@@ -3,1360 +3,2036 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Actividad Didáctica | Cancer Genome Landscapes</title>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<title>Cancer Genome Landscapes — Plataforma de Evaluación</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg: #0a0a0f;
-    --bg2: #111118;
-    --bg3: #1a1a24;
-    --surface: #1e1e2e;
-    --border: #2a2a3e;
-    --accent1: #e63946;
-    --accent2: #f4a261;
-    --accent3: #2a9d8f;
-    --accent4: #8338ec;
-    --text: #e8e8f0;
-    --text-dim: #9090a8;
-    --text-muted: #5a5a72;
-    --gold: #d4af37;
-    --unam-blue: #0047ab;
-    --unam-gold: #c8a951;
-  }
-
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Libre Baskerville', Georgia, serif;
-    line-height: 1.7;
-    overflow-x: hidden;
-  }
-
-  /* ── HEADER ─────────────────────────────────── */
-  header {
-    position: relative;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    background: radial-gradient(ellipse at 20% 50%, #1a0a2e 0%, transparent 60%),
-                radial-gradient(ellipse at 80% 20%, #0a1a2e 0%, transparent 55%),
-                radial-gradient(ellipse at 50% 80%, #1a0808 0%, transparent 50%),
-                var(--bg);
-  }
-
-  .dna-bg {
-    position: absolute;
-    inset: 0;
-    opacity: 0.06;
-    background-image:
-      repeating-linear-gradient(90deg, var(--accent1) 0px, var(--accent1) 1px, transparent 1px, transparent 60px),
-      repeating-linear-gradient(0deg, var(--accent3) 0px, var(--accent3) 1px, transparent 1px, transparent 60px);
-    animation: gridShift 20s linear infinite;
-  }
-
-  @keyframes gridShift {
-    0% { transform: translate(0,0); }
-    100% { transform: translate(60px, 60px); }
-  }
-
-  .header-inner {
-    position: relative;
-    z-index: 2;
-    text-align: center;
-    padding: 4rem 2rem;
-    max-width: 900px;
-  }
-
-  .badge {
-    display: inline-block;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.3em;
-    text-transform: uppercase;
-    color: var(--accent1);
-    border: 1px solid var(--accent1);
-    padding: 0.4rem 1rem;
-    margin-bottom: 2rem;
-    animation: fadeSlide 0.8s ease both;
-  }
-
-  .inst-badges {
-    display: flex;
-    gap: 1rem;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 2.5rem;
-    animation: fadeSlide 0.8s ease 0.1s both;
-  }
-
-  .inst-badge {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--unam-gold);
-    border: 1px solid var(--unam-gold);
-    padding: 0.35rem 0.8rem;
-    opacity: 0.85;
-  }
-
-  @keyframes fadeSlide {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-
-  h1 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(2.2rem, 6vw, 4.5rem);
-    font-weight: 900;
-    line-height: 1.1;
-    margin-bottom: 1.5rem;
-    animation: fadeSlide 0.8s ease 0.2s both;
-  }
-
-  h1 span.red { color: var(--accent1); }
-  h1 span.teal { color: var(--accent3); }
-
-  .subtitle {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.85rem;
-    color: var(--text-dim);
-    letter-spacing: 0.05em;
-    margin-bottom: 2.5rem;
-    animation: fadeSlide 0.8s ease 0.3s both;
-  }
-
-  .ref-box {
-    background: rgba(255,255,255,0.04);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--gold);
-    padding: 1rem 1.5rem;
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    font-family: 'IBM Plex Mono', monospace;
-    text-align: left;
-    margin-bottom: 3rem;
-    animation: fadeSlide 0.8s ease 0.4s both;
-  }
-
-  .ref-box strong { color: var(--gold); }
-
-  .scroll-hint {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--text-muted);
-    letter-spacing: 0.2em;
-    animation: pulse 2s ease infinite;
-  }
-
-  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
-
-  /* ── NAV ─────────────────────────────────────── */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(10,10,15,0.95);
-    border-bottom: 1px solid var(--border);
-    backdrop-filter: blur(12px);
-    padding: 0 2rem;
-    overflow-x: auto;
-  }
-
-  .nav-inner {
-    display: flex;
-    gap: 0;
-    max-width: 1100px;
-    margin: 0 auto;
-    align-items: center;
-  }
-
-  .nav-item {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    padding: 1rem 1.2rem;
-    border: none;
-    background: none;
-    cursor: pointer;
-    border-bottom: 2px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
-    white-space: nowrap;
-  }
-
-  .nav-item:hover, .nav-item.active {
-    color: var(--text);
-    border-bottom-color: var(--accent1);
-  }
-
-  .nav-item.active { color: var(--accent1); }
-
-  /* ── MAIN LAYOUT ─────────────────────────────── */
-  main { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
-
-  section { margin-bottom: 6rem; scroll-margin-top: 60px; }
-
-  .section-header {
-    display: flex;
-    align-items: baseline;
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-    padding-bottom: 1rem;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .section-number {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--accent1);
-    letter-spacing: 0.2em;
-  }
-
-  h2 {
-    font-family: 'Playfair Display', serif;
-    font-size: clamp(1.6rem, 3vw, 2.4rem);
-    font-weight: 700;
-    color: var(--text);
-  }
-
-  h2 em { font-style: italic; color: var(--accent3); }
-
-  h3 {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.25rem;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 1rem;
-  }
-
-  h3 .tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    color: var(--accent2);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    margin-left: 0.8rem;
-    vertical-align: middle;
-    border: 1px solid var(--accent2);
-    padding: 0.15rem 0.5rem;
-  }
-
-  p { margin-bottom: 1rem; color: var(--text-dim); font-size: 0.95rem; }
-
-  /* ── CARDS ───────────────────────────────────── */
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 2rem;
-    margin-bottom: 2rem;
-    position: relative;
-    transition: border-color 0.3s, transform 0.3s;
-  }
-
-  .card:hover { border-color: var(--accent3); transform: translateX(4px); }
-
-  .card::before {
-    content: '';
-    position: absolute;
-    left: 0; top: 0; bottom: 0;
-    width: 3px;
-    background: var(--accent3);
-    transform: scaleY(0);
-    transform-origin: bottom;
-    transition: transform 0.3s;
-  }
-
-  .card:hover::before { transform: scaleY(1); }
-
-  .card-red::before { background: var(--accent1); }
-  .card-red:hover { border-color: var(--accent1); }
-  .card-gold::before { background: var(--gold); }
-  .card-gold:hover { border-color: var(--gold); }
-  .card-purple::before { background: var(--accent4); }
-  .card-purple:hover { border-color: var(--accent4); }
-  .card-orange::before { background: var(--accent2); }
-  .card-orange:hover { border-color: var(--accent2); }
-
-  /* ── OBJETIVO GRID ───────────────────────────── */
-  .obj-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-
-  .obj-item {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 1.2rem;
-    display: flex;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .obj-icon {
-    font-size: 1.5rem;
-    flex-shrink: 0;
-    line-height: 1;
-    margin-top: 0.1rem;
-  }
-
-  .obj-label {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--accent2);
-    margin-bottom: 0.3rem;
-  }
-
-  .obj-text { font-size: 0.85rem; color: var(--text-dim); margin: 0; }
-
-  /* ── TIMELINE ────────────────────────────────── */
-  .timeline { position: relative; padding-left: 2.5rem; }
-
-  .timeline::before {
-    content: '';
-    position: absolute;
-    left: 0.7rem; top: 0; bottom: 0;
-    width: 1px;
-    background: linear-gradient(to bottom, var(--accent1), var(--accent3), var(--accent4));
-  }
-
-  .tl-item {
-    position: relative;
-    margin-bottom: 2.5rem;
-  }
-
-  .tl-dot {
-    position: absolute;
-    left: -2.5rem;
-    top: 0.4rem;
-    width: 12px; height: 12px;
-    border-radius: 50%;
-    background: var(--accent1);
-    border: 2px solid var(--bg);
-    box-shadow: 0 0 8px var(--accent1);
-  }
-
-  .tl-dot.teal { background: var(--accent3); box-shadow: 0 0 8px var(--accent3); }
-  .tl-dot.purple { background: var(--accent4); box-shadow: 0 0 8px var(--accent4); }
-  .tl-dot.orange { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
-  .tl-dot.gold { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
-
-  .tl-time {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    color: var(--accent1);
-    letter-spacing: 0.15em;
-    margin-bottom: 0.4rem;
-  }
-
-  /* ── ACTIVIDADES ─────────────────────────────── */
-  .act-number {
-    font-family: 'Playfair Display', serif;
-    font-size: 4rem;
-    font-weight: 900;
-    color: var(--bg3);
-    position: absolute;
-    right: 1.5rem;
-    top: 1rem;
-    line-height: 1;
-    pointer-events: none;
-    user-select: none;
-  }
-
-  .act-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    padding: 2rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .act-header {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin-bottom: 1.2rem;
-  }
-
-  .act-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    padding: 0.25rem 0.7rem;
-    border: 1px solid;
-  }
-
-  .tag-ind { color: #e63946; border-color: #e63946; }
-  .tag-grp { color: #2a9d8f; border-color: #2a9d8f; }
-  .tag-disc { color: #8338ec; border-color: #8338ec; }
-  .tag-inv { color: #f4a261; border-color: #f4a261; }
-
-  .act-title {
-    font-family: 'Playfair Display', serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-  }
-
-  /* ── COLLAPSIBLE ─────────────────────────────── */
-  details {
-    border: 1px solid var(--border);
-    margin-bottom: 0.8rem;
-    background: var(--bg3);
-  }
-
-  summary {
-    padding: 1rem 1.5rem;
-    cursor: pointer;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.8rem;
-    letter-spacing: 0.05em;
-    color: var(--text-dim);
-    list-style: none;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    transition: color 0.2s;
-  }
-
-  summary:hover { color: var(--text); }
-
-  summary::after {
-    content: '▶';
-    font-size: 0.6rem;
-    transition: transform 0.2s;
-  }
-
-  details[open] summary::after { transform: rotate(90deg); }
-  details[open] summary { color: var(--accent3); }
-
-  .details-body {
-    padding: 1.5rem;
-    border-top: 1px solid var(--border);
-  }
-
-  /* ── PREGUNTAS ───────────────────────────────── */
-  .q-list {
-    list-style: none;
-    counter-reset: q;
-  }
-
-  .q-list li {
-    counter-increment: q;
-    padding: 0.8rem 0 0.8rem 3rem;
-    position: relative;
-    border-bottom: 1px solid var(--bg3);
-    font-size: 0.9rem;
-    color: var(--text-dim);
-  }
-
-  .q-list li::before {
-    content: counter(q, decimal-leading-zero);
-    position: absolute;
-    left: 0;
-    top: 0.8rem;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--accent1);
-    letter-spacing: 0.05em;
-  }
-
-  .q-list li strong { color: var(--text); }
-
-  .bloom-tag {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.55rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    padding: 0.15rem 0.5rem;
-    margin-left: 0.5rem;
-    vertical-align: middle;
-  }
-
-  .b-rec { background: rgba(46,139,87,0.15); color: #2e8b57; border: 1px solid #2e8b57; }
-  .b-com { background: rgba(30,144,255,0.15); color: #1e90ff; border: 1px solid #1e90ff; }
-  .b-apl { background: rgba(255,165,0,0.15); color: #ffa500; border: 1px solid #ffa500; }
-  .b-ana { background: rgba(230,57,70,0.15); color: var(--accent1); border: 1px solid var(--accent1); }
-  .b-eva { background: rgba(131,56,236,0.15); color: var(--accent4); border: 1px solid var(--accent4); }
-  .b-cre { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--gold); }
-
-  /* ── RÚBRICA ─────────────────────────────────── */
-  .rubrica {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 0.82rem;
-    margin-top: 1rem;
-  }
-
-  .rubrica th {
-    background: var(--bg3);
-    padding: 0.8rem 1rem;
-    text-align: left;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.65rem;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-    border-bottom: 2px solid var(--border);
-  }
-
-  .rubrica td {
-    padding: 0.8rem 1rem;
-    border-bottom: 1px solid var(--bg3);
-    color: var(--text-dim);
-    vertical-align: top;
-  }
-
-  .rubrica tr:hover td { background: rgba(255,255,255,0.02); }
-
-  .rubrica .pts {
-    font-family: 'IBM Plex Mono', monospace;
-    font-weight: 500;
-    color: var(--accent3);
-    white-space: nowrap;
-  }
-
-  .rubrica .criterio { font-weight: 700; color: var(--text); }
-
-  /* ── HIGHLIGHT BOXES ─────────────────────────── */
-  .info-box {
-    background: rgba(42, 157, 143, 0.06);
-    border: 1px solid rgba(42, 157, 143, 0.3);
-    border-left: 3px solid var(--accent3);
-    padding: 1.2rem 1.5rem;
-    margin: 1.5rem 0;
-    font-size: 0.88rem;
-  }
-
-  .warn-box {
-    background: rgba(244,162,97,0.06);
-    border: 1px solid rgba(244,162,97,0.3);
-    border-left: 3px solid var(--accent2);
-    padding: 1.2rem 1.5rem;
-    margin: 1.5rem 0;
-    font-size: 0.88rem;
-  }
-
-  .cite-box {
-    background: rgba(212,175,55,0.05);
-    border: 1px solid rgba(212,175,55,0.2);
-    border-left: 3px solid var(--gold);
-    padding: 1rem 1.5rem;
-    margin: 1rem 0;
-    font-size: 0.82rem;
-    font-family: 'IBM Plex Mono', monospace;
-    color: var(--text-muted);
-  }
-
-  .cite-box strong { color: var(--gold); }
-
-  /* ── KEYWORDS ────────────────────────────────── */
-  .kw-cloud {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-
-  .kw {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.05em;
-    padding: 0.3rem 0.8rem;
-    border: 1px solid var(--border);
-    color: var(--text-muted);
-    cursor: default;
-    transition: border-color 0.2s, color 0.2s;
-  }
-
-  .kw:hover { border-color: var(--accent3); color: var(--text); }
-
-  /* ── RESOURCES ───────────────────────────────── */
-  .res-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-    margin-top: 1rem;
-  }
-
-  .res-item {
-    background: var(--bg3);
-    border: 1px solid var(--border);
-    padding: 1.2rem;
-    transition: border-color 0.2s;
-  }
-
-  .res-item:hover { border-color: var(--accent4); }
-
-  .res-type {
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.6rem;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--accent4);
-    margin-bottom: 0.5rem;
-  }
-
-  .res-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
-  .res-desc { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
-  .res-url { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent3); word-break: break-all; }
-
-  /* ── COMPETENCIAS ────────────────────────────── */
-  .comp-list {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
-    margin-top: 1rem;
-  }
-
-  .comp-item {
-    display: flex;
-    gap: 1.2rem;
-    align-items: flex-start;
-    padding: 1rem;
-    background: var(--bg3);
-    border: 1px solid var(--border);
-  }
-
-  .comp-bullet {
-    width: 8px; height: 8px;
-    border-radius: 50%;
-    background: var(--accent1);
-    flex-shrink: 0;
-    margin-top: 0.5rem;
-  }
-
-  .comp-bullet.teal { background: var(--accent3); }
-  .comp-bullet.gold { background: var(--gold); }
-  .comp-bullet.purple { background: var(--accent4); }
-  .comp-bullet.orange { background: var(--accent2); }
-
-  .comp-text { font-size: 0.88rem; color: var(--text-dim); margin: 0; }
-  .comp-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 0.2rem; }
-
-  /* ── FOOTER ──────────────────────────────────── */
-  footer {
-    background: var(--bg2);
-    border-top: 1px solid var(--border);
-    padding: 3rem 2rem;
-    text-align: center;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--text-muted);
-    letter-spacing: 0.05em;
-  }
-
-  footer strong { color: var(--unam-gold); }
-
-  /* ── RESPONSIVE ──────────────────────────────── */
-  @media (max-width: 600px) {
-    .obj-grid { grid-template-columns: 1fr; }
-    .res-grid { grid-template-columns: 1fr; }
-    .act-number { display: none; }
-  }
-
-  /* ── PRINT ───────────────────────────────────── */
-  @media print {
-    body { background: white; color: black; }
-    header { min-height: auto; }
-    nav { display: none; }
-    .dna-bg { display: none; }
-    .card { background: #f9f9f9; border-color: #ccc; }
-    p, li { color: #333; }
-    h2, h3 { color: #000; }
-  }
+:root {
+  --bg: #f7f5f0;
+  --bg2: #efefea;
+  --bg3: #e8e5de;
+  --surface: #ffffff;
+  --border: #d8d4cb;
+  --border2: #c8c3b8;
+  --text: #1a1916;
+  --text2: #4a4740;
+  --text3: #7a7670;
+  --accent: #c2410c;
+  --accent-light: #fff1ee;
+  --accent2: #0f766e;
+  --accent2-light: #f0fdf9;
+  --accent3: #6d28d9;
+  --accent3-light: #f5f3ff;
+  --gold: #b45309;
+  --gold-light: #fffbeb;
+  --success: #15803d;
+  --success-light: #f0fdf4;
+  --danger: #b91c1c;
+  --danger-light: #fef2f2;
+  --warn: #b45309;
+  --warn-light: #fffbeb;
+  --unam: #003366;
+  --unam-gold: #b8970a;
+  --radius: 8px;
+  --radius-lg: 12px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* ─── SCREENS ─── */
+.screen { display: none; min-height: 100vh; }
+.screen.active { display: block; }
+
+/* ─── LOGIN ─── */
+#login-screen {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: var(--bg);
+}
+#login-screen.active { display: flex; }
+
+.login-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 3rem;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.login-logo {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.login-logo-top {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--unam);
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.login-title {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.8rem;
+  color: var(--text);
+  line-height: 1.2;
+  margin-bottom: 0.4rem;
+}
+
+.login-subtitle {
+  font-size: 0.82rem;
+  color: var(--text3);
+  font-family: 'DM Mono', monospace;
+}
+
+.role-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 4px;
+  margin-bottom: 1.5rem;
+}
+
+.role-tab {
+  padding: 0.6rem;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text3);
+  cursor: pointer;
+  font-weight: 500;
+  transition: all .15s;
+}
+.role-tab.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
+}
+
+.form-group { margin-bottom: 1rem; }
+.form-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 0.4rem;
+  letter-spacing: 0.02em;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.65rem 0.9rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.9rem;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color .15s;
+  outline: none;
+}
+.form-input:focus { border-color: var(--accent2); }
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0.65rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.85rem;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .15s;
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+.btn:hover { background: var(--bg2); }
+.btn:active { transform: scale(.98); }
+.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn-primary:hover { background: var(--text2); }
+.btn-accent { background: var(--accent); color: white; border-color: var(--accent); }
+.btn-accent:hover { background: #b13b0a; }
+.btn-teal { background: var(--accent2); color: white; border-color: var(--accent2); }
+.btn-teal:hover { background: #0d6b62; }
+.btn-full { width: 100%; }
+.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.78rem; }
+
+.login-hint { font-size: 0.75rem; color: var(--text3); margin-top: 1rem; text-align: center; line-height: 1.5; }
+
+/* ─── TOPBAR ─── */
+.topbar {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 0 1.5rem;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.topbar-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.topbar-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.topbar-name {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1rem;
+  color: var(--text);
+}
+.topbar-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text3);
+  letter-spacing: 0.08em;
+}
+.topbar-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.82rem;
+  color: var(--text2);
+}
+.topbar-avatar {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  background: var(--accent2);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+/* ─── STUDENT LAYOUT ─── */
+.student-layout {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.student-header {
+  margin-bottom: 2rem;
+}
+.student-header h1 {
+  font-family: 'DM Serif Display', serif;
+  font-size: 1.6rem;
+  margin-bottom: 0.4rem;
+}
+.student-header p { font-size: 0.88rem; color: var(--text3); }
+
+/* progress overview */
+.progress-overview {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
+  gap: 10px;
+  margin-bottom: 2rem;
+}
+.prog-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+}
+.prog-card-label { font-size: 0.7rem; color: var(--text3); font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
+.prog-card-val { font-size: 1.5rem; font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; }
+.prog-card-sub { font-size: 0.7rem; color: var(--text3); }
+
+/* activity list */
+.activity-list { display: flex; flex-direction: column; gap: 10px; }
+
+.act-row {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  cursor: pointer;
+  transition: border-color .15s, box-shadow .15s;
+}
+.act-row:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
+.act-row.done { border-left: 3px solid var(--success); }
+.act-row.locked { opacity: .55; cursor: not-allowed; }
+
+.act-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--radius);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+.act-info { flex: 1; }
+.act-name { font-size: 0.92rem; font-weight: 500; color: var(--text); }
+.act-desc { font-size: 0.78rem; color: var(--text3); margin-top: 2px; }
+.act-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.68rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.badge-pending { background: var(--bg2); color: var(--text3); }
+.badge-done { background: var(--success-light); color: var(--success); }
+.badge-pts { background: var(--accent2-light); color: var(--accent2); }
+
+/* ─── ACTIVITY MODAL ─── */
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.35);
+  z-index: 200;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  width: 100%;
+  max-width: 680px;
+  margin: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  overflow: hidden;
+}
+
+.modal-head {
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.modal-head-title { font-size: 0.95rem; font-weight: 500; }
+.modal-close {
+  width: 28px; height: 28px;
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--text3);
+}
+.modal-close:hover { background: var(--bg2); }
+
+.modal-body { padding: 1.5rem; }
+.modal-footer {
+  padding: 1rem 1.5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+/* ─── QUIZ ─── */
+.quiz-progress { margin-bottom: 1.25rem; }
+.quiz-progress-bar { height: 3px; background: var(--bg3); border-radius: 2px; }
+.quiz-progress-fill { height: 3px; background: var(--accent2); border-radius: 2px; transition: width .3s; }
+.quiz-progress-label { font-size: 0.72rem; color: var(--text3); margin-top: 4px; font-family: 'DM Mono', monospace; }
+
+.quiz-q { font-size: 0.92rem; font-weight: 500; color: var(--text); line-height: 1.6; margin-bottom: 1rem; }
+.quiz-opts { display: flex; flex-direction: column; gap: 6px; }
+.quiz-opt {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 0.85rem;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  transition: all .15s;
+  line-height: 1.5;
+}
+.quiz-opt:hover:not(:disabled) { background: var(--bg2); }
+.quiz-opt:disabled { cursor: default; }
+.quiz-opt.correct { background: var(--success-light); border-color: var(--success); color: var(--success); }
+.quiz-opt.wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+.quiz-opt.reveal { background: var(--success-light); border-color: var(--success); color: var(--success); }
+
+.quiz-feedback {
+  margin-top: 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  display: none;
+}
+.quiz-feedback.show { display: block; }
+.quiz-feedback.ok { background: var(--success-light); color: var(--success); border: 1px solid #bbf7d0; }
+.quiz-feedback.bad { background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; }
+
+/* ─── FLASHCARDS ─── */
+.flash-wrap { perspective: 700px; margin-bottom: 1.25rem; }
+.flash-card {
+  position: relative;
+  height: 180px;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transition: transform .55s;
+}
+.flash-card.flipped { transform: rotateY(180deg); }
+.flash-face {
+  position: absolute;
+  inset: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  backface-visibility: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+.flash-front { background: var(--surface); }
+.flash-back { background: var(--bg2); transform: rotateY(180deg); }
+.flash-term { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
+.flash-hint { font-size: 0.72rem; color: var(--text3); margin-top: 6px; }
+.flash-def { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
+.flash-nav { display: flex; align-items: center; justify-content: space-between; }
+.flash-counter { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text3); }
+
+/* ─── DRAG DROP ─── */
+.dnd-source {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 0.85rem;
+  margin-bottom: 1rem;
+  min-height: 56px;
+}
+.dnd-source-label { font-size: 0.72rem; color: var(--text3); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+.dnd-items-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+.dnd-chip {
+  font-size: 0.78rem;
+  padding: 4px 10px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  background: var(--surface);
+  cursor: grab;
+  color: var(--text);
+  user-select: none;
+  transition: all .15s;
+}
+.dnd-chip:hover { border-color: var(--border2); }
+.dnd-chip.dragging { opacity: .4; }
+.dnd-chip.correct { background: var(--success-light); border-color: var(--success); color: var(--success); }
+.dnd-chip.wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+
+.dnd-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
+.dnd-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 10px;
+  min-height: 100px;
+  transition: border-color .15s, background .15s;
+}
+.dnd-zone.over { border-color: var(--accent2); background: var(--accent2-light); }
+.dnd-zone-name {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--text3);
+  margin-bottom: 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.dnd-zone-dot { width: 8px; height: 8px; border-radius: 50%; }
+.dnd-zone-items { display: flex; flex-wrap: wrap; gap: 5px; min-height: 36px; }
+
+/* ─── TIMELINE ─── */
+.tl-bank { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius); min-height: 48px; }
+.tl-chip {
+  font-size: 0.78rem;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  cursor: pointer;
+  color: var(--text);
+  transition: all .15s;
+  line-height: 1.4;
+}
+.tl-chip:hover { background: var(--bg2); }
+.tl-chip.selected { border-color: var(--accent3); background: var(--accent3-light); color: var(--accent3); }
+.tl-chip.used { opacity: .35; pointer-events: none; }
+
+.tl-slots { display: flex; flex-direction: column; gap: 6px; }
+.tl-slot {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  min-height: 44px;
+  background: var(--surface);
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.tl-slot:hover { border-color: var(--border2); }
+.tl-slot.filled { border-color: var(--accent3); }
+.tl-slot.correct { border-color: var(--success); background: var(--success-light); }
+.tl-slot.wrong { border-color: var(--danger); background: var(--danger-light); }
+.tl-slot-n { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text3); min-width: 18px; padding-top: 2px; }
+.tl-slot-content { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
+
+/* ─── MATCHING ─── */
+.match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+.match-col-label { font-size: 0.72rem; font-weight: 500; color: var(--text3); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
+.match-items { display: flex; flex-direction: column; gap: 5px; }
+.match-item {
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.78rem;
+  cursor: pointer;
+  color: var(--text);
+  transition: all .15s;
+  line-height: 1.4;
+}
+.match-item:hover:not(.matched-ok) { background: var(--bg2); }
+.match-item.selected { border-color: var(--accent3); background: var(--accent3-light); color: var(--accent3); }
+.match-item.matched-ok { border-color: var(--success); background: var(--success-light); color: var(--success); pointer-events: none; }
+.match-item.matched-bad { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
+
+/* ─── SCENARIO ─── */
+.sc-case {
+  background: var(--bg2);
+  border-radius: var(--radius);
+  padding: 1rem 1.25rem;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  margin-bottom: 1rem;
+  color: var(--text);
+  border-left: 3px solid var(--accent);
+}
+.sc-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+.sc-opt {
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  font-size: 0.83rem;
+  cursor: pointer;
+  text-align: left;
+  font-family: 'DM Sans', sans-serif;
+  color: var(--text);
+  transition: all .15s;
+  line-height: 1.5;
+}
+.sc-opt:hover:not(:disabled) { background: var(--bg2); }
+.sc-opt.good { background: var(--success-light); border-color: var(--success); color: var(--success); }
+.sc-opt.bad { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
+.sc-explain { font-size: 0.82rem; padding: 0.85rem 1rem; background: var(--bg2); border-radius: var(--radius); line-height: 1.6; display: none; }
+.sc-explain.show { display: block; }
+
+/* ─── RESULT CARD ─── */
+.result-card {
+  background: var(--bg2);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  text-align: center;
+}
+.result-score { font-family: 'DM Serif Display', serif; font-size: 3rem; color: var(--text); }
+.result-label { font-size: 0.82rem; color: var(--text3); margin-bottom: 1rem; }
+.result-bars { text-align: left; margin-top: 1rem; }
+.result-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.78rem; }
+.result-bar-label { min-width: 140px; color: var(--text2); }
+.result-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; }
+.result-bar-fill { height: 6px; border-radius: 3px; background: var(--accent2); transition: width .6s; }
+.result-bar-pts { min-width: 40px; text-align: right; color: var(--text3); font-family: 'DM Mono', monospace; }
+
+/* ─── REPORT PREVIEW ─── */
+.report-preview {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  margin-top: 1rem;
+  font-size: 0.82rem;
+}
+.report-section { margin-bottom: 1rem; }
+.report-section-title { font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 6px; }
+
+/* ─── PROFESSOR DASHBOARD ─── */
+.prof-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+}
+
+.prof-header { margin-bottom: 2rem; }
+.prof-header h1 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.4rem; }
+.prof-header p { font-size: 0.85rem; color: var(--text3); }
+
+.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 10px; margin-bottom: 2rem; }
+.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
+.stat-card-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 8px; }
+.stat-card-val { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; color: var(--text); }
+.stat-card-sub { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
+
+.section-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text2);
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* student table */
+.student-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
+.student-table th {
+  padding: 0.7rem 1rem;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text3);
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+}
+.student-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--bg3); color: var(--text); }
+.student-table tr:hover td { background: var(--bg2); }
+.student-table tr:last-child td { border-bottom: none; }
+
+.grade-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.grade-a { background: var(--success-light); color: var(--success); }
+.grade-b { background: var(--accent2-light); color: var(--accent2); }
+.grade-c { background: var(--warn-light); color: var(--warn); }
+.grade-d { background: var(--danger-light); color: var(--danger); }
+.grade-p { background: var(--bg3); color: var(--text3); }
+
+.mini-bar { height: 6px; background: var(--bg3); border-radius: 3px; width: 80px; display: inline-block; vertical-align: middle; margin-left: 6px; }
+.mini-bar-fill { height: 6px; border-radius: 3px; background: var(--accent2); }
+
+/* filter/search */
+.toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
+.search-input {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  min-width: 220px;
+}
+.search-input:focus { border-color: var(--accent2); }
+
+select.filter-sel {
+  padding: 0.5rem 0.85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  background: var(--surface);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  cursor: pointer;
+}
+
+/* chart bars */
+.bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-bottom: 4px; }
+.bar-col { flex: 1; background: var(--accent2); border-radius: 3px 3px 0 0; min-width: 8px; opacity: .8; transition: opacity .15s; }
+.bar-col:hover { opacity: 1; }
+.bar-labels { display: flex; gap: 4px; }
+.bar-label { flex: 1; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text3); text-align: center; }
+
+/* detail modal */
+.detail-section { margin-bottom: 1.25rem; }
+.detail-section-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); font-weight: 500; margin-bottom: 8px; }
+.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--bg3); font-size: 0.82rem; }
+.detail-row:last-child { border-bottom: none; }
+.detail-key { color: var(--text2); }
+.detail-val { font-family: 'DM Mono', monospace; color: var(--text); }
+
+/* export area */
+.export-area {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem;
+  margin-top: 1.5rem;
+}
+.export-title { font-size: 0.85rem; font-weight: 500; margin-bottom: 1rem; }
+.export-btns { display: flex; gap: 8px; flex-wrap: wrap; }
+
+/* notification */
+.notif {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--text);
+  color: var(--bg);
+  padding: 0.75rem 1.25rem;
+  border-radius: var(--radius);
+  font-size: 0.82rem;
+  z-index: 1000;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all .3s;
+  max-width: 300px;
+}
+.notif.show { transform: translateY(0); opacity: 1; }
+
+/* tabs within dashboard */
+.dash-tabs { display: flex; gap: 2px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+.dash-tab {
+  padding: 0.6rem 1rem;
+  font-size: 0.83rem;
+  border: none;
+  background: none;
+  color: var(--text3);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 500;
+  transition: color .15s;
+}
+.dash-tab:hover { color: var(--text); }
+.dash-tab.active { color: var(--text); border-bottom-color: var(--accent); }
+
+.dash-panel { display: none; }
+.dash-panel.active { display: block; }
+
+.info-box {
+  background: var(--accent2-light);
+  border: 1px solid #99f6e4;
+  border-radius: var(--radius);
+  padding: 0.85rem 1rem;
+  font-size: 0.82rem;
+  color: var(--accent2);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+@media (max-width: 600px) {
+  .dnd-zones { grid-template-columns: 1fr; }
+  .match-grid { grid-template-columns: 1fr; }
+  .progress-overview { grid-template-columns: repeat(2,1fr); }
+  .login-card { padding: 2rem 1.5rem; }
+}
 </style>
 </head>
 <body>
 
-<!-- ═══════════════════════════════════════════
-     HEADER
-════════════════════════════════════════════ -->
-<header>
-  <div class="dna-bg"></div>
-  <div class="header-inner">
-    <div class="badge">◼ Actividad Didáctica · Módulo Células Troncales y Cáncer</div>
-    <div class="inst-badges">
-      <span class="inst-badge">UNAM</span>
-      <span class="inst-badge">FES Iztacala</span>
-      <span class="inst-badge">Carrera Médico Cirujano</span>
-      <span class="inst-badge">Sección de Enseñanza Básica</span>
+<!-- ══════════════════════════════════════════════
+     LOGIN
+══════════════════════════════════════════════ -->
+<div id="login-screen" class="screen active">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="login-logo-top">UNAM · FES Iztacala · Carrera Médico Cirujano</div>
+      <div class="login-title">Cancer Genome<br>Landscapes</div>
+      <div class="login-subtitle" style="margin-top:4px">Módulo Células Troncales y Cáncer</div>
     </div>
-    <h1>
-      El Paisaje<br>
-      <span class="red">Genómico</span> del<br>
-      <span class="teal">Cáncer</span>
-    </h1>
-    <p class="subtitle">
-      Basada en · Vogelstein et al. (2013) · <em>Cancer Genome Landscapes</em> · Science 339:1546–1558
-    </p>
-    <div class="ref-box">
-      <strong>Referencia central:</strong> Vogelstein B, Papadopoulos N, Velculescu VE, Zhou S, Diaz LA Jr, Kinzler KW.
-      Cancer Genome Landscapes. <em>Science.</em> 2013;339(6127):1546–1558. DOI: 10.1126/science.1235122
+
+    <div class="role-tabs">
+      <button class="role-tab active" id="tab-student" onclick="switchRole('student')">👩‍🎓 Estudiante</button>
+      <button class="role-tab" id="tab-prof" onclick="switchRole('prof')">👨‍🏫 Profesor</button>
     </div>
-    <p class="scroll-hint">↓ &nbsp; DESPLAZAR &nbsp; ↓</p>
+
+    <div id="student-form">
+      <div class="form-group">
+        <label class="form-label">Número de matrícula</label>
+        <input type="text" class="form-input" id="student-id" placeholder="Ej. 421012345" maxlength="12">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nombre completo</label>
+        <input type="text" class="form-input" id="student-name" placeholder="Nombre(s) Apellido(s)">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Grupo</label>
+        <input type="text" class="form-input" id="student-group" placeholder="Ej. 2451-A">
+      </div>
+      <button class="btn btn-teal btn-full" onclick="loginStudent()">Ingresar y comenzar actividades</button>
+      <p class="login-hint">Sus respuestas y calificaciones se guardan automáticamente. No necesita contraseña; use su matrícula oficial.</p>
+    </div>
+
+    <div id="prof-form" style="display:none">
+      <div class="form-group">
+        <label class="form-label">Clave de acceso docente</label>
+        <input type="password" class="form-input" id="prof-key" placeholder="Ingrese la clave">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Nombre del profesor</label>
+        <input type="text" class="form-input" id="prof-name" placeholder="Nombre completo">
+      </div>
+      <button class="btn btn-primary btn-full" onclick="loginProf()">Acceder al panel docente</button>
+      <p class="login-hint">Clave por defecto: <strong>iztacala2025</strong> (cámbiela en producción).</p>
+    </div>
   </div>
-</header>
+</div>
 
-<!-- ═══════════════════════════════════════════
-     NAV
-════════════════════════════════════════════ -->
-<nav>
-  <div class="nav-inner">
-    <button class="nav-item active" onclick="scrollTo('presentacion')">Presentación</button>
-    <button class="nav-item" onclick="scrollTo('objetivos')">Objetivos</button>
-    <button class="nav-item" onclick="scrollTo('marco')">Marco Teórico</button>
-    <button class="nav-item" onclick="scrollTo('desarrollo')">Desarrollo</button>
-    <button class="nav-item" onclick="scrollTo('actividades')">Actividades</button>
-    <button class="nav-item" onclick="scrollTo('rubrica')">Rúbrica</button>
-    <button class="nav-item" onclick="scrollTo('recursos')">Recursos</button>
-  </div>
-</nav>
-
-<main>
-
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 1: PRESENTACIÓN
-════════════════════════════════════════════ -->
-<section id="presentacion">
-  <div class="section-header">
-    <span class="section-number">01 ——</span>
-    <h2>Presentación de la <em>Actividad</em></h2>
-  </div>
-
-  <div class="card card-red">
-    <h3>Denominación</h3>
-    <p><strong>«Los Paisajes Genómicos del Cáncer: de las Mutaciones Conductoras a la Medicina de Precisión»</strong></p>
-    <p>Actividad de análisis crítico, síntesis integradora y búsqueda bibliográfica avanzada, basada en la revisión seminal de Vogelstein et al. (2013), dentro del Módulo Células Troncales y Cáncer.</p>
-  </div>
-
-  <div class="obj-grid">
-    <div class="obj-item">
-      <span class="obj-icon">🎯</span>
+<!-- ══════════════════════════════════════════════
+     STUDENT SCREEN
+══════════════════════════════════════════════ -->
+<div id="student-screen" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-dot"></div>
       <div>
-        <div class="obj-label">Nivel</div>
-        <p class="obj-text">Licenciatura — Módulo de Células Troncales y Cáncer, 4.° año de Médico Cirujano</p>
+        <div class="topbar-name">Cancer Genome Landscapes</div>
+        <div class="topbar-sub">Módulo Células Troncales · FES Iztacala UNAM</div>
       </div>
     </div>
-    <div class="obj-item">
-      <span class="obj-icon">⏱</span>
+    <div class="topbar-user">
+      <div id="topbar-student-name" style="font-size:0.8rem; color:var(--text2)"></div>
+      <div class="topbar-avatar" id="topbar-avatar">--</div>
+      <button class="btn btn-sm" onclick="logout()">Salir</button>
+    </div>
+  </div>
+
+  <div class="student-layout">
+    <div class="student-header">
+      <h1>Mis actividades</h1>
+      <p>Completa todas las actividades para generar tu reporte de evaluación final.</p>
+    </div>
+
+    <div class="progress-overview" id="progress-overview"></div>
+
+    <div class="activity-list" id="activity-list"></div>
+
+    <div id="final-report-section" style="display:none; margin-top:2rem">
+      <div class="section-title" style="margin-bottom:1rem">Reporte final de evaluación</div>
+      <div id="final-report-content"></div>
+      <div style="display:flex; gap:8px; margin-top:1rem; flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="downloadStudentReport()">⬇ Descargar reporte (TXT)</button>
+        <button class="btn btn-teal" onclick="copyStudentReport()">📋 Copiar al portapapeles</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════
+     PROFESSOR SCREEN
+══════════════════════════════════════════════ -->
+<div id="prof-screen" class="screen">
+  <div class="topbar">
+    <div class="topbar-brand">
+      <div class="topbar-dot" style="background:var(--unam)"></div>
       <div>
-        <div class="obj-label">Duración total</div>
-        <p class="obj-text">5 sesiones (3 presenciales + 2 extraclase) · ~12 horas de trabajo total</p>
+        <div class="topbar-name">Panel Docente — Cancer Genome Landscapes</div>
+        <div class="topbar-sub">Módulo Células Troncales · FES Iztacala UNAM</div>
       </div>
     </div>
-    <div class="obj-item">
-      <span class="obj-icon">👥</span>
-      <div>
-        <div class="obj-label">Modalidad</div>
-        <p class="obj-text">Individual y equipos de 4–5 estudiantes · Presencial con soporte digital</p>
-      </div>
-    </div>
-    <div class="obj-item">
-      <span class="obj-icon">📐</span>
-      <div>
-        <div class="obj-label">Enfoque pedagógico</div>
-        <p class="obj-text">Aprendizaje basado en problemas + Aprendizaje basado en investigación + Taxonomía de Bloom revisada</p>
-      </div>
+    <div class="topbar-user">
+      <div id="topbar-prof-name" style="font-size:0.8rem;color:var(--text2)"></div>
+      <div class="topbar-avatar" style="background:var(--unam)" id="prof-avatar">PR</div>
+      <button class="btn btn-sm" onclick="logout()">Salir</button>
     </div>
   </div>
 
-  <div class="info-box" style="margin-top:2rem;">
-    <strong>Fundamentación:</strong> Esta actividad se diseñó para articular los conocimientos del módulo con la literatura científica contemporánea de alto impacto. El artículo de Vogelstein et al. representa una síntesis paradigmática que permite conectar conceptos de biología molecular, genética somática, evolución clonal, bioinformática aplicada y medicina traslacional, constituyendo un eje integrador ideal para el desarrollo del pensamiento científico crítico del futuro médico.
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 2: OBJETIVOS
-════════════════════════════════════════════ -->
-<section id="objetivos">
-  <div class="section-header">
-    <span class="section-number">02 ——</span>
-    <h2>Objetivos de <em>Aprendizaje</em></h2>
-  </div>
-
-  <p>Los objetivos se organizan conforme a la <strong>Taxonomía de Bloom Revisada</strong>, garantizando la progresión desde el conocimiento declarativo hasta las habilidades de orden superior.</p>
-
-  <div class="comp-list">
-    <div class="comp-item">
-      <div class="comp-bullet"></div>
-      <div>
-        <div class="comp-label">Recordar · Comprender <span class="bloom-tag b-rec">Bloom 1–2</span></div>
-        <p class="comp-text">Identificar y describir los conceptos centrales del artículo: mutaciones driver vs. passenger, genes Mut-driver, montañas y colinas, heterogeneidad intratumoral y las 12 vías de señalización implicadas en tumorigenesis.</p>
-      </div>
+  <div class="prof-layout">
+    <div class="prof-header">
+      <h1>Panel de evaluación</h1>
+      <p>Consulta el progreso, calificaciones y reportes individuales de todos los estudiantes del módulo.</p>
     </div>
-    <div class="comp-item">
-      <div class="comp-bullet teal"></div>
-      <div>
-        <div class="comp-label">Aplicar · Analizar <span class="bloom-tag b-apl">Bloom 3–4</span></div>
-        <p class="comp-text">Relacionar las alteraciones genómicas identificadas mediante NGS con los hallmarks del cáncer (Hanahan & Weinberg) y con los tres procesos celulares centrales (destino celular, supervivencia celular y mantenimiento del genoma).</p>
-      </div>
+
+    <div class="stats-grid" id="prof-stats"></div>
+
+    <div class="dash-tabs">
+      <button class="dash-tab active" onclick="showDashTab('alumnos')">Lista de alumnos</button>
+      <button class="dash-tab" onclick="showDashTab('analytics')">Análisis del grupo</button>
+      <button class="dash-tab" onclick="showDashTab('exportar')">Exportar</button>
     </div>
-    <div class="comp-item">
-      <div class="comp-bullet gold"></div>
-      <div>
-        <div class="comp-label">Evaluar <span class="bloom-tag b-eva">Bloom 5</span></div>
-        <p class="comp-text">Formular juicios críticos sobre las limitaciones metodológicas del secuenciamiento de nueva generación (NGS) en la identificación de mutaciones driver, incluyendo falsos negativos y la contribución del estroma tumoral a los resultados.</p>
+
+    <div id="dash-alumnos" class="dash-panel active">
+      <div class="toolbar">
+        <input type="text" class="search-input" placeholder="Buscar por nombre o matrícula…" id="search-students" oninput="renderStudentTable()">
+        <select class="filter-sel" id="filter-group" onchange="renderStudentTable()">
+          <option value="">Todos los grupos</option>
+        </select>
+        <select class="filter-sel" id="filter-status" onchange="renderStudentTable()">
+          <option value="">Todos los estados</option>
+          <option value="complete">Completado</option>
+          <option value="partial">En progreso</option>
+          <option value="none">Sin iniciar</option>
+        </select>
       </div>
-    </div>
-    <div class="comp-item">
-      <div class="comp-bullet purple"></div>
-      <div>
-        <div class="comp-label">Crear · Sintetizar <span class="bloom-tag b-cre">Bloom 6</span></div>
-        <p class="comp-text">Diseñar una propuesta argumentada de estrategia diagnóstica o terapéutica para un tipo de cáncer específico, integrando el conocimiento de las vías driver identificadas, los conceptos de heterogeneidad tumoral y los principios de medicina de precisión basada en genómica.</p>
-      </div>
-    </div>
-    <div class="comp-item">
-      <div class="comp-bullet orange"></div>
-      <div>
-        <div class="comp-label">Pensamiento crítico transversal</div>
-        <p class="comp-text">Desarrollar habilidades de búsqueda bibliográfica en bases de datos científicas de alta calidad (PubMed, COSMIC, cBioPortal, TCGA), evaluación de la calidad de la evidencia y discusión académica con argumentación sustentada en literatura.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 3: MARCO TEÓRICO
-════════════════════════════════════════════ -->
-<section id="marco">
-  <div class="section-header">
-    <span class="section-number">03 ——</span>
-    <h2>Marco Teórico <em>Integrador</em></h2>
-  </div>
-
-  <p>A continuación se sintetizan los conceptos articuladores del artículo de Vogelstein et al. (2013) que serán trabajados durante la actividad, en diálogo con los demás textos del módulo.</p>
-
-  <details>
-    <summary>El Paisaje Genómico: Montañas y Colinas</summary>
-    <div class="details-body">
-      <p>Vogelstein et al. introdujeron la metáfora topográfica para describir la distribución de mutaciones somáticas en el cáncer. Los tumores sólidos comunes presentan en promedio 33 a 66 genes con mutaciones somáticas que alteran su producto proteico. De éstas, ~95% son sustituciones de base única y el resto son inserciones o deleciones de pocos nucleótidos.</p>
-      <p>Los genes con alta frecuencia de mutación en distintos tumores se denominan <strong>"montañas"</strong> (ej. <em>TP53</em>, <em>KRAS</em>). Los genes alterados con menor frecuencia pero en número mucho mayor conforman las <strong>"colinas"</strong>. Estas colinas dominan numéricamente el paisaje y presentan el reto metodológico central del campo.</p>
-      <div class="cite-box">
-        <strong>Cita conceptual:</strong> "For most cancer types, this landscape consists of a small number of 'mountains' (genes altered in a high percentage of tumors) and a much larger number of 'hills' (genes altered infrequently)." — Vogelstein et al., Science 2013.
-      </div>
-      <div class="kw-cloud">
-        <span class="kw">SNV</span><span class="kw">Indels</span><span class="kw">Mutación no sinónima</span>
-        <span class="kw">Mutación sinónima</span><span class="kw">Exoma</span><span class="kw">Secuenciación NGS</span>
-        <span class="kw">COSMIC database</span><span class="kw">Tasa mutacional</span>
-      </div>
-    </div>
-  </details>
-
-  <details>
-    <summary>Genes Driver vs. Passenger: la Distinción Fundamental</summary>
-    <div class="details-body">
-      <p>Una <strong>mutación driver</strong> confiere ventaja de crecimiento selectivo a la célula tumoral. En contraste, las <strong>mutaciones passenger</strong> no aportan ventaja de crecimiento pero se acumulan como consecuencia de la inestabilidad genómica. Esta distinción es conceptualmente clara pero metodológicamente compleja.</p>
-      <p>Los autores proponen los conceptos de <strong>Mut-driver genes</strong> (con mutaciones intragénicas recurrentes identificables por el patrón de mutación, no sólo por frecuencia) y <strong>Epi-driver genes</strong> (alterados epigenéticamente sin mutación frecuente). Se identificaron aproximadamente 140 genes Mut-driver, clasificados en oncogenes (mutaciones recurrentes en posiciones específicas de aminoácidos) y genes supresores de tumor (mutaciones truncantes a lo largo de todo el gen).</p>
-      <div class="cite-box">
-        <strong>Regla ratiométrica:</strong> Para clasificar un gen como oncogén Mut-driver, se requiere que >20% de las mutaciones registradas en COSMIC sean missense en posiciones recurrentes. Para tumor supresor, que >20% sean truncantes.
-      </div>
-      <div class="kw-cloud">
-        <span class="kw">Oncogén</span><span class="kw">Gen supresor de tumor</span>
-        <span class="kw">Ganancia de función</span><span class="kw">Pérdida de función</span>
-        <span class="kw">Metilación del ADN</span><span class="kw">Epi-driver</span>
-        <span class="kw">Ventaja selectiva</span>
-      </div>
-    </div>
-  </details>
-
-  <details>
-    <summary>Las 12 Vías de Señalización y los 3 Procesos Celulares Centrales</summary>
-    <div class="details-body">
-      <p>El artículo propone que los ~140 genes driver conocidos actúan a través de solo <strong>12 vías de señalización</strong> que regulan tres procesos celulares fundamentales:</p>
-      <div class="obj-grid" style="margin:1rem 0;">
-        <div class="obj-item">
-          <span class="obj-icon">🧬</span>
-          <div>
-            <div class="obj-label">1. Destino celular</div>
-            <p class="obj-text">TGF-β, Notch, Hedgehog, WNT (vía APC), transcripción (SOX). Regulan la oposición entre división y diferenciación.</p>
-          </div>
-        </div>
-        <div class="obj-item">
-          <span class="obj-icon">⚙️</span>
-          <div>
-            <div class="obj-label">2. Supervivencia celular</div>
-            <p class="obj-text">RAS, PI3K, TP53, Ciclo celular/apoptosis, HIF-1. Controlan la ratio de nacimiento/muerte celular.</p>
-          </div>
-        </div>
-        <div class="obj-item">
-          <span class="obj-icon">🔧</span>
-          <div>
-            <div class="obj-label">3. Mantenimiento del genoma</div>
-            <p class="obj-text">Reparación de ADN (BRCA1/2, MMR), inestabilidad cromosómica. Permiten la acumulación de alteraciones adicionales.</p>
-          </div>
-        </div>
-      </div>
-      <p>Este marco integrador es conceptualmente relevante porque explica por qué mutaciones en distintos genes de una misma vía son frecuentemente mutuamente excluyentes, y abre la posibilidad de <strong>dirigir el tratamiento a la vía</strong> en lugar de al gen específico.</p>
-    </div>
-  </details>
-
-  <details>
-    <summary>Heterogeneidad Genética: Cuatro Tipos Relevantes</summary>
-    <div class="details-body">
-      <p>Vogelstein et al. distinguen cuatro formas de heterogeneidad genética con implicaciones clínicas directas:</p>
-      <ol style="padding-left:1.5rem; color:var(--text-dim); font-size:0.9rem; line-height:2;">
-        <li><strong>Intratumoral:</strong> variación entre células de un mismo tumor; siempre presente, responsable de respuestas incompletas a terapia dirigida.</li>
-        <li><strong>Intertumoral:</strong> diferencias entre tumores del mismo subtipo histopatológico en distintos pacientes.</li>
-        <li><strong>Temporal:</strong> evolución del perfil mutacional durante la progresión y bajo presión terapéutica (resistencia adquirida).</li>
-        <li><strong>Regional:</strong> diferencias entre regiones espacialmente distintas de un mismo tumor (relevante para biopsia líquida).</li>
-      </ol>
-      <div class="warn-box">
-        <strong>Relevancia clínica:</strong> Esta heterogeneidad explica por qué una biopsia única puede no representar el perfil genómico completo del tumor y justifica el desarrollo de la biopsia líquida y el ctDNA como herramientas de monitoreo dinámico.
-      </div>
-    </div>
-  </details>
-
-  <details>
-    <summary>Implicaciones para la Medicina de Precisión y la Detección Temprana</summary>
-    <div class="details-body">
-      <p>El artículo concluye con una propuesta programática de alto impacto: la estrategia prioritaria contra el cáncer debe ser la <strong>detección temprana y la prevención</strong> (Plan A), reservando la terapia de enfermedad avanzada como contingencia (Plan B).</p>
-      <p>Los autores estiman que más del 75% de las muertes por cáncer podrían reducirse en las próximas décadas si se invirtieran mayores recursos en detección precoz. Esta postura tiene implicaciones ético-políticas que constituyen un eje central de discusión para los futuros médicos.</p>
-      <p>En cuanto a la medicina de precisión, el conocimiento de los genes driver específicos de cada tumor permite seleccionar inhibidores de cinasas (EGFR, ALK, BRAF), prever respuestas farmacológicas y estratificar pacientes. Sin embargo, persisten desafíos: la mayoría de los genes driver son supresores de tumor, cuya proteína pérdida no es directamente terapéuticamente asequible.</p>
-    </div>
-  </details>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 4: DESARROLLO TEMPORAL
-════════════════════════════════════════════ -->
-<section id="desarrollo">
-  <div class="section-header">
-    <span class="section-number">04 ——</span>
-    <h2>Desarrollo <em>Temporal</em></h2>
-  </div>
-
-  <p>La actividad se despliega en cinco fases progresivas, articulando trabajo autónomo previo, trabajo presencial en aula y cierre evaluativo.</p>
-
-  <div class="timeline">
-    <div class="tl-item">
-      <div class="tl-dot"></div>
-      <div class="tl-time">FASE 0 · Extraclase · 2 horas</div>
-      <div class="card card-red" style="margin-bottom:0">
-        <h3>Lectura Dirigida y Glosario Activo</h3>
-        <p>El estudiante lee el artículo completo de Vogelstein et al. (2013) con una guía de lectura entregada previamente. Elabora un glosario activo (≥20 términos) en el que no sólo define, sino que explica con sus propias palabras la relevancia de cada concepto en el contexto del artículo. Identifica tres afirmaciones del texto que le resulten contraintuitivas o que genere una pregunta.</p>
-        <div class="warn-box" style="margin-top:1rem;">
-          <strong>Entregable:</strong> Glosario activo (digital o manuscrito) + 3 preguntas propias para discusión en clase. Sin este entregable, el estudiante no puede participar activamente en la Fase 1.
-        </div>
+      <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden">
+        <table class="student-table">
+          <thead>
+            <tr>
+              <th>Matrícula</th>
+              <th>Nombre</th>
+              <th>Grupo</th>
+              <th>Actividades</th>
+              <th>Calificación</th>
+              <th>Estado</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="student-table-body"></tbody>
+        </table>
       </div>
     </div>
 
-    <div class="tl-item">
-      <div class="tl-dot teal"></div>
-      <div class="tl-time">FASE 1 · Presencial · 90 minutos</div>
-      <div class="card card-gold" style="margin-bottom:0">
-        <h3>Activación de Conocimientos y Discusión Socrática</h3>
-        <p>El profesor conduce una discusión socrática usando las preguntas generadas por los estudiantes. Se construye colectivamente en el pizarrón el "mapa del paisaje genómico" con los conceptos centrales. El profesor introduce el contexto del TCGA y la base de datos COSMIC. Se integra una discusión breve sobre las diferencias conceptuales entre el modelo de Vogelstein (genómico-mutacional) y el modelo de Hallmarks de Hanahan &amp; Weinberg (fenotípico-funcional).</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot purple"></div>
-      <div class="tl-time">FASE 2 · Presencial · 2 horas</div>
-      <div class="card card-purple" style="margin-bottom:0">
-        <h3>Trabajo en Equipos: Análisis de Caso Genómico</h3>
-        <p>En equipos de 4–5 estudiantes, cada equipo recibe un tipo de tumor específico (cáncer colorrectal, cáncer de pulmón NSCLC, glioblastoma, melanoma, cáncer de páncreas o cáncer de mama). Utilizando el cBioPortal y la Figura 2 del artículo, el equipo mapea las vías driver de su tumor y responde un cuestionario analítico guiado. Las actividades detalladas se describen en la Sección 5.</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot orange"></div>
-      <div class="tl-time">FASE 3 · Extraclase · 4 horas</div>
-      <div class="card card-orange" style="margin-bottom:0">
-        <h3>Investigación Bibliográfica Avanzada y Propuesta Integradora</h3>
-        <p>Cada equipo realiza una búsqueda bibliográfica en PubMed y Google Scholar (post-2015, alta evidencia) para actualizar el conocimiento sobre las vías driver de su tumor asignado. Con ello elabora una Propuesta Integradora (ver Actividad 4) que conecta genómica, hallmarks y estrategia clínica, incluyendo al menos 5 referencias bibliográficas adicionales al artículo base.</p>
-      </div>
-    </div>
-
-    <div class="tl-item">
-      <div class="tl-dot gold"></div>
-      <div class="tl-time">FASE 4 · Presencial · 2 horas</div>
-      <div class="card card-red" style="margin-bottom:0">
-        <h3>Presentación, Debate y Síntesis Colectiva</h3>
-        <p>Cada equipo presenta su propuesta en 10 minutos seguidos de 5 minutos de debate con el grupo. El profesor modera y problematiza. Al final, se realiza una síntesis colectiva que construye un modelo integrado "Vogelstein + Hanahan" del cáncer como enfermedad evolutiva del genoma. Cierre con reflexión crítica sobre la afirmación de Vogelstein respecto al Plan A vs Plan B en la política de salud oncológica.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 5: ACTIVIDADES DETALLADAS
-════════════════════════════════════════════ -->
-<section id="actividades">
-  <div class="section-header">
-    <span class="section-number">05 ——</span>
-    <h2>Actividades <em>Detalladas</em></h2>
-  </div>
-
-  <!-- ACTIVIDAD 1 -->
-  <div class="act-card">
-    <div class="act-number">1</div>
-    <div class="act-header">
-      <span class="act-tag tag-ind">Individual</span>
-      <span class="act-tag tag-inv">Investigación</span>
-      <h3 class="act-title">Glosario Activo con Razonamiento Integrador</h3>
-    </div>
-    <p>El estudiante elabora un glosario de al menos 20 términos clave del artículo. Para cada término no basta la definición: debe explicar <em>por qué ese concepto importa para entender la biología del cáncer</em> y debe proporcionar al menos un ejemplo concreto del artículo.</p>
-    <div class="info-box">
-      <strong>Términos obligatorios a incluir:</strong> Exoma, Mutación somática, Mutación driver, Mutación passenger, Mut-driver gene, Epi-driver gene, Montaña / Colina, COSMIC, Heterogeneidad intratumoral, Selección clonal, Inestabilidad microsatelital (MSI), Inestabilidad cromosómica, Cromothripsis, Translocación, Amplificación génica, Deleción homocigota, Vía de señalización, Plan A / Plan B, ctDNA, Medicina de precisión.
-    </div>
-    <ul class="q-list">
-      <li><strong>Pregunta reflexiva obligatoria 1:</strong> ¿Por qué los autores afirman que la distinción entre gen driver y mutación driver es fundamental? Proporciona un ejemplo con el gen <em>APC</em>. <span class="bloom-tag b-ana">Análisis</span></li>
-      <li><strong>Pregunta reflexiva obligatoria 2:</strong> Explica con tus propias palabras la paradoja de que los tumores, siendo genómicamente complejos, puedan responder dramáticamente a la inhibición de un solo gen (ej. <em>BRAF</em> V600E en melanoma). <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li><strong>Pregunta libre:</strong> El estudiante formula su propia pregunta más interesante surgida de la lectura, justificando por qué le parece relevante y formulando una hipótesis tentativa de respuesta. <span class="bloom-tag b-cre">Creación</span></li>
-    </ul>
-  </div>
-
-  <!-- ACTIVIDAD 2 -->
-  <div class="act-card">
-    <div class="act-number">2</div>
-    <div class="act-header">
-      <span class="act-tag tag-ind">Individual</span>
-      <span class="act-tag tag-disc">Discusión</span>
-      <h3 class="act-title">Cuestionario de Razonamiento Escalonado</h3>
-    </div>
-    <p>Cuestionario individual escrito que debe completarse <em>durante</em> la lectura (no después). Las preguntas siguen una progresión de dificultad cognitiva. Se entrega al inicio de la Fase 1.</p>
-    <ul class="q-list">
-      <li>Define la diferencia entre secuenciación del exoma y del genoma completo. ¿Qué ventajas y limitaciones tiene cada abordaje para el estudio del paisaje mutacional del cáncer? <span class="bloom-tag b-com">Comprensión</span></li>
-      <li>La Figura 1B del artículo muestra que el melanoma y el cáncer de pulmón tienen tasas mutacionales mucho más altas que el meduloblastoma. Propón dos hipótesis biológicas que expliquen esta diferencia. <span class="bloom-tag b-ana">Análisis</span></li>
-      <li>¿Cuál es el significado del criterio del 20/20 que proponen los autores para clasificar genes como oncogenes o supresores tumorales? ¿Por qué la frecuencia de mutación no es suficiente criterio? <span class="bloom-tag b-ana">Análisis</span></li>
-      <li>Vogelstein et al. proponen que las mutaciones en componentes de una misma vía de señalización tienden a ser mutuamente excluyentes. ¿Qué implicación tiene esto para entender la evolución clonal del tumor? ¿Apoya o contradice el modelo de selección darwiniana? <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li>El artículo menciona la "materia oscura" (dark matter) del cáncer. ¿Qué significa este concepto? Discute por qué el secuenciamiento actual podría subestimar el número real de genes driver. Fundamenta tu respuesta con datos del artículo. <span class="bloom-tag b-ana">Análisis</span></li>
-      <li>Los autores afirman que la metástasis puede explicarse en principio por procesos estocásticos, sin necesidad de postular genes de metástasis específicos. ¿Estás de acuerdo? Argumenta con base en el artículo y en lo que conoces de biología celular del cáncer. <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li>Si eres un médico en 2030 con acceso al perfil genómico completo del tumor de tu paciente, describe (no más de 10 líneas) cómo utilizarías la clasificación de vías driver de Vogelstein para tomar decisiones terapéuticas. <span class="bloom-tag b-cre">Creación</span></li>
-    </ul>
-  </div>
-
-  <!-- ACTIVIDAD 3 -->
-  <div class="act-card">
-    <div class="act-number">3</div>
-    <div class="act-header">
-      <span class="act-tag tag-grp">Equipo</span>
-      <span class="act-tag tag-inv">Investigación</span>
-      <h3 class="act-title">Análisis de Caso Genómico con cBioPortal y COSMIC</h3>
-    </div>
-    <p>Cada equipo trabaja con un tipo tumoral asignado. Accede a <strong>cBioPortal for Cancer Genomics</strong> (cbioportal.org) y al <strong>COSMIC</strong> (cancer.sanger.ac.uk) para responder las siguientes preguntas basadas en datos reales del TCGA. <em>Todos los hallazgos deben sustentarse con capturas de pantalla incorporadas al informe.</em></p>
-
-    <details>
-      <summary>🔬 Parte A — Caracterización del Paisaje Genómico</summary>
-      <div class="details-body">
-        <ul class="q-list">
-          <li>Accede al cBioPortal, selecciona tu tipo tumoral del TCGA (ej. TCGA-COAD para colorrectal). Identifica los 5 genes más frecuentemente mutados. ¿Son los mismos que menciona Vogelstein et al.? ¿Ha cambiado algo en los datos actualizados? <span class="bloom-tag b-com">Comprensión</span></li>
-          <li>Clasifica cada uno de esos 5 genes como oncogén o supresor tumoral según el criterio ratiométrico del artículo. Consulta COSMIC para verificar el patrón de mutación. <span class="bloom-tag b-apl">Aplicación</span></li>
-          <li>¿Cuántas mutaciones somáticas no sinónimas por tumor reporta cBioPortal en promedio para tu tipo tumoral? ¿Coincide con los datos de la Figura 1B del artículo? Interpreta las diferencias. <span class="bloom-tag b-ana">Análisis</span></li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary>🧩 Parte B — Mapeo de Vías de Señalización</summary>
-      <div class="details-body">
-        <ul class="q-list">
-          <li>Usando la Figura 7 del artículo y los datos de cBioPortal, identifica qué vías de señalización están más afectadas en tu tipo tumoral. Elabora un diagrama simplificado de la vía principal y señala dónde ocurren las alteraciones genéticas más frecuentes. <span class="bloom-tag b-apl">Aplicación</span></li>
-          <li>Selecciona dos genes driver de tu tumor que actúen en la misma vía de señalización. Confirma en cBioPortal si sus alteraciones son mutuamente excluyentes. Interpreta el resultado en términos evolutivos. <span class="bloom-tag b-ana">Análisis</span></li>
-          <li>Conecta las vías afectadas con al menos 3 hallmarks del cáncer según Hanahan &amp; Weinberg (2011). Explica el mecanismo molecular que une cada vía driver con el hallmark correspondiente. <span class="bloom-tag b-ana">Análisis</span></li>
-        </ul>
-      </div>
-    </details>
-
-    <details>
-      <summary>🔎 Parte C — Pensamiento Crítico sobre Limitaciones</summary>
-      <div class="details-body">
-        <ul class="q-list">
-          <li>Identifica al menos dos genes que en el artículo de Vogelstein (2013) no se mencionan como driver, pero que en los datos actuales de TCGA/cBioPortal aparecen recurrentemente alterados en tu tumor. ¿Qué explica esta diferencia? <span class="bloom-tag b-eva">Evaluación</span></li>
-          <li>¿Qué limitaciones metodológicas del NGS exónico podrían estar subestimando genes driver en tu tipo tumoral específico? Argumenta con base en el artículo y en al menos una referencia adicional publicada posterior a 2018. <span class="bloom-tag b-eva">Evaluación</span></li>
-          <li>Discute si el perfil genómico que describes corresponde principalmente a la "cima del iceberg" (mutaciones clonales) o si refleja también la heterogeneidad subclonal. ¿Qué herramienta o diseño de estudio serviría para profundizar en esto? <span class="bloom-tag b-cre">Creación</span></li>
-        </ul>
-      </div>
-    </details>
-  </div>
-
-  <!-- ACTIVIDAD 4 -->
-  <div class="act-card">
-    <div class="act-number">4</div>
-    <div class="act-header">
-      <span class="act-tag tag-grp">Equipo</span>
-      <span class="act-tag tag-inv">Investigación</span>
-      <span class="act-tag tag-disc">Síntesis</span>
-      <h3 class="act-title">Propuesta Integradora: Del Genoma a la Clínica</h3>
-    </div>
-    <p>Cada equipo elabora un documento de síntesis (1,500–2,000 palabras) con el siguiente esquema obligatorio. La propuesta debe demostrar integración de las tres dimensiones: <em>genómica molecular, biología del cáncer y perspectiva clínica-traslacional.</em></p>
-    <div class="info-box">
-      <strong>Estructura obligatoria del documento:</strong>
-    </div>
-    <ul class="q-list">
-      <li><strong>Introducción (≤250 palabras):</strong> Presenta el tumor asignado, su epidemiología (incluyendo datos para México, búsqueda en INEGI/Globocan) y justifica la importancia del análisis genómico para este tumor. <span class="bloom-tag b-com">Comprensión</span></li>
-      <li><strong>Paisaje Genómico Actualizado (≤400 palabras):</strong> Describe las principales alteraciones driver de tu tumor con datos del TCGA actualizados. Compara con lo reportado en Vogelstein et al. (2013): ¿qué ha cambiado en 10 años de investigación? Incluye al menos 3 referencias post-2018. <span class="bloom-tag b-ana">Análisis</span></li>
-      <li><strong>Integración con Hallmarks (≤400 palabras):</strong> Conecta los genes driver identificados con los hallmarks del cáncer (Hanahan &amp; Weinberg 2011, Hanahan 2022). Elabora una tabla o diagrama que muestre esta integración. ¿Qué hallmarks están cubiertos y cuáles no explican los genes driver conocidos? <span class="bloom-tag b-ana">Análisis</span></li>
-      <li><strong>Propuesta Diagnóstica o Terapéutica (≤500 palabras):</strong> Propón una estrategia concreta de detección temprana (ej. biomarcadores en fluidos corporales) O una estrategia terapéutica dirigida a vías driver específicas. Fundamenta con evidencia de ensayos clínicos (ClinicalTrials.gov). ¿Es viable esta estrategia para el sistema de salud mexicano? <span class="bloom-tag b-cre">Creación</span></li>
-      <li><strong>Reflexión Crítica (≤200 palabras):</strong> Postura del equipo sobre el "Plan A vs Plan B" de Vogelstein: ¿debería México priorizar la detección temprana sobre el tratamiento de enfermedad avanzada? Argumenta con datos de salud pública. <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li><strong>Referencias bibliográficas:</strong> Mínimo 8 referencias. Formato Vancouver o APA 7.ª edición. Incluir siempre el DOI. Se descalifican referencias sin revisión por pares (Wikipedia, webs sin respaldo científico, etc.).</li>
-    </ul>
-  </div>
-
-  <!-- ACTIVIDAD 5 -->
-  <div class="act-card">
-    <div class="act-number">5</div>
-    <div class="act-header">
-      <span class="act-tag tag-disc">Debate</span>
-      <span class="act-tag tag-grp">Grupal</span>
-      <h3 class="act-title">Mesa Redonda: Pensamiento Crítico en Oncología Genómica</h3>
-    </div>
-    <p>Al finalizar las presentaciones de equipos, el profesor modera una mesa redonda de 30–40 minutos con los siguientes <strong>temas de debate</strong>. Cada estudiante debe intervenir al menos una vez con argumentos sustentados en el artículo o en las fuentes consultadas.</p>
-    <ul class="q-list">
-      <li><strong>DEBATE 1 — Reduccionismo vs. Complejidad:</strong> Vogelstein plantea que el cáncer se reduce a alteraciones en ~140 genes y 12 vías. Hanahan &amp; Weinberg insisten en la complejidad del microambiente tumoral. ¿Son estas perspectivas complementarias o contradictorias? ¿Cuál sirve mejor al clínico? <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li><strong>DEBATE 2 — La Metáfora del "Plan A":</strong> Vogelstein afirma que más del 75% de muertes por cáncer serían evitables con detección temprana. ¿Es esta afirmación sustentada por los datos o es una postura optimista no realista? ¿Qué barreras estructurales existen en el sistema de salud de México? <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li><strong>DEBATE 3 — Equidad en la Medicina de Precisión:</strong> Si el tratamiento óptimo del cáncer requiere secuenciación tumoral completa, ¿es esto éticamente sostenible en sistemas de salud con recursos limitados? ¿Cómo debe el médico equilibrar la mejor evidencia con la disponibilidad real? <span class="bloom-tag b-eva">Evaluación</span></li>
-      <li><strong>DEBATE 4 — Células troncales y genes driver:</strong> ¿Las células troncales cancerosas (CSC) son las responsables de acumular las mutaciones driver? ¿O cualquier célula puede ser la célula de origen? Conecta la información de Vogelstein con los conceptos de heterogeneidad tumoral y jerarquía celular estudiados en el módulo. <span class="bloom-tag b-cre">Síntesis</span></li>
-    </ul>
-  </div>
-</section>
-
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 6: RÚBRICA
-════════════════════════════════════════════ -->
-<section id="rubrica">
-  <div class="section-header">
-    <span class="section-number">06 ——</span>
-    <h2>Rúbrica de <em>Evaluación</em></h2>
-  </div>
-
-  <p>La calificación total de la actividad equivale a <strong>100 puntos</strong>, distribuidos entre los productos individuales y los colectivos.</p>
-
-  <div class="card" style="margin-bottom:2rem;">
-    <h3>Distribución de la Calificación</h3>
-    <div class="obj-grid" style="margin-top:1rem;">
-      <div class="obj-item">
-        <span class="obj-icon">📝</span>
+    <div id="dash-analytics" class="dash-panel">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
         <div>
-          <div class="obj-label">Glosario Activo (Individual)</div>
-          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">15 pts</p>
+          <div class="section-title">Distribución de calificaciones</div>
+          <div class="bar-chart" id="grade-dist-chart"></div>
+          <div class="bar-labels" id="grade-dist-labels"></div>
         </div>
-      </div>
-      <div class="obj-item">
-        <span class="obj-icon">🧠</span>
         <div>
-          <div class="obj-label">Cuestionario Escalonado (Individual)</div>
-          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">25 pts</p>
+          <div class="section-title">Actividad más difícil</div>
+          <div id="activity-difficulty" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
       </div>
-      <div class="obj-item">
-        <span class="obj-icon">🔬</span>
-        <div>
-          <div class="obj-label">Análisis de Caso Genómico (Equipo)</div>
-          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">25 pts</p>
-        </div>
+      <div style="margin-top:2rem">
+        <div class="section-title">Preguntas con mayor tasa de error</div>
+        <div id="error-analysis" style="font-size:0.82rem; color:var(--text2); line-height:1.8"></div>
       </div>
-      <div class="obj-item">
-        <span class="obj-icon">📄</span>
-        <div>
-          <div class="obj-label">Propuesta Integradora (Equipo)</div>
-          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">25 pts</p>
-        </div>
+    </div>
+
+    <div id="dash-exportar" class="dash-panel">
+      <div class="info-box">Los reportes generados son archivos de texto plano que pueden abrirse en Word, Excel (CSV) o cualquier editor. También puede copiar los datos directamente al portapapeles para pegarlos en una hoja de calificaciones.</div>
+      <div class="export-btns" style="flex-direction:column; gap:12px; max-width:480px">
+        <button class="btn btn-primary" onclick="exportCSV()">📊 Exportar lista completa como CSV (para Excel)</button>
+        <button class="btn" onclick="exportFullReport()">📄 Exportar reporte detallado de todos los alumnos (TXT)</button>
+        <button class="btn" onclick="exportGradeSheet()">📋 Exportar sólo calificaciones finales (tabla)</button>
+        <button class="btn btn-teal" onclick="copyCSVClipboard()">📋 Copiar CSV al portapapeles</button>
       </div>
-      <div class="obj-item">
-        <span class="obj-icon">🎤</span>
-        <div>
-          <div class="obj-label">Participación en Debate (Individual)</div>
-          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">10 pts</p>
-        </div>
+      <div id="export-preview" style="margin-top:1.5rem; display:none">
+        <div class="section-title">Vista previa</div>
+        <textarea id="export-text" style="width:100%; height:220px; font-family:'DM Mono',monospace; font-size:0.72rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg2); color:var(--text); resize:vertical;" readonly></textarea>
       </div>
     </div>
   </div>
+</div>
 
-  <h3>Rúbrica Detallada — Propuesta Integradora</h3>
-  <table class="rubrica">
-    <thead>
-      <tr>
-        <th>Criterio</th>
-        <th>Excelente (100%)</th>
-        <th>Bueno (75%)</th>
-        <th>Suficiente (50%)</th>
-        <th>Insuficiente (25%)</th>
-        <th>Puntos</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td class="criterio">Dominio conceptual del artículo</td>
-        <td>Demuestra comprensión profunda de todos los conceptos centrales; usa terminología precisa; sin errores conceptuales.</td>
-        <td>Comprende la mayoría de los conceptos; 1–2 errores menores.</td>
-        <td>Comprende los conceptos básicos; varios errores o imprecisiones.</td>
-        <td>Comprensión superficial; errores conceptuales importantes.</td>
-        <td class="pts">5 pts</td>
-      </tr>
-      <tr>
-        <td class="criterio">Uso de bases de datos (cBioPortal, COSMIC)</td>
-        <td>Evidencia clara de acceso y análisis; capturas de pantalla pertinentes; interpreta datos correctamente.</td>
-        <td>Acceso confirmado; análisis parcialmente correcto.</td>
-        <td>Menciona las bases de datos pero sin análisis original.</td>
-        <td>No evidencia uso real de las bases de datos.</td>
-        <td class="pts">5 pts</td>
-      </tr>
-      <tr>
-        <td class="criterio">Calidad bibliográfica</td>
-        <td>≥8 referencias; todas con DOI; artículos originales en revistas indexadas; post-2018 los requeridos.</td>
-        <td>6–7 referencias de calidad; 1–2 sin DOI.</td>
-        <td>4–5 referencias; algunas sin revisión por pares.</td>
-        <td>&lt;4 referencias; predominan fuentes no científicas.</td>
-        <td class="pts">5 pts</td>
-      </tr>
-      <tr>
-        <td class="criterio">Integración Vogelstein–Hallmarks</td>
-        <td>Conexión explícita, mecánicamente justificada entre genes driver, vías y hallmarks específicos, con evidencia.</td>
-        <td>Conexión correcta pero superficialmente justificada.</td>
-        <td>Conexión mencionada sin justificación mecanística.</td>
-        <td>No conecta los dos marcos conceptuales.</td>
-        <td class="pts">5 pts</td>
-      </tr>
-      <tr>
-        <td class="criterio">Propuesta original y viabilidad</td>
-        <td>Propuesta creativa, sustentada en evidencia clínica real; considera contexto del sistema de salud mexicano.</td>
-        <td>Propuesta válida, sustentada parcialmente; no considera contexto local.</td>
-        <td>Propuesta genérica repetida de la literatura; sin análisis propio.</td>
-        <td>Propuesta inviable, sin sustento o no existe.</td>
-        <td class="pts">5 pts</td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div class="warn-box" style="margin-top:1.5rem;">
-    <strong>Criterio transversal de integridad académica:</strong> El uso de inteligencia artificial generativa sin declaración explícita y sin verificación crítica del contenido (revisión con el artículo original y con bases de datos primarias) será considerado como trabajo no sustentado. El objetivo central de la actividad es desarrollar la capacidad de lectura crítica de literatura científica primaria, habilidad que no puede ser delegada.
+<!-- ══════════════════════════════════════════════
+     ACTIVITY MODAL
+══════════════════════════════════════════════ -->
+<div id="modal-overlay" class="modal-overlay" onclick="closeModalOutside(event)">
+  <div class="modal-box" id="modal-box">
+    <div class="modal-head">
+      <div class="modal-head-title" id="modal-title">Actividad</div>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer" id="modal-footer"></div>
   </div>
-</section>
+</div>
 
-<!-- ═══════════════════════════════════════════
-     SECCIÓN 7: RECURSOS
-════════════════════════════════════════════ -->
-<section id="recursos">
-  <div class="section-header">
-    <span class="section-number">07 ——</span>
-    <h2>Recursos y <em>Fuentes</em></h2>
-  </div>
-
-  <p>Listado de bases de datos, herramientas y referencias complementarias para el desarrollo de la actividad. Todas las fuentes listadas son de acceso libre o disponibles a través de la biblioteca digital de la UNAM (VPN requerida para algunas).</p>
-
-  <h3 style="margin-bottom:1rem;">Bases de Datos Primarias <span class="tag">Obligatorias</span></h3>
-  <div class="res-grid">
-    <div class="res-item">
-      <div class="res-type">Base de datos · Genómica de cáncer</div>
-      <div class="res-name">cBioPortal for Cancer Genomics</div>
-      <p class="res-desc">Portal de análisis y visualización de datos genómicos del TCGA y otros estudios. Permite análisis de mutaciones, expresión, amplificaciones y correlaciones clínicas.</p>
-      <div class="res-url">cbioportal.org</div>
+<!-- DETAIL MODAL -->
+<div id="detail-overlay" class="modal-overlay" onclick="closeDetailOutside(event)">
+  <div class="modal-box" style="max-width:540px" id="detail-box">
+    <div class="modal-head">
+      <div class="modal-head-title" id="detail-title">Detalle del estudiante</div>
+      <button class="modal-close" onclick="closeDetail()">✕</button>
     </div>
-    <div class="res-item">
-      <div class="res-type">Base de datos · Mutaciones somáticas</div>
-      <div class="res-name">COSMIC — Catalogue of Somatic Mutations in Cancer</div>
-      <p class="res-desc">Catálogo global de mutaciones somáticas en cáncer. Fundamental para identificar el patrón de mutación de genes driver (montañas, recurrencia, missense vs truncantes).</p>
-      <div class="res-url">cancer.sanger.ac.uk/cosmic</div>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Programa · TCGA</div>
-      <div class="res-name">The Cancer Genome Atlas (TCGA)</div>
-      <p class="res-desc">Repositorio NCI/NIH con datos genómicos, transcriptómicos y clínicos de más de 11,000 tumores de 33 tipos de cáncer. Acceso a través de GDC Data Portal.</p>
-      <div class="res-url">portal.gdc.cancer.gov</div>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Base de datos · Ensayos clínicos</div>
-      <div class="res-name">ClinicalTrials.gov</div>
-      <p class="res-desc">Registro de ensayos clínicos en curso y concluidos. Útil para sustentar la Propuesta Integradora con evidencia de eficacia de terapias dirigidas.</p>
-      <div class="res-url">clinicaltrials.gov</div>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Buscador · Literatura biomédica</div>
-      <div class="res-name">PubMed / MEDLINE</div>
-      <p class="res-desc">Base de datos bibliográfica de la NLM/NIH. Uso obligatorio para la búsqueda de referencias complementarias. Filtros recomendados: Full text, Clinical Trial, Systematic Review, &gt;2018.</p>
-      <div class="res-url">pubmed.ncbi.nlm.nih.gov</div>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Estadísticas · Epidemiología</div>
-      <div class="res-name">GLOBOCAN — IARC</div>
-      <p class="res-desc">Estadísticas de incidencia y mortalidad por cáncer a nivel mundial y por país. Incluye datos para México. Indispensable para la sección epidemiológica de la Propuesta Integradora.</p>
-      <div class="res-url">gco.iarc.fr/today</div>
+    <div class="modal-body" id="detail-body"></div>
+    <div class="modal-footer">
+      <div></div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-sm" onclick="downloadOneReport()">⬇ Descargar reporte</button>
+        <button class="btn btn-sm btn-primary" onclick="closeDetail()">Cerrar</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <h3 style="margin:2rem 0 1rem;">Lecturas Complementarias del Módulo</h3>
-  <div class="res-grid">
-    <div class="res-item">
-      <div class="res-type">Artículo seminal · Hallmarks</div>
-      <div class="res-name">Hanahan &amp; Weinberg (2011) — Hallmarks of Cancer: The Next Generation</div>
-      <p class="res-desc">Cell 144:646–674. Marco conceptual complementario de Vogelstein: mientras éste describe el <em>qué</em> genómico, Hanahan &amp; Weinberg describen el <em>para qué</em> fenotípico.</p>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Artículo · Nuevas dimensiones</div>
-      <div class="res-name">Hanahan (2022) — Hallmarks of Cancer: New Dimensions</div>
-      <p class="res-desc">Cancer Discovery 12:31–46. Actualización con 4 nuevos hallmarks propuestos: plasticidad fenotípica, reprogramación epigenética no mutacional, microbiomas y senescencia. Integración con Vogelstein.</p>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Revisión · Evolución tumoral</div>
-      <div class="res-name">Nowell (1976) — The Clonal Evolution of Tumor Cell Populations</div>
-      <p class="res-desc">Science 194:23–28. Referencia histórica fundamental. El modelo de selección clonal de Nowell es la base conceptual sobre la que Vogelstein construye el modelo de alteraciones secuenciales.</p>
-    </div>
-    <div class="res-item">
-      <div class="res-type">Revisión · Medicina de precisión</div>
-      <div class="res-name">Garraway &amp; Lander (2013) — Lessons from the Cancer Genome</div>
-      <p class="res-desc">Cell 153:17–37. Perspectiva complementaria contemporánea al artículo de Vogelstein sobre las implicaciones del paisaje genómico para la oncología de precisión.</p>
-    </div>
-  </div>
-
-  <div class="cite-box" style="margin-top:2rem;">
-    <strong>Recursos de apoyo para búsqueda bibliográfica:</strong> La biblioteca digital de la UNAM (dgb.unam.mx) permite acceso a Science, Cell, Nature, NEJM, Lancet y otras revistas de alto impacto a través de VPN institucional. Se recomienda el uso de Mendeley o Zotero para gestión de referencias.
-  </div>
-</section>
-
-</main>
-
-<!-- ═══════════════════════════════════════════
-     FOOTER
-════════════════════════════════════════════ -->
-<footer>
-  <p><strong>Universidad Nacional Autónoma de México</strong></p>
-  <p>Facultad de Estudios Superiores Iztacala · Carrera de Médico Cirujano</p>
-  <p>Módulo: Células Troncales y Cáncer · Sección de Enseñanza Básica</p>
-  <br>
-  <p style="color:var(--text-muted)">Actividad didáctica diseñada con base en: Vogelstein B et al. Cancer Genome Landscapes. <em>Science.</em> 2013;339(6127):1546–1558.</p>
-  <p style="color:var(--text-muted)">DOI: 10.1126/science.1235122 · Hanahan D, Weinberg RA. Cell 2011;144:646–674 · Hanahan D. Cancer Discovery 2022;12:31–46</p>
-</footer>
+<!-- NOTIFICATION -->
+<div id="notif" class="notif"></div>
 
 <script>
-  function scrollTo(id) {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
-    event.target.classList.add('active');
+/* ═══════════════════════════════════════════════
+   STORAGE LAYER — uses window.storage (Claude persistent)
+   with localStorage as fallback for local testing
+═══════════════════════════════════════════════ */
+const STORE_KEY = 'cglandscapes_v2';
+
+async function saveData(data) {
+  try {
+    if (window.storage) {
+      await window.storage.set(STORE_KEY, JSON.stringify(data), true);
+    } else {
+      localStorage.setItem(STORE_KEY, JSON.stringify(data));
+    }
+  } catch(e) {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch(_) {}
+  }
+}
+
+async function loadData() {
+  try {
+    if (window.storage) {
+      const r = await window.storage.get(STORE_KEY, true);
+      if (r && r.value) return JSON.parse(r.value);
+    }
+    const lsv = localStorage.getItem(STORE_KEY);
+    if (lsv) return JSON.parse(lsv);
+  } catch(e) {}
+  return { students: {} };
+}
+
+let DB = { students: {} };
+let currentUser = null;
+let currentRole = null;
+let currentDetailId = null;
+
+async function initDB() {
+  DB = await loadData();
+  if (!DB.students) DB.students = {};
+}
+
+/* ═══════════════════════════════════════════════
+   AUTH
+═══════════════════════════════════════════════ */
+function switchRole(role) {
+  document.getElementById('student-form').style.display = role === 'student' ? 'block' : 'none';
+  document.getElementById('prof-form').style.display = role === 'prof' ? 'block' : 'none';
+  document.getElementById('tab-student').classList.toggle('active', role === 'student');
+  document.getElementById('tab-prof').classList.toggle('active', role === 'prof');
+}
+
+async function loginStudent() {
+  const id = document.getElementById('student-id').value.trim();
+  const name = document.getElementById('student-name').value.trim();
+  const group = document.getElementById('student-group').value.trim();
+  if (!id || !name || !group) { notify('Complete todos los campos'); return; }
+  if (!DB.students[id]) {
+    DB.students[id] = {
+      id, name, group,
+      registered: new Date().toISOString(),
+      scores: {},
+      attempts: {},
+      quizErrors: [],
+      lastAccess: null,
+    };
+  } else {
+    DB.students[id].name = name;
+    DB.students[id].group = group;
+  }
+  DB.students[id].lastAccess = new Date().toISOString();
+  await saveData(DB);
+  currentUser = DB.students[id];
+  currentRole = 'student';
+  showScreen('student-screen');
+  renderStudentUI();
+}
+
+function loginProf() {
+  const key = document.getElementById('prof-key').value.trim();
+  const name = document.getElementById('prof-name').value.trim();
+  if (key !== 'iztacala2025') { notify('Clave incorrecta'); return; }
+  if (!name) { notify('Ingrese su nombre'); return; }
+  currentRole = 'prof';
+  showScreen('prof-screen');
+  document.getElementById('topbar-prof-name').textContent = name;
+  document.getElementById('prof-avatar').textContent = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  renderProfDashboard();
+}
+
+function logout() {
+  currentUser = null; currentRole = null;
+  showScreen('login-screen');
+}
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display=''; });
+  const s = document.getElementById(id);
+  s.style.display = id === 'login-screen' ? 'flex' : 'block';
+  s.classList.add('active');
+}
+
+/* ═══════════════════════════════════════════════
+   ACTIVITY DEFINITIONS
+═══════════════════════════════════════════════ */
+const ACTIVITIES = [
+  { id:'quiz', name:'Quiz adaptativo', desc:'12 preguntas sobre Cancer Genome Landscapes', icon:'🧬', pts:25, color:'#fef3c7', iconBg:'#d97706' },
+  { id:'flashcards', name:'Flashcards — Glosario activo', desc:'15 términos clave del artículo de Vogelstein', icon:'📇', pts:10, color:'#ede9fe', iconBg:'#7c3aed' },
+  { id:'dragdrop', name:'Clasificador de genes', desc:'Driver vs. passenger, oncogén vs. supresor', icon:'🔀', pts:15, color:'#dcfce7', iconBg:'#16a34a' },
+  { id:'timeline', name:'Puzzle evolutivo', desc:'Secuencia de tumorigénesis colorrectal', icon:'⏱', pts:15, color:'#e0f2fe', iconBg:'#0284c7' },
+  { id:'matching', name:'Emparejamiento gen–vía–tumor', desc:'3 rondas de asociación conceptual', icon:'🔗', pts:15, color:'#fce7f3', iconBg:'#db2777' },
+  { id:'scenario', name:'Casos clínicos', desc:'2 casos con decisión terapéutica basada en genómica', icon:'🏥', pts:20, color:'#fff7ed', iconBg:'#c2410c' },
+];
+
+const TOTAL_PTS = ACTIVITIES.reduce((a,b) => a + b.pts, 0);
+
+function getScore(id) {
+  if (!currentUser || !currentUser.scores) return null;
+  return currentUser.scores[id] !== undefined ? currentUser.scores[id] : null;
+}
+
+function totalScore() {
+  if (!currentUser) return 0;
+  return ACTIVITIES.reduce((a,act) => a + (currentUser.scores[act.id] || 0), 0);
+}
+
+function completedCount() {
+  if (!currentUser) return 0;
+  return ACTIVITIES.filter(a => currentUser.scores[a.id] !== undefined).length;
+}
+
+/* ═══════════════════════════════════════════════
+   STUDENT UI
+═══════════════════════════════════════════════ */
+function renderStudentUI() {
+  const u = currentUser;
+  document.getElementById('topbar-student-name').textContent = u.name;
+  document.getElementById('topbar-avatar').textContent = u.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+
+  const done = completedCount();
+  const total = totalScore();
+  const pct = Math.round((total/TOTAL_PTS)*100);
+
+  document.getElementById('progress-overview').innerHTML = `
+    <div class="prog-card"><div class="prog-card-label">Actividades</div><div class="prog-card-val">${done}/${ACTIVITIES.length}</div><div class="prog-card-sub">completadas</div></div>
+    <div class="prog-card"><div class="prog-card-label">Puntos</div><div class="prog-card-val">${total}</div><div class="prog-card-sub">de ${TOTAL_PTS} posibles</div></div>
+    <div class="prog-card"><div class="prog-card-label">Calificación</div><div class="prog-card-val">${pctToGrade(pct)}</div><div class="prog-card-sub">${pct}%</div></div>
+    <div class="prog-card"><div class="prog-card-label">Matrícula</div><div class="prog-card-val" style="font-size:1rem">${u.id}</div><div class="prog-card-sub">${u.group}</div></div>
+  `;
+
+  document.getElementById('activity-list').innerHTML = ACTIVITIES.map(act => {
+    const sc = getScore(act.id);
+    const done = sc !== null;
+    const pctAct = done ? Math.round((sc/act.pts)*100) : 0;
+    return `<div class="act-row ${done?'done':''}" onclick="openActivity('${act.id}')">
+      <div class="act-icon" style="background:${act.color}; font-size:1.2rem">${act.icon}</div>
+      <div class="act-info">
+        <div class="act-name">${act.name}</div>
+        <div class="act-desc">${act.desc}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
+        ${done
+          ? `<span class="act-badge badge-pts">${sc}/${act.pts} pts</span><span class="act-badge badge-done">✓ Completa</span>`
+          : `<span class="act-badge badge-pending">${act.pts} pts</span>`}
+      </div>
+    </div>`;
+  }).join('');
+
+  if (done === ACTIVITIES.length) {
+    document.getElementById('final-report-section').style.display = 'block';
+    renderFinalReport();
+  }
+}
+
+function pctToGrade(pct) {
+  if (pct >= 90) return '10';
+  if (pct >= 80) return '9';
+  if (pct >= 70) return '8';
+  if (pct >= 60) return '7';
+  if (pct >= 50) return '6';
+  return '5';
+}
+
+function pctToLetterGrade(pct) {
+  if (pct >= 90) return 'A';
+  if (pct >= 80) return 'B';
+  if (pct >= 70) return 'C';
+  if (pct >= 60) return 'D';
+  return 'F';
+}
+
+/* ═══════════════════════════════════════════════
+   QUIZ DATA & LOGIC
+═══════════════════════════════════════════════ */
+const QUIZ_Qs = [
+  {q:"¿Cuántas mutaciones no sinónimas presenta en promedio un tumor sólido común?",opts:["5 a 10","33 a 66","100 a 200",">500"],c:1,exp:"Vogelstein et al. reportan 33–66 mutaciones no sinónimas. ~95% son sustituciones de base única. La mayoría son passenger sin ventaja selectiva."},
+  {q:"En la metáfora topográfica del paisaje genómico, las 'montañas' representan:",opts:["Todos los genes del exoma","Genes driver muy frecuentemente mutados (ej. TP53, KRAS)","Regiones de alta densidad génica","Genes amplificados en tumores pediátricos"],c:1,exp:"Las 'montañas' son genes driver con alta frecuencia como TP53 y KRAS. Las 'colinas' son drivers de baja frecuencia pero mucho más numerosas."},
+  {q:"Regla 20/20 para clasificar un gen como oncogén Mut-driver:",opts:["Mutado en >20 estudios independientes",">20% de mutaciones COSMIC son missense en posiciones recurrentes",">20% de pacientes presentan la alteración","Amplificado 20 veces por encima del nivel basal"],c:1,exp:"Oncogén: >20% missense recurrentes. Supresor tumoral: >20% truncantes. Este criterio usa el patrón, no solo la frecuencia."},
+  {q:"¿Cuántas mutaciones driver tiene típicamente un tumor colorrectal adulto?",opts:["0 a 1","2 a 8","15 a 25","50 a 100"],c:1,exp:"2–8 mutaciones driver por tumor. Las restantes son passenger. La progresión colorrectal tarda 20–30 años."},
+  {q:"Los tres procesos celulares centrales regulados por las 12 vías driver son:",opts:["Apoptosis, angiogénesis y metástasis","Destino celular, supervivencia celular y mantenimiento del genoma","Proliferación, diferenciación y migración","Metabolismo, senescencia e inmortalización"],c:1,exp:"(1) Destino celular: vías WNT/APC, HH, NOTCH. (2) Supervivencia: RAS, PI3K, TP53. (3) Mantenimiento del genoma: BRCA, MMR."},
+  {q:"¿Por qué mutaciones en distintos genes de la misma vía tienden a ser mutuamente excluyentes?",opts:["Por restricción de espacio cromosómico","Una sola mutación en la vía ya otorga la ventaja selectiva máxima","Comparten el mismo promotor","Mecanismos de reparación impiden mutaciones dobles"],c:1,exp:"Si KRAS ya activa RAS-MAPK, una mutación adicional en BRAF no añade ventaja. Tiene implicaciones terapéuticas directas."},
+  {q:"¿Qué es la 'materia oscura' en el paisaje genómico del cáncer?",opts:["Células estromales contaminantes","Drivers no identificados: Epi-drivers, mutaciones no codificantes, regiones de baja cobertura","Mutaciones en cromosoma Y","Translocaciones en desiertos génicos"],c:1,exp:"Incluye Epi-driver genes, mutaciones en promotores (TERT), y regiones de difícil secuenciación. Explica la brecha entre epidemiología y datos moleculares."},
+  {q:"Tasa de falsos negativos estimada por NGS del exoma en cáncer pancreático (Biankin et al.):",opts:["<5%","~15%","~37%","~60%"],c:2,exp:"37% de mutaciones driver no detectadas. Solo 159/251 esperadas fueron identificadas. Causa: contaminación estromal y cobertura variable."},
+  {q:"¿Cómo explotan los inhibidores de PARP la deficiencia de BRCA1/2?",opts:["Activando directamente BRCA1 mutada","Letabilidad sintética: células BRCA-deficientes dependen más de PARP para reparación; inhibirlo es letal selectivo","Bloqueando la vía HER2","Inhibiendo VEGF"],c:1,exp:"Letabilidad sintética clásica: pérdida de reparación por recombinación homóloga (BRCA) + inhibición de PARP = muerte selectiva del tumor."},
+  {q:"¿Por qué vemurafenib funciona en melanoma BRAF V600E pero NO en cáncer colorrectal con la misma mutación?",opts:["El gen BRAF es diferente en colon","En colorrectal, EGFR reactiva la vía RAS-MAPK corriente arriba del bloqueo","Los pacientes metabolizan más rápido el fármaco","La mutación V600E ocurre en codón diferente"],c:1,exp:"En colorrectal, EGFR activa RAS-MAPK a nivel superior al punto de inhibición de vemurafenib, escapando el bloqueo. Contexto molecular importa."},
+  {q:"El 'Plan A' de Vogelstein para reducir la mortalidad por cáncer es:",opts:["Nuevos agentes de quimioterapia para metástasis","Detección temprana y prevención — >75% de muertes serían evitables","Inmunoterapia universal","Secuenciación germinal de todos los adultos"],c:1,exp:"La mayoría de muertes ocurren porque los cánceres se detectan en etapa metastásica. 20–30 años antes el tumor era operable."},
+  {q:"La heterogeneidad intratumoral implica que:",opts:["Es exclusiva de tumores pediátricos","Todo tumor tiene subclones genéticamente distintos; base de resistencia a terapia dirigida","Solo ocurre en la interfaz tumor-estroma","Solo es cuantificable por FISH"],c:1,exp:"Cada división introduce nuevas mutaciones. Subclones preexistentes resistentes seleccionados por la terapia explican las recaídas."},
+];
+
+let quizState = {};
+
+function initQuiz() {
+  quizState = { idx: 0, score: 0, errors: [], answered: false };
+}
+
+function renderQuiz() {
+  const q = QUIZ_Qs[quizState.idx];
+  const pct = Math.round((quizState.idx/QUIZ_Qs.length)*100);
+  document.getElementById('modal-body').innerHTML = `
+    <div class="quiz-progress">
+      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="qbar" style="width:${pct}%"></div></div>
+      <div class="quiz-progress-label">Pregunta ${quizState.idx+1} de ${QUIZ_Qs.length} · Aciertos: ${quizState.score}</div>
+    </div>
+    <div class="quiz-q">${q.q}</div>
+    <div class="quiz-opts" id="qopts">
+      ${q.opts.map((o,i)=>`<button class="quiz-opt" id="qopt-${i}" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="quiz-feedback" id="qfb"></div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <div style="font-size:0.78rem;color:var(--text3)">Selecciona la respuesta correcta</div>
+    <button class="btn btn-primary" id="qnext" onclick="nextQuizQ()" style="display:none">Siguiente →</button>
+  `;
+  quizState.answered = false;
+}
+
+function answerQuiz(i) {
+  if (quizState.answered) return;
+  quizState.answered = true;
+  const q = QUIZ_Qs[quizState.idx];
+  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
+  document.getElementById(`qopt-${q.c}`).classList.add('correct');
+  const fb = document.getElementById('qfb');
+  if (i === q.c) {
+    quizState.score++;
+    fb.className = 'quiz-feedback show ok';
+    fb.textContent = '✓ ' + q.exp;
+  } else {
+    document.getElementById(`qopt-${i}`).classList.add('wrong');
+    fb.className = 'quiz-feedback show bad';
+    fb.textContent = '✗ ' + q.exp;
+    quizState.errors.push({ qIdx: quizState.idx, question: q.q, selected: q.opts[i], correct: q.opts[q.c] });
+  }
+  document.getElementById('qnext').style.display = 'inline-flex';
+}
+
+function nextQuizQ() {
+  quizState.idx++;
+  if (quizState.idx >= QUIZ_Qs.length) {
+    const pts = Math.round((quizState.score / QUIZ_Qs.length) * 25);
+    saveActivityScore('quiz', pts, { errors: quizState.errors, rawScore: quizState.score, total: QUIZ_Qs.length });
+    showActivityResult('quiz', pts, 25, `${quizState.score}/${QUIZ_Qs.length} respuestas correctas`);
+  } else {
+    renderQuiz();
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   FLASHCARDS LOGIC
+═══════════════════════════════════════════════ */
+const FLASHDATA = [
+  {t:'Exoma',d:'Conjunto de exones del genoma (~1.5% total). El NGS del exoma detecta >80% de mutaciones causantes de enfermedad pero omite alteraciones en intrones, regiones reguladoras y promotores.'},
+  {t:'Mutación driver',d:'Mutación somática que confiere ventaja de crecimiento selectivo. Cada alteración aumenta el ratio de nacimiento/muerte celular. No todas las mutaciones de un gen driver son driver (ej. APC).'},
+  {t:'Mutación passenger',d:'Mutación sin ventaja selectiva. Se acumula como marcador del tiempo entre expansiones clonales. >99.9% de las alteraciones tumorales son passenger.'},
+  {t:'Mut-driver gene',d:'Gen con mutaciones driver identificables por su patrón (no solo frecuencia). ~125 identificados por NGS. Se subclasifican como oncogenes o supresores tumorales según la regla 20/20.'},
+  {t:'Epi-driver gene',d:'Gen que favorece la proliferación por alteración epigenética (metilación, modificación de histonas) sin mutación intragénica frecuente. Ej: silenciamiento de MLH1 por hipermetilación.'},
+  {t:'Regla 20/20',d:'Criterio ratiométrico: oncogén = >20% de mutaciones en COSMIC son missense recurrentes; supresor tumoral = >20% son truncantes. Usa el patrón de mutación, no la frecuencia.'},
+  {t:'Montaña / Colina',d:'Montaña: gen driver con alta frecuencia (TP53, KRAS). Colina: gen driver de baja frecuencia. Las colinas dominan numéricamente pero son difíciles de identificar estadísticamente.'},
+  {t:'Materia oscura',d:'Drivers no identificados por NGS actual: Epi-driver genes, mutaciones no codificantes (promotor TERT), regiones de difícil cobertura. Explica la "brecha" entre epidemiología y molecular.'},
+  {t:'Heterogeneidad intratumoral',d:'Diversidad genética entre células de un mismo tumor. Inevitable: cada división introduce mutaciones. Base de la resistencia adquirida a terapia dirigida.'},
+  {t:'Exclusión mutua',d:'Mutaciones en genes de la misma vía rara vez coexisten en el mismo tumor (ej. KRAS y BRAF). Confirma el modelo de señalización por vías; base de la lógica terapéutica por pathway.'},
+  {t:'Letabilidad sintética',d:'Pérdida simultánea de dos genes que por separado son viables pero juntos son letales. Base de inhibidores PARP en tumores BRCA1/2-deficientes (letabilidad con la reparación por recombinación homóloga).'},
+  {t:'MSI-H',d:'Inestabilidad de microsatélites de alta carga. Resultado de deficiencia en genes de reparación de mismatch (MLH1, MSH2). Tasas mutacionales 10–100× más altas. Predictor de respuesta a anti-PD1.'},
+  {t:'Plan A vs Plan B',d:'Plan A = detección temprana y prevención; Plan B = terapia de enfermedad avanzada. Vogelstein estima >75% de muertes evitables si se detecta en el 90% inicial del desarrollo tumoral.'},
+  {t:'Cromothripsis',d:'Evento catastrófico raro: uno o pocos cromosomas sufren decenas de reordenamientos simultáneos en una sola división. Genera fusiones oncogénicas y deleciones de supresores. Complica inferencias causales.'},
+  {t:'Señalización por vías',d:'Los ~140 genes driver actúan en solo 12 vías y 3 procesos centrales. Esto explica la exclusión mutua y permite dirigir terapia a la vía completa, no solo al gen mutado específico.'},
+];
+
+let flashState = {};
+
+function initFlash() {
+  flashState = { idx: 0, known: new Set(), review: new Set(), total: FLASHDATA.length };
+}
+
+function renderFlash() {
+  const fc = FLASHDATA[flashState.idx];
+  document.getElementById('modal-body').innerHTML = `
+    <div class="flash-nav" style="margin-bottom:1rem">
+      <button class="btn btn-sm" onclick="flashPrev()">← Ant.</button>
+      <div class="flash-counter">${flashState.idx+1} / ${FLASHDATA.length}</div>
+      <button class="btn btn-sm" onclick="flashNext()">Sig. →</button>
+    </div>
+    <div class="flash-wrap">
+      <div class="flash-card" id="fcard" onclick="document.getElementById('fcard').classList.toggle('flipped')">
+        <div class="flash-face flash-front"><div class="flash-term">${fc.t}</div><div class="flash-hint">Haz clic para la definición</div></div>
+        <div class="flash-face flash-back"><div class="flash-def">${fc.d}</div></div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:0.5rem">
+      <button class="btn btn-sm" style="color:var(--success);border-color:var(--success)" onclick="flashKnow()">✓ La sé</button>
+      <button class="btn btn-sm" style="color:var(--accent);border-color:var(--accent)" onclick="flashRepeat()">↺ Repasar</button>
+    </div>
+    <div style="font-size:0.72rem;color:var(--text3);text-align:center;margin-top:8px">
+      Aprendidas: ${flashState.known.size} · Por repasar: ${flashState.review.size}
+    </div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <div style="font-size:0.78rem;color:var(--text3)">Marca cada tarjeta antes de finalizar</div>
+    <button class="btn btn-teal" onclick="finishFlash()">Finalizar flashcards</button>
+  `;
+}
+
+function flashPrev() { flashState.idx = (flashState.idx - 1 + FLASHDATA.length) % FLASHDATA.length; renderFlash(); }
+function flashNext() { flashState.idx = (flashState.idx + 1) % FLASHDATA.length; renderFlash(); }
+function flashKnow() { flashState.known.add(flashState.idx); flashState.review.delete(flashState.idx); flashNext(); }
+function flashRepeat() { flashState.review.add(flashState.idx); flashState.known.delete(flashState.idx); flashNext(); }
+
+function finishFlash() {
+  const pts = Math.round((flashState.known.size / FLASHDATA.length) * 10);
+  saveActivityScore('flashcards', pts, { known: flashState.known.size, total: FLASHDATA.length });
+  showActivityResult('flashcards', pts, 10, `${flashState.known.size}/${FLASHDATA.length} tarjetas aprendidas`);
+}
+
+/* ═══════════════════════════════════════════════
+   DRAG & DROP LOGIC
+═══════════════════════════════════════════════ */
+const DND_DATA = [
+  {id:'kras', label:'KRAS G12D (missense recurrente)', cat:'onco'},
+  {id:'tp53', label:'TP53 R248* (truncante)', cat:'tsg'},
+  {id:'apc', label:'APC Q1338* (truncante aa 1–1600)', cat:'tsg'},
+  {id:'braf', label:'BRAF V600E (missense recurrente)', cat:'onco'},
+  {id:'pik3ca', label:'PIK3CA E545K (missense recurrente)', cat:'onco'},
+  {id:'apc2', label:'APC missense en C-terminal (aa 2400)', cat:'passenger'},
+  {id:'ezh2', label:'EZH2 — hipermetilación de histonas', cat:'epidriver'},
+  {id:'mlh1m', label:'MLH1 — silenciamiento por metilación', cat:'epidriver'},
+  {id:'syn', label:'Mutación sinónima sin patrón recurrente', cat:'passenger'},
+  {id:'rb1', label:'RB1 — deleción homocigota', cat:'tsg'},
+];
+
+const DND_ZONES = [
+  {id:'onco', label:'Oncogén (driver)', color:'#dc2626'},
+  {id:'tsg', label:'Supresor tumoral (driver)', color:'#2563eb'},
+  {id:'passenger', label:'Mutación passenger', color:'#6b7280'},
+  {id:'epidriver', label:'Epi-driver (epigenético)', color:'#b45309'},
+];
+
+let dndState = {};
+
+function initDnD() {
+  dndState = { placements: {}, dragging: null };
+}
+
+function renderDnD() {
+  document.getElementById('modal-body').innerHTML = `
+    <div class="dnd-source">
+      <div class="dnd-source-label">Genes y alteraciones por clasificar — arrastra a su zona</div>
+      <div class="dnd-items-wrap" id="dnd-pool">
+        ${DND_DATA.map(d=>`<div class="dnd-chip" id="dchip-${d.id}" draggable="true" ondragstart="dndStart('${d.id}')" ondragend="dndEnd()">${d.label}</div>`).join('')}
+      </div>
+    </div>
+    <div class="dnd-zones">
+      ${DND_ZONES.map(z=>`
+        <div class="dnd-zone" id="dzone-${z.id}" ondragover="dndOver(event)" ondragleave="dndLeave(event)" ondrop="dndDrop(event,'${z.id}')">
+          <div class="dnd-zone-name"><span class="dnd-zone-dot" style="background:${z.color}"></span>${z.label}</div>
+          <div class="dnd-zone-items" id="dzitems-${z.id}"></div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn btn-sm" onclick="resetDnD()">↺ Reiniciar</button>
+    <button class="btn btn-teal" onclick="checkDnD()">Verificar clasificación</button>
+  `;
+}
+
+function dndStart(id) { dndState.dragging = id; document.getElementById('dchip-'+id).classList.add('dragging'); }
+function dndEnd() { if(dndState.dragging) document.getElementById('dchip-'+dndState.dragging).classList.remove('dragging'); }
+function dndOver(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
+function dndLeave(e) { e.currentTarget.classList.remove('over'); }
+function dndDrop(e, zone) {
+  e.preventDefault(); e.currentTarget.classList.remove('over');
+  if (!dndState.dragging) return;
+  const chip = document.getElementById('dchip-'+dndState.dragging);
+  document.getElementById('dzitems-'+zone).appendChild(chip);
+  chip.classList.remove('dragging');
+  dndState.placements[dndState.dragging] = zone;
+  dndState.dragging = null;
+}
+
+function checkDnD() {
+  let correct = 0;
+  DND_DATA.forEach(d => {
+    const chip = document.getElementById('dchip-'+d.id);
+    if (!chip) return;
+    if (dndState.placements[d.id] === d.cat) { chip.classList.add('correct'); correct++; }
+    else { chip.classList.add('wrong'); }
+  });
+  const pts = Math.round((correct / DND_DATA.length) * 15);
+  saveActivityScore('dragdrop', pts, { correct, total: DND_DATA.length });
+  setTimeout(() => showActivityResult('dragdrop', pts, 15, `${correct}/${DND_DATA.length} genes clasificados correctamente`), 800);
+}
+
+function resetDnD() { initDnD(); renderDnD(); }
+
+/* ═══════════════════════════════════════════════
+   TIMELINE LOGIC
+═══════════════════════════════════════════════ */
+const TL_DATA = [
+  {id:'t1', label:'Mutación en APC — inicia adenoma pequeño en célula madre colónica (30–50 años)', correct:0},
+  {id:'t2', label:'Activación de KRAS G12D — expansión del adenoma (40–60 años)', correct:1},
+  {id:'t3', label:'Inactivación de SMAD4/TGFBR2 (vía TGF-β) — adenoma avanzado', correct:2},
+  {id:'t4', label:'Pérdida de TP53 — transición a carcinoma in situ (50–70 años)', correct:3},
+  {id:'t5', label:'Invasión local — carcinoma invasivo con todas las mutaciones driver', correct:4},
+  {id:'t6', label:'Metástasis hepática — células derivadas del tumor primario', correct:5},
+];
+
+let tlState = {};
+
+function initTimeline() {
+  tlState = { selected: null, slots: new Array(TL_DATA.length).fill(null), chips: [...TL_DATA].sort(()=>Math.random()-0.5) };
+}
+
+function renderTimeline() {
+  document.getElementById('modal-body').innerHTML = `
+    <p style="font-size:0.82rem;color:var(--text3);margin-bottom:1rem">Haz clic en un evento del banco y luego en la posición correcta en la secuencia.</p>
+    <div class="tl-bank" id="tl-bank">
+      ${tlState.chips.map(c=>`<div class="tl-chip ${tlState.slots.includes(c.id)?'used':''}" id="tlchip-${c.id}" onclick="tlSelect('${c.id}')">${c.label}</div>`).join('')}
+    </div>
+    <div class="tl-slots" id="tl-slots">
+      ${TL_DATA.map((_,i)=>`
+        <div class="tl-slot ${tlState.slots[i]?'filled':''}" id="tlslot-${i}" onclick="tlPlace(${i})">
+          <span class="tl-slot-n">${i+1}.</span>
+          <span class="tl-slot-content">${tlState.slots[i] ? TL_DATA.find(t=>t.id===tlState.slots[i]).label : '<span style="color:var(--text3)">Haz clic aquí para colocar el evento seleccionado</span>'}</span>
+        </div>
+      `).join('')}
+    </div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn btn-sm" onclick="resetTimeline()">↺ Reiniciar</button>
+    <button class="btn btn-teal" onclick="checkTimeline()">Verificar orden</button>
+  `;
+}
+
+function tlSelect(id) {
+  tlState.selected = id;
+  document.querySelectorAll('.tl-chip').forEach(c => c.classList.remove('selected'));
+  document.getElementById('tlchip-'+id).classList.add('selected');
+}
+
+function tlPlace(pos) {
+  if (!tlState.selected) return;
+  if (tlState.slots[pos]) {
+    const oldId = tlState.slots[pos];
+    const oldChip = document.getElementById('tlchip-'+oldId);
+    if (oldChip) { oldChip.classList.remove('used', 'selected'); }
+  }
+  tlState.slots[pos] = tlState.selected;
+  document.getElementById('tlchip-'+tlState.selected).classList.add('used');
+  tlState.selected = null;
+  renderTimeline();
+}
+
+function checkTimeline() {
+  let correct = 0;
+  TL_DATA.forEach((ev, i) => {
+    const slot = document.getElementById('tlslot-'+i);
+    if (!slot) return;
+    slot.classList.remove('correct','wrong','filled');
+    if (tlState.slots[i] === ev.id) { slot.classList.add('correct'); correct++; }
+    else if (tlState.slots[i]) { slot.classList.add('wrong'); }
+  });
+  const pts = Math.round((correct / TL_DATA.length) * 15);
+  saveActivityScore('timeline', pts, { correct, total: TL_DATA.length });
+  setTimeout(() => showActivityResult('timeline', pts, 15, `${correct}/${TL_DATA.length} eventos en posición correcta`), 600);
+}
+
+function resetTimeline() { initTimeline(); renderTimeline(); }
+
+/* ═══════════════════════════════════════════════
+   MATCHING LOGIC
+═══════════════════════════════════════════════ */
+const MATCH_ROUNDS = [
+  {
+    left:['KRAS G12D','TP53 truncante','APC Q1338*','PIK3CA H1047R','BRCA2 pérdida'],
+    right:['Oncogén · vía RAS-MAPK · >90% pancreático','Supresor · guardián del genoma · >50% de todos los tumores','Supresor · vía WNT · >80% colorrectal','Oncogén · vía PI3K · 30% mama/endometrio','Supresor · reparación HR · HBOC · letabilidad sintética PARP'],
+    pairs:[0,1,2,3,4]
+  },
+  {
+    left:['MLH1 metilación','BRAF V600E','IDH1 R132H','EGFR L858R','Destino celular'],
+    right:['Epi-driver · MSI-H · responde a anti-PD1','Oncogén · melanoma · falla en colorrectal (EGFR)','Oncogén · 2-HG · hipometilación · glioma bajo grado','Oncogén · RTK · NSCLC · responde a erlotinib','Proceso central: vías WNT/APC, HH, NOTCH'],
+    pairs:[0,1,2,3,4]
+  },
+  {
+    left:['Supervivencia celular','Mantenimiento del genoma','Heterogeneidad intratumoral','Materia oscura','Exclusión mutua'],
+    right:['Vías RAS, PI3K, TP53 — ratio nacimiento/muerte celular','Vías BRCA, MMR — integridad del ADN y caretakers del genoma','Subclones distintos · base de resistencia a terapia dirigida','Drivers no identificados por NGS: Epi-drivers y mutaciones no codificantes','Mutaciones en la misma vía rara vez coexisten en el mismo tumor'],
+    pairs:[0,1,2,3,4]
+  }
+];
+
+let matchState = {};
+
+function initMatching() {
+  matchState = { round: 0, leftSel: null, rightSel: null, matched: new Set(), score: 0, total: 0, shuffled: [] };
+  MATCH_ROUNDS.forEach(r => {
+    matchState.shuffled.push([...r.right.map((t,i)=>({t,i}))].sort(()=>Math.random()-0.5));
+  });
+}
+
+function renderMatching() {
+  const r = MATCH_ROUNDS[matchState.round];
+  const sh = matchState.shuffled[matchState.round];
+  document.getElementById('modal-body').innerHTML = `
+    <p style="font-size:0.78rem;color:var(--text3);margin-bottom:0.75rem">Ronda ${matchState.round+1} de ${MATCH_ROUNDS.length} — Selecciona un elemento de cada columna para emparejarlos.</p>
+    <div class="match-grid">
+      <div>
+        <div class="match-col-label">Gen / Concepto</div>
+        <div class="match-items">
+          ${r.left.map((t,i)=>`<div class="match-item ${matchState.matched.has('L'+matchState.round+'_'+i)?'matched-ok':''}" id="ml-${i}" onclick="matchSelect('left',${i})">${t}</div>`).join('')}
+        </div>
+      </div>
+      <div>
+        <div class="match-col-label">Vía / Función / Tumor</div>
+        <div class="match-items">
+          ${sh.map((item,j)=>`<div class="match-item ${matchState.matched.has('R'+matchState.round+'_'+item.i)?'matched-ok':''}" id="mr-${j}" data-orig="${item.i}" onclick="matchSelect('right',${j})">${item.t}</div>`).join('')}
+        </div>
+      </div>
+    </div>
+    <div style="font-size:0.78rem;color:var(--text3);margin-top:8px">Emparejados: ${matchState.matched.size/2} de ${r.left.length}</div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <div style="font-size:0.78rem;color:var(--text3)">Ronda ${matchState.round+1}/${MATCH_ROUNDS.length}</div>
+    <button class="btn btn-teal" onclick="nextMatchRound()">Siguiente ronda →</button>
+  `;
+}
+
+function matchSelect(side, idx) {
+  const r = MATCH_ROUNDS[matchState.round];
+  const sh = matchState.shuffled[matchState.round];
+  if (side === 'left') {
+    document.querySelectorAll('[id^="ml-"]').forEach(e => e.classList.remove('selected'));
+    if (!matchState.matched.has('L'+matchState.round+'_'+idx)) {
+      document.getElementById('ml-'+idx).classList.add('selected');
+      matchState.leftSel = idx;
+    }
+  } else {
+    document.querySelectorAll('[id^="mr-"]').forEach(e => { if (!e.classList.contains('matched-ok')) e.classList.remove('selected'); });
+    const origIdx = parseInt(document.getElementById('mr-'+idx).dataset.orig);
+    if (!matchState.matched.has('R'+matchState.round+'_'+origIdx)) {
+      document.getElementById('mr-'+idx).classList.add('selected');
+      matchState.rightSel = { j: idx, orig: origIdx };
+    }
+  }
+  if (matchState.leftSel !== null && matchState.rightSel !== null) {
+    const lIdx = matchState.leftSel;
+    const { j, orig } = matchState.rightSel;
+    if (r.pairs[lIdx] === orig) {
+      document.getElementById('ml-'+lIdx).classList.remove('selected');
+      document.getElementById('ml-'+lIdx).classList.add('matched-ok');
+      document.getElementById('mr-'+j).classList.remove('selected');
+      document.getElementById('mr-'+j).classList.add('matched-ok');
+      matchState.matched.add('L'+matchState.round+'_'+lIdx);
+      matchState.matched.add('R'+matchState.round+'_'+orig);
+      matchState.score++;
+      document.querySelector('[id^="mr-"]').parentElement.parentElement.querySelector('[style*="font-size:0.78rem"]').textContent = `Emparejados: ${matchState.matched.size/2} de ${r.left.length}`;
+    } else {
+      document.getElementById('ml-'+lIdx).classList.add('matched-bad');
+      document.getElementById('mr-'+j).classList.add('matched-bad');
+      setTimeout(() => {
+        document.getElementById('ml-'+lIdx) && document.getElementById('ml-'+lIdx).classList.remove('matched-bad','selected');
+        document.getElementById('mr-'+j) && document.getElementById('mr-'+j).classList.remove('matched-bad','selected');
+      }, 600);
+    }
+    matchState.leftSel = null; matchState.rightSel = null;
+  }
+}
+
+function nextMatchRound() {
+  matchState.total += MATCH_ROUNDS[matchState.round].left.length;
+  matchState.round++;
+  matchState.matched = new Set();
+  matchState.leftSel = null; matchState.rightSel = null;
+  if (matchState.round >= MATCH_ROUNDS.length) {
+    const pts = Math.round((matchState.score / (MATCH_ROUNDS.reduce((a,r)=>a+r.left.length,0))) * 15);
+    saveActivityScore('matching', pts, { correct: matchState.score, total: MATCH_ROUNDS.reduce((a,r)=>a+r.left.length,0) });
+    showActivityResult('matching', pts, 15, `${matchState.score}/${MATCH_ROUNDS.reduce((a,r)=>a+r.left.length,0)} pares correctos en 3 rondas`);
+  } else {
+    renderMatching();
+  }
+}
+
+/* ═══════════════════════════════════════════════
+   SCENARIO LOGIC
+═══════════════════════════════════════════════ */
+const SCENARIOS = [
+  {
+    title:'Caso 1: Adenocarcinoma pulmonar',
+    steps:[
+      { case:'Paciente masculino, 62 años, fumador crónico. Adenocarcinoma pulmonar estadio IIIB. NGS tumoral: EGFR L858R (exón 21), KRAS wild-type, ALK wild-type, PD-L1 15%.', opts:['Quimioterapia platino + pemetrexed','Erlotinib (inhibidor EGFR) primera línea','Pembrolizumab por PD-L1 15%','Cirugía sin terapia sistémica'], c:1, exp:'EGFR L858R es mutación driver missense recurrente. Los inhibidores EGFR (erlotinib, osimertinib) son primera línea. PD-L1 15% no alcanza el umbral de ≥50% para pembrolizumab en primera línea sin quimioterapia.' },
+      { case:'Seis meses después: progresión. Biopsia líquida (ctDNA) detecta EGFR T790M — mutación de resistencia adquirida a erlotinib de primera generación.', opts:['Reiniciar erlotinib a dosis mayor','Osimertinib (inhibidor EGFR 3ª gen., activo contra T790M)','Quimioterapia exclusiva','Suspender tratamiento por resistencia'], c:1, exp:'EGFR T790M es la mutación de resistencia más frecuente (~60%). Osimertinib es específicamente activo contra T790M e incluso es hoy primera línea. Ilustra heterogeneidad temporal y evolución clonal bajo presión terapéutica.' },
+    ]
+  },
+  {
+    title:'Caso 2: Melanoma metastásico BRAF V600E',
+    steps:[
+      { case:'Paciente femenina, 48 años. Melanoma cutáneo metastásico estadio IV. NGS: BRAF V600E, NRAS wild-type, MMR proficiente, PD-L1 negativo.', opts:['Quimioterapia con dacarbazina','Vemurafenib monoterapia (anti-BRAF)','Dabrafenib + trametinib (anti-BRAF + anti-MEK)','Pembrolizumab por PD-L1 negativo'], c:2, exp:'BRAF V600E predice respuesta a inhibidores BRAF. La combinación BRAF+MEK (dabrafenib+trametinib) es superior a monoterapia: inhibe la vía en dos puntos, reduciendo la resistencia emergente por reactivación de MEK.' },
+      { case:'14 meses después: progresión. Nueva biopsia muestra mutación adquirida MAP2K1 Q56P (MEK1). ¿Cómo interpreta este hallazgo en el marco de Vogelstein et al.?', opts:['Nueva vía distinta explica la resistencia','Mutación passenger, la resistencia es no genética','Selección clonal de subclón MAP2K1-mutado preexistente que reactivó RAS-MAPK corriente abajo del bloqueo','El diagnóstico inicial fue incorrecto'], c:2, exp:'MAP2K1/MEK1 actúa corriente abajo de BRAF en la misma vía RAS-MAPK. Su mutación reestablece la señalización evadiendo el bloqueo de BRAF — selección de subclón preexistente con heterogeneidad intratumoral (Fig. 6 del artículo). Ejemplo de heterogeneidad temporal con consecuencia clínica directa.' },
+    ]
+  },
+];
+
+let scenState = {};
+
+function initScenario() {
+  scenState = { case: 0, step: 0, score: 0, answered: false };
+}
+
+function renderScenario() {
+  const sc = SCENARIOS[scenState.case];
+  if (scenState.step >= sc.steps.length) {
+    scenState.case++;
+    scenState.step = 0;
+    if (scenState.case >= SCENARIOS.length) {
+      const pts = Math.round((scenState.score / (SCENARIOS.reduce((a,s)=>a+s.steps.length,0))) * 20);
+      saveActivityScore('scenario', pts, { correct: scenState.score, total: SCENARIOS.reduce((a,s)=>a+s.steps.length,0) });
+      showActivityResult('scenario', pts, 20, `${scenState.score}/${SCENARIOS.reduce((a,s)=>a+s.steps.length,0)} decisiones correctas`);
+      return;
+    }
+  }
+  const step = SCENARIOS[scenState.case].steps[scenState.step];
+  document.getElementById('modal-body').innerHTML = `
+    <div style="font-size:0.72rem;color:var(--text3);margin-bottom:0.5rem;font-family:'DM Mono',monospace">${SCENARIOS[scenState.case].title} · Decisión ${scenState.step+1}</div>
+    <div class="sc-case">${step.case}</div>
+    <div class="sc-opts" id="sc-opts">
+      ${step.opts.map((o,i)=>`<button class="sc-opt" id="scopt-${i}" onclick="answerScen(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
+    </div>
+    <div class="sc-explain" id="sc-exp"></div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <div style="font-size:0.78rem;color:var(--text3)">Caso ${scenState.case+1}/${SCENARIOS.length} · Paso ${scenState.step+1}/${SCENARIOS[scenState.case].steps.length}</div>
+    <button class="btn btn-primary" id="sc-next" onclick="nextScenStep()" style="display:none">Siguiente →</button>
+  `;
+  scenState.answered = false;
+}
+
+function answerScen(i) {
+  if (scenState.answered) return;
+  scenState.answered = true;
+  const step = SCENARIOS[scenState.case].steps[scenState.step];
+  document.querySelectorAll('.sc-opt').forEach(b => b.disabled = true);
+  if (i === step.c) { document.getElementById('scopt-'+i).classList.add('good'); scenState.score++; }
+  else { document.getElementById('scopt-'+i).classList.add('bad'); document.getElementById('scopt-'+step.c).classList.add('good'); }
+  const exp = document.getElementById('sc-exp');
+  exp.textContent = step.exp; exp.className = 'sc-explain show';
+  document.getElementById('sc-next').style.display = 'inline-flex';
+}
+
+function nextScenStep() { scenState.step++; renderScenario(); }
+
+/* ═══════════════════════════════════════════════
+   OPEN ACTIVITY
+═══════════════════════════════════════════════ */
+function openActivity(id) {
+  const act = ACTIVITIES.find(a => a.id === id);
+  document.getElementById('modal-title').textContent = `${act.icon} ${act.name}`;
+  document.getElementById('modal-overlay').classList.add('open');
+
+  switch(id) {
+    case 'quiz':     initQuiz();     renderQuiz(); break;
+    case 'flashcards': initFlash();  renderFlash(); break;
+    case 'dragdrop': initDnD();     renderDnD(); break;
+    case 'timeline': initTimeline(); renderTimeline(); break;
+    case 'matching': initMatching(); renderMatching(); break;
+    case 'scenario': initScenario(); renderScenario(); break;
+  }
+}
+
+function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); renderStudentUI(); }
+function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
+
+/* ═══════════════════════════════════════════════
+   SCORE SAVING
+═══════════════════════════════════════════════ */
+async function saveActivityScore(id, pts, meta) {
+  if (!currentUser) return;
+  currentUser.scores[id] = pts;
+  if (!currentUser.attempts) currentUser.attempts = {};
+  currentUser.attempts[id] = { pts, meta, ts: new Date().toISOString() };
+  if (meta.errors) currentUser.quizErrors = (currentUser.quizErrors||[]).concat(meta.errors);
+  DB.students[currentUser.id] = currentUser;
+  await saveData(DB);
+}
+
+function showActivityResult(id, pts, maxPts, detail) {
+  const pct = Math.round((pts/maxPts)*100);
+  document.getElementById('modal-body').innerHTML = `
+    <div class="result-card">
+      <div class="result-score">${pts}<span style="font-size:1.5rem;color:var(--text3)">/${maxPts}</span></div>
+      <div class="result-label">puntos obtenidos · ${detail}</div>
+      <div style="font-size:0.82rem;color:var(--text2);margin-top:0.5rem">${pct >= 80 ? '✓ Excelente comprensión del artículo.' : pct >= 60 ? 'Buen desempeño. Revisa los conceptos fallidos.' : 'Refuerza la lectura de Vogelstein et al. (2013).'}</div>
+    </div>
+  `;
+  document.getElementById('modal-footer').innerHTML = `
+    <div style="font-size:0.78rem;color:var(--text3)">${pct >= 80 ? '🟢' : pct >= 60 ? '🟡' : '🔴'} ${pct}% — ${pctToLetterGrade(pct)}</div>
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-sm" onclick="openActivity('${id}')">↺ Reintentar</button>
+      <button class="btn btn-primary btn-sm" onclick="closeModal()">Continuar →</button>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════
+   STUDENT FINAL REPORT
+═══════════════════════════════════════════════ */
+function renderFinalReport() {
+  const u = currentUser;
+  const total = totalScore();
+  const pct = Math.round((total/TOTAL_PTS)*100);
+  const date = new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'});
+
+  const barsHTML = ACTIVITIES.map(act => {
+    const sc = u.scores[act.id] || 0;
+    const p = Math.round((sc/act.pts)*100);
+    return `<div class="result-bar-row">
+      <div class="result-bar-label">${act.name}</div>
+      <div class="result-bar-track"><div class="result-bar-fill" style="width:${p}%"></div></div>
+      <div class="result-bar-pts">${sc}/${act.pts}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('final-report-content').innerHTML = `
+    <div class="result-card" style="text-align:left">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
+        <div>
+          <div style="font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Reporte de evaluación</div>
+          <div style="font-family:'DM Serif Display',serif;font-size:1.2rem">${u.name}</div>
+          <div style="font-size:0.78rem;color:var(--text3)">Matrícula: ${u.id} · Grupo: ${u.group} · ${date}</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-family:'DM Mono',monospace;font-size:2.5rem;font-weight:500">${pctToGrade(pct)}</div>
+          <div style="font-size:0.72rem;color:var(--text3)">${total}/${TOTAL_PTS} pts · ${pct}%</div>
+        </div>
+      </div>
+      <div class="result-bars">${barsHTML}</div>
+    </div>
+  `;
+}
+
+function generateReportText(u) {
+  const total = ACTIVITIES.reduce((a,act) => a + (u.scores && u.scores[act.id] || 0), 0);
+  const pct = Math.round((total/TOTAL_PTS)*100);
+  const date = new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'});
+  let txt = `REPORTE DE EVALUACIÓN — MÓDULO CÉLULAS TRONCALES Y CÁNCER
+FES Iztacala UNAM — Cancer Genome Landscapes (Vogelstein et al., 2013)
+${'='.repeat(60)}
+
+DATOS DEL ESTUDIANTE
+Nombre:     ${u.name}
+Matrícula:  ${u.id}
+Grupo:      ${u.group}
+Fecha:      ${date}
+Registro:   ${u.registered ? u.registered.slice(0,10) : 'N/A'}
+
+CALIFICACIÓN FINAL
+Puntos obtenidos: ${total} / ${TOTAL_PTS}
+Porcentaje:       ${pct}%
+Calificación:     ${pctToGrade(pct)} (${pctToLetterGrade(pct)})
+
+DESGLOSE POR ACTIVIDAD
+${'─'.repeat(60)}
+${ACTIVITIES.map(act => {
+  const sc = (u.scores && u.scores[act.id] !== undefined) ? u.scores[act.id] : 'N/A';
+  const pctAct = sc !== 'N/A' ? Math.round((sc/act.pts)*100)+'%' : '—';
+  return `${act.name.padEnd(35)} ${String(sc).padStart(3)} / ${act.pts} pts   ${pctAct}`;
+}).join('\n')}
+${'─'.repeat(60)}
+TOTAL:                              ${String(total).padStart(3)} / ${TOTAL_PTS} pts   ${pct}%
+
+`;
+  if (u.quizErrors && u.quizErrors.length > 0) {
+    txt += `ERRORES EN QUIZ (preguntas para reforzar)\n${'─'.repeat(60)}\n`;
+    u.quizErrors.forEach((err, i) => {
+      txt += `${i+1}. ${err.question}\n   Seleccionó: ${err.selected}\n   Correcto:   ${err.correct}\n\n`;
+    });
+  }
+  txt += `\nFin del reporte. Generado automáticamente por la plataforma.\n`;
+  return txt;
+}
+
+function downloadStudentReport() {
+  const txt = generateReportText(currentUser);
+  downloadTxt(`reporte_${currentUser.id}.txt`, txt);
+  notify('Reporte descargado');
+}
+
+function copyStudentReport() {
+  navigator.clipboard.writeText(generateReportText(currentUser)).then(() => notify('Copiado al portapapeles'));
+}
+
+/* ═══════════════════════════════════════════════
+   PROFESSOR DASHBOARD
+═══════════════════════════════════════════════ */
+function renderProfDashboard() {
+  const students = Object.values(DB.students);
+  const completed = students.filter(s => s.scores && Object.keys(s.scores).length === ACTIVITIES.length);
+  const inProgress = students.filter(s => s.scores && Object.keys(s.scores).length > 0 && Object.keys(s.scores).length < ACTIVITIES.length);
+  const scores = completed.map(s => ACTIVITIES.reduce((a,act) => a+(s.scores[act.id]||0),0));
+  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
+  const avgPct = Math.round((avg/TOTAL_PTS)*100);
+
+  document.getElementById('prof-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-card-label">Total alumnos</div><div class="stat-card-val">${students.length}</div><div class="stat-card-sub">registrados</div></div>
+    <div class="stat-card"><div class="stat-card-label">Completaron</div><div class="stat-card-val">${completed.length}</div><div class="stat-card-sub">todas las actividades</div></div>
+    <div class="stat-card"><div class="stat-card-label">En progreso</div><div class="stat-card-val">${inProgress.length}</div><div class="stat-card-sub">iniciaron pero no terminaron</div></div>
+    <div class="stat-card"><div class="stat-card-label">Promedio grupo</div><div class="stat-card-val">${avgPct}%</div><div class="stat-card-sub">${avg}/${TOTAL_PTS} pts — ${pctToGrade(avgPct)}</div></div>
+  `;
+
+  const groups = [...new Set(students.map(s=>s.group))].sort();
+  const sel = document.getElementById('filter-group');
+  sel.innerHTML = '<option value="">Todos los grupos</option>';
+  groups.forEach(g => sel.innerHTML += `<option value="${g}">${g}</option>`);
+
+  renderStudentTable();
+  renderAnalytics();
+}
+
+function renderStudentTable() {
+  const search = document.getElementById('search-students').value.toLowerCase();
+  const group = document.getElementById('filter-group').value;
+  const status = document.getElementById('filter-status').value;
+
+  let students = Object.values(DB.students).filter(s => {
+    if (search && !s.name.toLowerCase().includes(search) && !s.id.includes(search)) return false;
+    if (group && s.group !== group) return false;
+    if (status) {
+      const n = s.scores ? Object.keys(s.scores).length : 0;
+      if (status === 'complete' && n !== ACTIVITIES.length) return false;
+      if (status === 'partial' && (n === 0 || n === ACTIVITIES.length)) return false;
+      if (status === 'none' && n !== 0) return false;
+    }
+    return true;
+  });
+
+  students.sort((a,b) => {
+    const ta = ACTIVITIES.reduce((x,act)=>x+(a.scores&&a.scores[act.id]||0),0);
+    const tb = ACTIVITIES.reduce((x,act)=>x+(b.scores&&b.scores[act.id]||0),0);
+    return tb - ta;
+  });
+
+  const tbody = document.getElementById('student-table-body');
+  if (students.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">No se encontraron estudiantes con esos filtros.</td></tr>`;
+    return;
   }
 
-  // Update active nav on scroll
-  const sections = document.querySelectorAll('section[id]');
-  const navItems = document.querySelectorAll('.nav-item');
+  tbody.innerHTML = students.map(s => {
+    const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
+    const pct = Math.round((total/TOTAL_PTS)*100);
+    const done = s.scores ? Object.keys(s.scores).length : 0;
+    const grLetter = pctToLetterGrade(pct);
+    const grClass = grLetter==='A'?'grade-a':grLetter==='B'?'grade-b':grLetter==='C'?'grade-c':grLetter==='D'?'grade-d':'grade-p';
+    const statusLabel = done === ACTIVITIES.length ? '✓ Completo' : done > 0 ? `${done}/${ACTIVITIES.length} acts` : 'Sin iniciar';
+    const statusColor = done === ACTIVITIES.length ? 'var(--success)' : done > 0 ? 'var(--warn)' : 'var(--text3)';
 
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const id = entry.target.id;
-        const sectionMap = {
-          'presentacion': 0, 'objetivos': 1, 'marco': 2,
-          'desarrollo': 3, 'actividades': 4, 'rubrica': 5, 'recursos': 6
-        };
-        navItems.forEach(n => n.classList.remove('active'));
-        if (sectionMap[id] !== undefined) {
-          navItems[sectionMap[id]].classList.add('active');
-        }
-      }
-    });
-  }, { threshold: 0.3 });
+    return `<tr>
+      <td style="font-family:'DM Mono',monospace;font-size:0.78rem">${s.id}</td>
+      <td style="font-weight:500">${s.name}</td>
+      <td style="font-family:'DM Mono',monospace;font-size:0.78rem">${s.group}</td>
+      <td>${done > 0 ? `<span>${done}/${ACTIVITIES.length}</span><span class="mini-bar"><span class="mini-bar-fill" style="width:${Math.round((done/ACTIVITIES.length)*100)}%"></span></span>` : '—'}</td>
+      <td>${done > 0 ? `<span class="grade-badge ${grClass}">${pctToGrade(pct)} (${pct}%)</span>` : '<span style="color:var(--text3)">—</span>'}</td>
+      <td style="font-size:0.78rem;color:${statusColor}">${statusLabel}</td>
+      <td><button class="btn btn-sm" onclick="openStudentDetail('${s.id}')">Ver detalle</button></td>
+    </tr>`;
+  }).join('');
+}
 
-  sections.forEach(s => observer.observe(s));
+function renderAnalytics() {
+  const students = Object.values(DB.students).filter(s => s.scores && Object.keys(s.scores).length > 0);
+  const scores = students.map(s => ACTIVITIES.reduce((a,act)=>a+(s.scores[act.id]||0),0));
+  
+  const bins = [0,0,0,0,0]; // <50, 50-59, 60-69, 70-79, >=80
+  scores.forEach(sc => {
+    const p = Math.round((sc/TOTAL_PTS)*100);
+    if(p<50) bins[0]++; else if(p<60) bins[1]++; else if(p<70) bins[2]++; else if(p<80) bins[3]++; else bins[4]++;
+  });
+  const maxBin = Math.max(...bins,1);
+  const chart = document.getElementById('grade-dist-chart');
+  if(!chart) return;
+  chart.innerHTML = bins.map((b,i)=>`<div class="bar-col" style="height:${Math.round((b/maxBin)*80)}px;opacity:${0.5+i*0.1}" title="${b} estudiantes"></div>`).join('');
+  document.getElementById('grade-dist-labels').innerHTML = ['<50%','50-59%','60-69%','70-79%','≥80%'].map((l,i)=>`<div class="bar-label">${l}<br><strong>${bins[i]}</strong></div>`).join('');
+
+  const actDifficulty = document.getElementById('activity-difficulty');
+  if(actDifficulty) {
+    actDifficulty.innerHTML = ACTIVITIES.map(act => {
+      const actScores = students.filter(s=>s.scores&&s.scores[act.id]!==undefined).map(s=>s.scores[act.id]);
+      const avg = actScores.length ? Math.round(actScores.reduce((a,b)=>a+b,0)/actScores.length) : 0;
+      const pct = actScores.length ? Math.round((avg/act.pts)*100) : 0;
+      return `<div class="result-bar-row"><div class="result-bar-label" style="font-size:0.75rem">${act.icon} ${act.name}</div>
+        <div class="result-bar-track" style="height:6px"><div class="result-bar-fill" style="width:${pct}%;background:${pct<60?'var(--accent)':'var(--accent2)'}"></div></div>
+        <div class="result-bar-pts" style="font-size:0.72rem">${pct}%</div></div>`;
+    }).join('');
+  }
+
+  const errDiv = document.getElementById('error-analysis');
+  if(errDiv) {
+    const allErrors = students.flatMap(s=>s.quizErrors||[]);
+    if(allErrors.length === 0) { errDiv.innerHTML = '<span style="color:var(--text3)">No hay datos de errores aún.</span>'; return; }
+    const errCount = {};
+    allErrors.forEach(e => { errCount[e.question] = (errCount[e.question]||0)+1; });
+    const sorted = Object.entries(errCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    errDiv.innerHTML = sorted.map(([q,n])=>`<div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)"><span style="font-weight:500">${n} errores:</span> ${q}</div>`).join('');
+  }
+}
+
+function showDashTab(id) {
+  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  document.getElementById('dash-'+id).classList.add('active');
+  if(id==='analytics') renderAnalytics();
+}
+
+/* ─── STUDENT DETAIL ─── */
+function openStudentDetail(id) {
+  currentDetailId = id;
+  const s = DB.students[id];
+  const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
+  const pct = Math.round((total/TOTAL_PTS)*100);
+  const date = s.registered ? s.registered.slice(0,10) : 'N/A';
+  const lastAccess = s.lastAccess ? s.lastAccess.slice(0,10) : 'N/A';
+
+  document.getElementById('detail-title').textContent = s.name;
+  document.getElementById('detail-body').innerHTML = `
+    <div class="detail-section">
+      <div class="detail-section-title">Datos del estudiante</div>
+      <div class="detail-row"><span class="detail-key">Matrícula</span><span class="detail-val">${s.id}</span></div>
+      <div class="detail-row"><span class="detail-key">Grupo</span><span class="detail-val">${s.group}</span></div>
+      <div class="detail-row"><span class="detail-key">Registro</span><span class="detail-val">${date}</span></div>
+      <div class="detail-row"><span class="detail-key">Último acceso</span><span class="detail-val">${lastAccess}</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Calificación global</div>
+      <div class="detail-row"><span class="detail-key">Puntos</span><span class="detail-val">${total} / ${TOTAL_PTS}</span></div>
+      <div class="detail-row"><span class="detail-key">Porcentaje</span><span class="detail-val">${pct}%</span></div>
+      <div class="detail-row"><span class="detail-key">Calificación</span><span class="detail-val">${pctToGrade(pct)} (${pctToLetterGrade(pct)})</span></div>
+    </div>
+    <div class="detail-section">
+      <div class="detail-section-title">Desglose por actividad</div>
+      ${ACTIVITIES.map(act => {
+        const sc = s.scores && s.scores[act.id] !== undefined ? s.scores[act.id] : null;
+        return `<div class="detail-row">
+          <span class="detail-key">${act.icon} ${act.name}</span>
+          <span class="detail-val">${sc !== null ? sc+'/'+act.pts+' pts' : '—'}</span>
+        </div>`;
+      }).join('')}
+    </div>
+    ${s.quizErrors && s.quizErrors.length > 0 ? `<div class="detail-section">
+      <div class="detail-section-title">Errores en quiz (${s.quizErrors.length})</div>
+      ${s.quizErrors.slice(0,3).map(e=>`<div style="font-size:0.78rem;padding:5px 0;border-bottom:1px solid var(--bg3);color:var(--text2)"><strong>Q:</strong> ${e.question.slice(0,60)}...<br><strong>Resp:</strong> ${e.selected.slice(0,40)}</div>`).join('')}
+    </div>` : ''}
+  `;
+  document.getElementById('detail-overlay').classList.add('open');
+}
+
+function closeDetail() { document.getElementById('detail-overlay').classList.remove('open'); }
+function closeDetailOutside(e) { if(e.target.id==='detail-overlay') closeDetail(); }
+
+function downloadOneReport() {
+  if(!currentDetailId) return;
+  const s = DB.students[currentDetailId];
+  downloadTxt(`reporte_${s.id}.txt`, generateReportText(s));
+  notify('Reporte descargado');
+}
+
+/* ─── EXPORTS ─── */
+function generateCSV() {
+  const rows = [['Matrícula','Nombre','Grupo',...ACTIVITIES.map(a=>a.name),'Total','Porcentaje','Calificación']];
+  Object.values(DB.students).forEach(s => {
+    const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
+    const pct = Math.round((total/TOTAL_PTS)*100);
+    rows.push([s.id, s.name, s.group, ...ACTIVITIES.map(a=>s.scores&&s.scores[a.id]!==undefined?s.scores[a.id]:'N/A'), total, pct+'%', pctToGrade(pct)]);
+  });
+  return rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
+}
+
+function exportCSV() {
+  const csv = generateCSV();
+  document.getElementById('export-text').value = csv;
+  document.getElementById('export-preview').style.display = 'block';
+  downloadTxt('calificaciones_cancer_genome.csv', csv);
+  notify('CSV descargado');
+}
+
+function exportGradeSheet() {
+  let txt = `LISTA DE CALIFICACIONES — CANCER GENOME LANDSCAPES\nFES Iztacala UNAM · ${new Date().toLocaleDateString('es-MX')}\n${'='.repeat(60)}\n\n`;
+  txt += `${'Matrícula'.padEnd(14)}${'Nombre'.padEnd(32)}${'Grupo'.padEnd(12)}${'Pts'.padEnd(8)}${'%'.padEnd(8)}Cal\n${'─'.repeat(60)}\n`;
+  Object.values(DB.students).sort((a,b)=>a.group.localeCompare(b.group)||a.name.localeCompare(b.name)).forEach(s => {
+    const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
+    const pct = Math.round((total/TOTAL_PTS)*100);
+    txt += `${s.id.padEnd(14)}${s.name.slice(0,30).padEnd(32)}${s.group.padEnd(12)}${String(total).padEnd(8)}${(pct+'%').padEnd(8)}${pctToGrade(pct)}\n`;
+  });
+  document.getElementById('export-text').value = txt;
+  document.getElementById('export-preview').style.display = 'block';
+  downloadTxt('lista_calificaciones.txt', txt);
+  notify('Lista descargada');
+}
+
+function exportFullReport() {
+  let txt = Object.values(DB.students).map(s => generateReportText(s)).join('\n\n' + '═'.repeat(60) + '\n\n');
+  document.getElementById('export-text').value = txt.slice(0,2000) + (txt.length > 2000 ? '\n[...truncado en vista previa...]' : '');
+  document.getElementById('export-preview').style.display = 'block';
+  downloadTxt('reportes_completos.txt', txt);
+  notify('Reporte completo descargado');
+}
+
+function copyCSVClipboard() {
+  navigator.clipboard.writeText(generateCSV()).then(() => notify('CSV copiado al portapapeles'));
+}
+
+/* ─── UTILS ─── */
+function downloadTxt(filename, text) {
+  const a = document.createElement('a');
+  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
+  a.download = filename;
+  a.click();
+}
+
+let notifTimeout;
+function notify(msg) {
+  const n = document.getElementById('notif');
+  n.textContent = msg;
+  n.classList.add('show');
+  clearTimeout(notifTimeout);
+  notifTimeout = setTimeout(() => n.classList.remove('show'), 2500);
+}
+
+/* ─── INIT ─── */
+initDB().then(() => {
+  showScreen('login-screen');
+});
 </script>
 </body>
 </html>
