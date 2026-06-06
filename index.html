@@ -1,0 +1,1362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Actividad Didáctica | Cancer Genome Landscapes</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=IBM+Plex+Mono:wght@300;400;500&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --bg2: #111118;
+    --bg3: #1a1a24;
+    --surface: #1e1e2e;
+    --border: #2a2a3e;
+    --accent1: #e63946;
+    --accent2: #f4a261;
+    --accent3: #2a9d8f;
+    --accent4: #8338ec;
+    --text: #e8e8f0;
+    --text-dim: #9090a8;
+    --text-muted: #5a5a72;
+    --gold: #d4af37;
+    --unam-blue: #0047ab;
+    --unam-gold: #c8a951;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Libre Baskerville', Georgia, serif;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── HEADER ─────────────────────────────────── */
+  header {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background: radial-gradient(ellipse at 20% 50%, #1a0a2e 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 20%, #0a1a2e 0%, transparent 55%),
+                radial-gradient(ellipse at 50% 80%, #1a0808 0%, transparent 50%),
+                var(--bg);
+  }
+
+  .dna-bg {
+    position: absolute;
+    inset: 0;
+    opacity: 0.06;
+    background-image:
+      repeating-linear-gradient(90deg, var(--accent1) 0px, var(--accent1) 1px, transparent 1px, transparent 60px),
+      repeating-linear-gradient(0deg, var(--accent3) 0px, var(--accent3) 1px, transparent 1px, transparent 60px);
+    animation: gridShift 20s linear infinite;
+  }
+
+  @keyframes gridShift {
+    0% { transform: translate(0,0); }
+    100% { transform: translate(60px, 60px); }
+  }
+
+  .header-inner {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 4rem 2rem;
+    max-width: 900px;
+  }
+
+  .badge {
+    display: inline-block;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--accent1);
+    border: 1px solid var(--accent1);
+    padding: 0.4rem 1rem;
+    margin-bottom: 2rem;
+    animation: fadeSlide 0.8s ease both;
+  }
+
+  .inst-badges {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 2.5rem;
+    animation: fadeSlide 0.8s ease 0.1s both;
+  }
+
+  .inst-badge {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--unam-gold);
+    border: 1px solid var(--unam-gold);
+    padding: 0.35rem 0.8rem;
+    opacity: 0.85;
+  }
+
+  @keyframes fadeSlide {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    font-weight: 900;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: fadeSlide 0.8s ease 0.2s both;
+  }
+
+  h1 span.red { color: var(--accent1); }
+  h1 span.teal { color: var(--accent3); }
+
+  .subtitle {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+    margin-bottom: 2.5rem;
+    animation: fadeSlide 0.8s ease 0.3s both;
+  }
+
+  .ref-box {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.5rem;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    font-family: 'IBM Plex Mono', monospace;
+    text-align: left;
+    margin-bottom: 3rem;
+    animation: fadeSlide 0.8s ease 0.4s both;
+  }
+
+  .ref-box strong { color: var(--gold); }
+
+  .scroll-hint {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--text-muted);
+    letter-spacing: 0.2em;
+    animation: pulse 2s ease infinite;
+  }
+
+  @keyframes pulse { 0%,100%{opacity:0.4} 50%{opacity:1} }
+
+  /* ── NAV ─────────────────────────────────────── */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(12px);
+    padding: 0 2rem;
+    overflow-x: auto;
+  }
+
+  .nav-inner {
+    display: flex;
+    gap: 0;
+    max-width: 1100px;
+    margin: 0 auto;
+    align-items: center;
+  }
+
+  .nav-item {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    padding: 1rem 1.2rem;
+    border: none;
+    background: none;
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    white-space: nowrap;
+  }
+
+  .nav-item:hover, .nav-item.active {
+    color: var(--text);
+    border-bottom-color: var(--accent1);
+  }
+
+  .nav-item.active { color: var(--accent1); }
+
+  /* ── MAIN LAYOUT ─────────────────────────────── */
+  main { max-width: 1100px; margin: 0 auto; padding: 4rem 2rem; }
+
+  section { margin-bottom: 6rem; scroll-margin-top: 60px; }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 1.5rem;
+    margin-bottom: 3rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-number {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent1);
+    letter-spacing: 0.2em;
+  }
+
+  h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  h2 em { font-style: italic; color: var(--accent3); }
+
+  h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 1rem;
+  }
+
+  h3 .tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--accent2);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-left: 0.8rem;
+    vertical-align: middle;
+    border: 1px solid var(--accent2);
+    padding: 0.15rem 0.5rem;
+  }
+
+  p { margin-bottom: 1rem; color: var(--text-dim); font-size: 0.95rem; }
+
+  /* ── CARDS ───────────────────────────────────── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    margin-bottom: 2rem;
+    position: relative;
+    transition: border-color 0.3s, transform 0.3s;
+  }
+
+  .card:hover { border-color: var(--accent3); transform: translateX(4px); }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 3px;
+    background: var(--accent3);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s;
+  }
+
+  .card:hover::before { transform: scaleY(1); }
+
+  .card-red::before { background: var(--accent1); }
+  .card-red:hover { border-color: var(--accent1); }
+  .card-gold::before { background: var(--gold); }
+  .card-gold:hover { border-color: var(--gold); }
+  .card-purple::before { background: var(--accent4); }
+  .card-purple:hover { border-color: var(--accent4); }
+  .card-orange::before { background: var(--accent2); }
+  .card-orange:hover { border-color: var(--accent2); }
+
+  /* ── OBJETIVO GRID ───────────────────────────── */
+  .obj-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+
+  .obj-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .obj-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+    line-height: 1;
+    margin-top: 0.1rem;
+  }
+
+  .obj-label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent2);
+    margin-bottom: 0.3rem;
+  }
+
+  .obj-text { font-size: 0.85rem; color: var(--text-dim); margin: 0; }
+
+  /* ── TIMELINE ────────────────────────────────── */
+  .timeline { position: relative; padding-left: 2.5rem; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 0.7rem; top: 0; bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--accent1), var(--accent3), var(--accent4));
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 2.5rem;
+  }
+
+  .tl-dot {
+    position: absolute;
+    left: -2.5rem;
+    top: 0.4rem;
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    background: var(--accent1);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 8px var(--accent1);
+  }
+
+  .tl-dot.teal { background: var(--accent3); box-shadow: 0 0 8px var(--accent3); }
+  .tl-dot.purple { background: var(--accent4); box-shadow: 0 0 8px var(--accent4); }
+  .tl-dot.orange { background: var(--accent2); box-shadow: 0 0 8px var(--accent2); }
+  .tl-dot.gold { background: var(--gold); box-shadow: 0 0 8px var(--gold); }
+
+  .tl-time {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    color: var(--accent1);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.4rem;
+  }
+
+  /* ── ACTIVIDADES ─────────────────────────────── */
+  .act-number {
+    font-family: 'Playfair Display', serif;
+    font-size: 4rem;
+    font-weight: 900;
+    color: var(--bg3);
+    position: absolute;
+    right: 1.5rem;
+    top: 1rem;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .act-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .act-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+  }
+
+  .act-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    padding: 0.25rem 0.7rem;
+    border: 1px solid;
+  }
+
+  .tag-ind { color: #e63946; border-color: #e63946; }
+  .tag-grp { color: #2a9d8f; border-color: #2a9d8f; }
+  .tag-disc { color: #8338ec; border-color: #8338ec; }
+  .tag-inv { color: #f4a261; border-color: #f4a261; }
+
+  .act-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+  }
+
+  /* ── COLLAPSIBLE ─────────────────────────────── */
+  details {
+    border: 1px solid var(--border);
+    margin-bottom: 0.8rem;
+    background: var(--bg3);
+  }
+
+  summary {
+    padding: 1rem 1.5rem;
+    cursor: pointer;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    list-style: none;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: color 0.2s;
+  }
+
+  summary:hover { color: var(--text); }
+
+  summary::after {
+    content: '▶';
+    font-size: 0.6rem;
+    transition: transform 0.2s;
+  }
+
+  details[open] summary::after { transform: rotate(90deg); }
+  details[open] summary { color: var(--accent3); }
+
+  .details-body {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+
+  /* ── PREGUNTAS ───────────────────────────────── */
+  .q-list {
+    list-style: none;
+    counter-reset: q;
+  }
+
+  .q-list li {
+    counter-increment: q;
+    padding: 0.8rem 0 0.8rem 3rem;
+    position: relative;
+    border-bottom: 1px solid var(--bg3);
+    font-size: 0.9rem;
+    color: var(--text-dim);
+  }
+
+  .q-list li::before {
+    content: counter(q, decimal-leading-zero);
+    position: absolute;
+    left: 0;
+    top: 0.8rem;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent1);
+    letter-spacing: 0.05em;
+  }
+
+  .q-list li strong { color: var(--text); }
+
+  .bloom-tag {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0.15rem 0.5rem;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .b-rec { background: rgba(46,139,87,0.15); color: #2e8b57; border: 1px solid #2e8b57; }
+  .b-com { background: rgba(30,144,255,0.15); color: #1e90ff; border: 1px solid #1e90ff; }
+  .b-apl { background: rgba(255,165,0,0.15); color: #ffa500; border: 1px solid #ffa500; }
+  .b-ana { background: rgba(230,57,70,0.15); color: var(--accent1); border: 1px solid var(--accent1); }
+  .b-eva { background: rgba(131,56,236,0.15); color: var(--accent4); border: 1px solid var(--accent4); }
+  .b-cre { background: rgba(212,175,55,0.15); color: var(--gold); border: 1px solid var(--gold); }
+
+  /* ── RÚBRICA ─────────────────────────────────── */
+  .rubrica {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.82rem;
+    margin-top: 1rem;
+  }
+
+  .rubrica th {
+    background: var(--bg3);
+    padding: 0.8rem 1rem;
+    text-align: left;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    border-bottom: 2px solid var(--border);
+  }
+
+  .rubrica td {
+    padding: 0.8rem 1rem;
+    border-bottom: 1px solid var(--bg3);
+    color: var(--text-dim);
+    vertical-align: top;
+  }
+
+  .rubrica tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .rubrica .pts {
+    font-family: 'IBM Plex Mono', monospace;
+    font-weight: 500;
+    color: var(--accent3);
+    white-space: nowrap;
+  }
+
+  .rubrica .criterio { font-weight: 700; color: var(--text); }
+
+  /* ── HIGHLIGHT BOXES ─────────────────────────── */
+  .info-box {
+    background: rgba(42, 157, 143, 0.06);
+    border: 1px solid rgba(42, 157, 143, 0.3);
+    border-left: 3px solid var(--accent3);
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 0.88rem;
+  }
+
+  .warn-box {
+    background: rgba(244,162,97,0.06);
+    border: 1px solid rgba(244,162,97,0.3);
+    border-left: 3px solid var(--accent2);
+    padding: 1.2rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 0.88rem;
+  }
+
+  .cite-box {
+    background: rgba(212,175,55,0.05);
+    border: 1px solid rgba(212,175,55,0.2);
+    border-left: 3px solid var(--gold);
+    padding: 1rem 1.5rem;
+    margin: 1rem 0;
+    font-size: 0.82rem;
+    font-family: 'IBM Plex Mono', monospace;
+    color: var(--text-muted);
+  }
+
+  .cite-box strong { color: var(--gold); }
+
+  /* ── KEYWORDS ────────────────────────────────── */
+  .kw-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 1rem 0;
+  }
+
+  .kw {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    padding: 0.3rem 0.8rem;
+    border: 1px solid var(--border);
+    color: var(--text-muted);
+    cursor: default;
+    transition: border-color 0.2s, color 0.2s;
+  }
+
+  .kw:hover { border-color: var(--accent3); color: var(--text); }
+
+  /* ── RESOURCES ───────────────────────────────── */
+  .res-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .res-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    padding: 1.2rem;
+    transition: border-color 0.2s;
+  }
+
+  .res-item:hover { border-color: var(--accent4); }
+
+  .res-type {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent4);
+    margin-bottom: 0.5rem;
+  }
+
+  .res-name { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.3rem; }
+  .res-desc { font-size: 0.8rem; color: var(--text-muted); margin: 0; }
+  .res-url { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; color: var(--accent3); word-break: break-all; }
+
+  /* ── COMPETENCIAS ────────────────────────────── */
+  .comp-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .comp-item {
+    display: flex;
+    gap: 1.2rem;
+    align-items: flex-start;
+    padding: 1rem;
+    background: var(--bg3);
+    border: 1px solid var(--border);
+  }
+
+  .comp-bullet {
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: var(--accent1);
+    flex-shrink: 0;
+    margin-top: 0.5rem;
+  }
+
+  .comp-bullet.teal { background: var(--accent3); }
+  .comp-bullet.gold { background: var(--gold); }
+  .comp-bullet.purple { background: var(--accent4); }
+  .comp-bullet.orange { background: var(--accent2); }
+
+  .comp-text { font-size: 0.88rem; color: var(--text-dim); margin: 0; }
+  .comp-label { font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--text-muted); letter-spacing: 0.05em; margin-bottom: 0.2rem; }
+
+  /* ── FOOTER ──────────────────────────────────── */
+  footer {
+    background: var(--bg2);
+    border-top: 1px solid var(--border);
+    padding: 3rem 2rem;
+    text-align: center;
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+  }
+
+  footer strong { color: var(--unam-gold); }
+
+  /* ── RESPONSIVE ──────────────────────────────── */
+  @media (max-width: 600px) {
+    .obj-grid { grid-template-columns: 1fr; }
+    .res-grid { grid-template-columns: 1fr; }
+    .act-number { display: none; }
+  }
+
+  /* ── PRINT ───────────────────────────────────── */
+  @media print {
+    body { background: white; color: black; }
+    header { min-height: auto; }
+    nav { display: none; }
+    .dna-bg { display: none; }
+    .card { background: #f9f9f9; border-color: #ccc; }
+    p, li { color: #333; }
+    h2, h3 { color: #000; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════ -->
+<header>
+  <div class="dna-bg"></div>
+  <div class="header-inner">
+    <div class="badge">◼ Actividad Didáctica · Módulo Células Troncales y Cáncer</div>
+    <div class="inst-badges">
+      <span class="inst-badge">UNAM</span>
+      <span class="inst-badge">FES Iztacala</span>
+      <span class="inst-badge">Carrera Médico Cirujano</span>
+      <span class="inst-badge">Sección de Enseñanza Básica</span>
+    </div>
+    <h1>
+      El Paisaje<br>
+      <span class="red">Genómico</span> del<br>
+      <span class="teal">Cáncer</span>
+    </h1>
+    <p class="subtitle">
+      Basada en · Vogelstein et al. (2013) · <em>Cancer Genome Landscapes</em> · Science 339:1546–1558
+    </p>
+    <div class="ref-box">
+      <strong>Referencia central:</strong> Vogelstein B, Papadopoulos N, Velculescu VE, Zhou S, Diaz LA Jr, Kinzler KW.
+      Cancer Genome Landscapes. <em>Science.</em> 2013;339(6127):1546–1558. DOI: 10.1126/science.1235122
+    </div>
+    <p class="scroll-hint">↓ &nbsp; DESPLAZAR &nbsp; ↓</p>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════
+     NAV
+════════════════════════════════════════════ -->
+<nav>
+  <div class="nav-inner">
+    <button class="nav-item active" onclick="scrollTo('presentacion')">Presentación</button>
+    <button class="nav-item" onclick="scrollTo('objetivos')">Objetivos</button>
+    <button class="nav-item" onclick="scrollTo('marco')">Marco Teórico</button>
+    <button class="nav-item" onclick="scrollTo('desarrollo')">Desarrollo</button>
+    <button class="nav-item" onclick="scrollTo('actividades')">Actividades</button>
+    <button class="nav-item" onclick="scrollTo('rubrica')">Rúbrica</button>
+    <button class="nav-item" onclick="scrollTo('recursos')">Recursos</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 1: PRESENTACIÓN
+════════════════════════════════════════════ -->
+<section id="presentacion">
+  <div class="section-header">
+    <span class="section-number">01 ——</span>
+    <h2>Presentación de la <em>Actividad</em></h2>
+  </div>
+
+  <div class="card card-red">
+    <h3>Denominación</h3>
+    <p><strong>«Los Paisajes Genómicos del Cáncer: de las Mutaciones Conductoras a la Medicina de Precisión»</strong></p>
+    <p>Actividad de análisis crítico, síntesis integradora y búsqueda bibliográfica avanzada, basada en la revisión seminal de Vogelstein et al. (2013), dentro del Módulo Células Troncales y Cáncer.</p>
+  </div>
+
+  <div class="obj-grid">
+    <div class="obj-item">
+      <span class="obj-icon">🎯</span>
+      <div>
+        <div class="obj-label">Nivel</div>
+        <p class="obj-text">Licenciatura — Módulo de Células Troncales y Cáncer, 4.° año de Médico Cirujano</p>
+      </div>
+    </div>
+    <div class="obj-item">
+      <span class="obj-icon">⏱</span>
+      <div>
+        <div class="obj-label">Duración total</div>
+        <p class="obj-text">5 sesiones (3 presenciales + 2 extraclase) · ~12 horas de trabajo total</p>
+      </div>
+    </div>
+    <div class="obj-item">
+      <span class="obj-icon">👥</span>
+      <div>
+        <div class="obj-label">Modalidad</div>
+        <p class="obj-text">Individual y equipos de 4–5 estudiantes · Presencial con soporte digital</p>
+      </div>
+    </div>
+    <div class="obj-item">
+      <span class="obj-icon">📐</span>
+      <div>
+        <div class="obj-label">Enfoque pedagógico</div>
+        <p class="obj-text">Aprendizaje basado en problemas + Aprendizaje basado en investigación + Taxonomía de Bloom revisada</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="info-box" style="margin-top:2rem;">
+    <strong>Fundamentación:</strong> Esta actividad se diseñó para articular los conocimientos del módulo con la literatura científica contemporánea de alto impacto. El artículo de Vogelstein et al. representa una síntesis paradigmática que permite conectar conceptos de biología molecular, genética somática, evolución clonal, bioinformática aplicada y medicina traslacional, constituyendo un eje integrador ideal para el desarrollo del pensamiento científico crítico del futuro médico.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 2: OBJETIVOS
+════════════════════════════════════════════ -->
+<section id="objetivos">
+  <div class="section-header">
+    <span class="section-number">02 ——</span>
+    <h2>Objetivos de <em>Aprendizaje</em></h2>
+  </div>
+
+  <p>Los objetivos se organizan conforme a la <strong>Taxonomía de Bloom Revisada</strong>, garantizando la progresión desde el conocimiento declarativo hasta las habilidades de orden superior.</p>
+
+  <div class="comp-list">
+    <div class="comp-item">
+      <div class="comp-bullet"></div>
+      <div>
+        <div class="comp-label">Recordar · Comprender <span class="bloom-tag b-rec">Bloom 1–2</span></div>
+        <p class="comp-text">Identificar y describir los conceptos centrales del artículo: mutaciones driver vs. passenger, genes Mut-driver, montañas y colinas, heterogeneidad intratumoral y las 12 vías de señalización implicadas en tumorigenesis.</p>
+      </div>
+    </div>
+    <div class="comp-item">
+      <div class="comp-bullet teal"></div>
+      <div>
+        <div class="comp-label">Aplicar · Analizar <span class="bloom-tag b-apl">Bloom 3–4</span></div>
+        <p class="comp-text">Relacionar las alteraciones genómicas identificadas mediante NGS con los hallmarks del cáncer (Hanahan & Weinberg) y con los tres procesos celulares centrales (destino celular, supervivencia celular y mantenimiento del genoma).</p>
+      </div>
+    </div>
+    <div class="comp-item">
+      <div class="comp-bullet gold"></div>
+      <div>
+        <div class="comp-label">Evaluar <span class="bloom-tag b-eva">Bloom 5</span></div>
+        <p class="comp-text">Formular juicios críticos sobre las limitaciones metodológicas del secuenciamiento de nueva generación (NGS) en la identificación de mutaciones driver, incluyendo falsos negativos y la contribución del estroma tumoral a los resultados.</p>
+      </div>
+    </div>
+    <div class="comp-item">
+      <div class="comp-bullet purple"></div>
+      <div>
+        <div class="comp-label">Crear · Sintetizar <span class="bloom-tag b-cre">Bloom 6</span></div>
+        <p class="comp-text">Diseñar una propuesta argumentada de estrategia diagnóstica o terapéutica para un tipo de cáncer específico, integrando el conocimiento de las vías driver identificadas, los conceptos de heterogeneidad tumoral y los principios de medicina de precisión basada en genómica.</p>
+      </div>
+    </div>
+    <div class="comp-item">
+      <div class="comp-bullet orange"></div>
+      <div>
+        <div class="comp-label">Pensamiento crítico transversal</div>
+        <p class="comp-text">Desarrollar habilidades de búsqueda bibliográfica en bases de datos científicas de alta calidad (PubMed, COSMIC, cBioPortal, TCGA), evaluación de la calidad de la evidencia y discusión académica con argumentación sustentada en literatura.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 3: MARCO TEÓRICO
+════════════════════════════════════════════ -->
+<section id="marco">
+  <div class="section-header">
+    <span class="section-number">03 ——</span>
+    <h2>Marco Teórico <em>Integrador</em></h2>
+  </div>
+
+  <p>A continuación se sintetizan los conceptos articuladores del artículo de Vogelstein et al. (2013) que serán trabajados durante la actividad, en diálogo con los demás textos del módulo.</p>
+
+  <details>
+    <summary>El Paisaje Genómico: Montañas y Colinas</summary>
+    <div class="details-body">
+      <p>Vogelstein et al. introdujeron la metáfora topográfica para describir la distribución de mutaciones somáticas en el cáncer. Los tumores sólidos comunes presentan en promedio 33 a 66 genes con mutaciones somáticas que alteran su producto proteico. De éstas, ~95% son sustituciones de base única y el resto son inserciones o deleciones de pocos nucleótidos.</p>
+      <p>Los genes con alta frecuencia de mutación en distintos tumores se denominan <strong>"montañas"</strong> (ej. <em>TP53</em>, <em>KRAS</em>). Los genes alterados con menor frecuencia pero en número mucho mayor conforman las <strong>"colinas"</strong>. Estas colinas dominan numéricamente el paisaje y presentan el reto metodológico central del campo.</p>
+      <div class="cite-box">
+        <strong>Cita conceptual:</strong> "For most cancer types, this landscape consists of a small number of 'mountains' (genes altered in a high percentage of tumors) and a much larger number of 'hills' (genes altered infrequently)." — Vogelstein et al., Science 2013.
+      </div>
+      <div class="kw-cloud">
+        <span class="kw">SNV</span><span class="kw">Indels</span><span class="kw">Mutación no sinónima</span>
+        <span class="kw">Mutación sinónima</span><span class="kw">Exoma</span><span class="kw">Secuenciación NGS</span>
+        <span class="kw">COSMIC database</span><span class="kw">Tasa mutacional</span>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Genes Driver vs. Passenger: la Distinción Fundamental</summary>
+    <div class="details-body">
+      <p>Una <strong>mutación driver</strong> confiere ventaja de crecimiento selectivo a la célula tumoral. En contraste, las <strong>mutaciones passenger</strong> no aportan ventaja de crecimiento pero se acumulan como consecuencia de la inestabilidad genómica. Esta distinción es conceptualmente clara pero metodológicamente compleja.</p>
+      <p>Los autores proponen los conceptos de <strong>Mut-driver genes</strong> (con mutaciones intragénicas recurrentes identificables por el patrón de mutación, no sólo por frecuencia) y <strong>Epi-driver genes</strong> (alterados epigenéticamente sin mutación frecuente). Se identificaron aproximadamente 140 genes Mut-driver, clasificados en oncogenes (mutaciones recurrentes en posiciones específicas de aminoácidos) y genes supresores de tumor (mutaciones truncantes a lo largo de todo el gen).</p>
+      <div class="cite-box">
+        <strong>Regla ratiométrica:</strong> Para clasificar un gen como oncogén Mut-driver, se requiere que >20% de las mutaciones registradas en COSMIC sean missense en posiciones recurrentes. Para tumor supresor, que >20% sean truncantes.
+      </div>
+      <div class="kw-cloud">
+        <span class="kw">Oncogén</span><span class="kw">Gen supresor de tumor</span>
+        <span class="kw">Ganancia de función</span><span class="kw">Pérdida de función</span>
+        <span class="kw">Metilación del ADN</span><span class="kw">Epi-driver</span>
+        <span class="kw">Ventaja selectiva</span>
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Las 12 Vías de Señalización y los 3 Procesos Celulares Centrales</summary>
+    <div class="details-body">
+      <p>El artículo propone que los ~140 genes driver conocidos actúan a través de solo <strong>12 vías de señalización</strong> que regulan tres procesos celulares fundamentales:</p>
+      <div class="obj-grid" style="margin:1rem 0;">
+        <div class="obj-item">
+          <span class="obj-icon">🧬</span>
+          <div>
+            <div class="obj-label">1. Destino celular</div>
+            <p class="obj-text">TGF-β, Notch, Hedgehog, WNT (vía APC), transcripción (SOX). Regulan la oposición entre división y diferenciación.</p>
+          </div>
+        </div>
+        <div class="obj-item">
+          <span class="obj-icon">⚙️</span>
+          <div>
+            <div class="obj-label">2. Supervivencia celular</div>
+            <p class="obj-text">RAS, PI3K, TP53, Ciclo celular/apoptosis, HIF-1. Controlan la ratio de nacimiento/muerte celular.</p>
+          </div>
+        </div>
+        <div class="obj-item">
+          <span class="obj-icon">🔧</span>
+          <div>
+            <div class="obj-label">3. Mantenimiento del genoma</div>
+            <p class="obj-text">Reparación de ADN (BRCA1/2, MMR), inestabilidad cromosómica. Permiten la acumulación de alteraciones adicionales.</p>
+          </div>
+        </div>
+      </div>
+      <p>Este marco integrador es conceptualmente relevante porque explica por qué mutaciones en distintos genes de una misma vía son frecuentemente mutuamente excluyentes, y abre la posibilidad de <strong>dirigir el tratamiento a la vía</strong> en lugar de al gen específico.</p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Heterogeneidad Genética: Cuatro Tipos Relevantes</summary>
+    <div class="details-body">
+      <p>Vogelstein et al. distinguen cuatro formas de heterogeneidad genética con implicaciones clínicas directas:</p>
+      <ol style="padding-left:1.5rem; color:var(--text-dim); font-size:0.9rem; line-height:2;">
+        <li><strong>Intratumoral:</strong> variación entre células de un mismo tumor; siempre presente, responsable de respuestas incompletas a terapia dirigida.</li>
+        <li><strong>Intertumoral:</strong> diferencias entre tumores del mismo subtipo histopatológico en distintos pacientes.</li>
+        <li><strong>Temporal:</strong> evolución del perfil mutacional durante la progresión y bajo presión terapéutica (resistencia adquirida).</li>
+        <li><strong>Regional:</strong> diferencias entre regiones espacialmente distintas de un mismo tumor (relevante para biopsia líquida).</li>
+      </ol>
+      <div class="warn-box">
+        <strong>Relevancia clínica:</strong> Esta heterogeneidad explica por qué una biopsia única puede no representar el perfil genómico completo del tumor y justifica el desarrollo de la biopsia líquida y el ctDNA como herramientas de monitoreo dinámico.
+      </div>
+    </div>
+  </details>
+
+  <details>
+    <summary>Implicaciones para la Medicina de Precisión y la Detección Temprana</summary>
+    <div class="details-body">
+      <p>El artículo concluye con una propuesta programática de alto impacto: la estrategia prioritaria contra el cáncer debe ser la <strong>detección temprana y la prevención</strong> (Plan A), reservando la terapia de enfermedad avanzada como contingencia (Plan B).</p>
+      <p>Los autores estiman que más del 75% de las muertes por cáncer podrían reducirse en las próximas décadas si se invirtieran mayores recursos en detección precoz. Esta postura tiene implicaciones ético-políticas que constituyen un eje central de discusión para los futuros médicos.</p>
+      <p>En cuanto a la medicina de precisión, el conocimiento de los genes driver específicos de cada tumor permite seleccionar inhibidores de cinasas (EGFR, ALK, BRAF), prever respuestas farmacológicas y estratificar pacientes. Sin embargo, persisten desafíos: la mayoría de los genes driver son supresores de tumor, cuya proteína pérdida no es directamente terapéuticamente asequible.</p>
+    </div>
+  </details>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 4: DESARROLLO TEMPORAL
+════════════════════════════════════════════ -->
+<section id="desarrollo">
+  <div class="section-header">
+    <span class="section-number">04 ——</span>
+    <h2>Desarrollo <em>Temporal</em></h2>
+  </div>
+
+  <p>La actividad se despliega en cinco fases progresivas, articulando trabajo autónomo previo, trabajo presencial en aula y cierre evaluativo.</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot"></div>
+      <div class="tl-time">FASE 0 · Extraclase · 2 horas</div>
+      <div class="card card-red" style="margin-bottom:0">
+        <h3>Lectura Dirigida y Glosario Activo</h3>
+        <p>El estudiante lee el artículo completo de Vogelstein et al. (2013) con una guía de lectura entregada previamente. Elabora un glosario activo (≥20 términos) en el que no sólo define, sino que explica con sus propias palabras la relevancia de cada concepto en el contexto del artículo. Identifica tres afirmaciones del texto que le resulten contraintuitivas o que genere una pregunta.</p>
+        <div class="warn-box" style="margin-top:1rem;">
+          <strong>Entregable:</strong> Glosario activo (digital o manuscrito) + 3 preguntas propias para discusión en clase. Sin este entregable, el estudiante no puede participar activamente en la Fase 1.
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot teal"></div>
+      <div class="tl-time">FASE 1 · Presencial · 90 minutos</div>
+      <div class="card card-gold" style="margin-bottom:0">
+        <h3>Activación de Conocimientos y Discusión Socrática</h3>
+        <p>El profesor conduce una discusión socrática usando las preguntas generadas por los estudiantes. Se construye colectivamente en el pizarrón el "mapa del paisaje genómico" con los conceptos centrales. El profesor introduce el contexto del TCGA y la base de datos COSMIC. Se integra una discusión breve sobre las diferencias conceptuales entre el modelo de Vogelstein (genómico-mutacional) y el modelo de Hallmarks de Hanahan &amp; Weinberg (fenotípico-funcional).</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot purple"></div>
+      <div class="tl-time">FASE 2 · Presencial · 2 horas</div>
+      <div class="card card-purple" style="margin-bottom:0">
+        <h3>Trabajo en Equipos: Análisis de Caso Genómico</h3>
+        <p>En equipos de 4–5 estudiantes, cada equipo recibe un tipo de tumor específico (cáncer colorrectal, cáncer de pulmón NSCLC, glioblastoma, melanoma, cáncer de páncreas o cáncer de mama). Utilizando el cBioPortal y la Figura 2 del artículo, el equipo mapea las vías driver de su tumor y responde un cuestionario analítico guiado. Las actividades detalladas se describen en la Sección 5.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot orange"></div>
+      <div class="tl-time">FASE 3 · Extraclase · 4 horas</div>
+      <div class="card card-orange" style="margin-bottom:0">
+        <h3>Investigación Bibliográfica Avanzada y Propuesta Integradora</h3>
+        <p>Cada equipo realiza una búsqueda bibliográfica en PubMed y Google Scholar (post-2015, alta evidencia) para actualizar el conocimiento sobre las vías driver de su tumor asignado. Con ello elabora una Propuesta Integradora (ver Actividad 4) que conecta genómica, hallmarks y estrategia clínica, incluyendo al menos 5 referencias bibliográficas adicionales al artículo base.</p>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-dot gold"></div>
+      <div class="tl-time">FASE 4 · Presencial · 2 horas</div>
+      <div class="card card-red" style="margin-bottom:0">
+        <h3>Presentación, Debate y Síntesis Colectiva</h3>
+        <p>Cada equipo presenta su propuesta en 10 minutos seguidos de 5 minutos de debate con el grupo. El profesor modera y problematiza. Al final, se realiza una síntesis colectiva que construye un modelo integrado "Vogelstein + Hanahan" del cáncer como enfermedad evolutiva del genoma. Cierre con reflexión crítica sobre la afirmación de Vogelstein respecto al Plan A vs Plan B en la política de salud oncológica.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 5: ACTIVIDADES DETALLADAS
+════════════════════════════════════════════ -->
+<section id="actividades">
+  <div class="section-header">
+    <span class="section-number">05 ——</span>
+    <h2>Actividades <em>Detalladas</em></h2>
+  </div>
+
+  <!-- ACTIVIDAD 1 -->
+  <div class="act-card">
+    <div class="act-number">1</div>
+    <div class="act-header">
+      <span class="act-tag tag-ind">Individual</span>
+      <span class="act-tag tag-inv">Investigación</span>
+      <h3 class="act-title">Glosario Activo con Razonamiento Integrador</h3>
+    </div>
+    <p>El estudiante elabora un glosario de al menos 20 términos clave del artículo. Para cada término no basta la definición: debe explicar <em>por qué ese concepto importa para entender la biología del cáncer</em> y debe proporcionar al menos un ejemplo concreto del artículo.</p>
+    <div class="info-box">
+      <strong>Términos obligatorios a incluir:</strong> Exoma, Mutación somática, Mutación driver, Mutación passenger, Mut-driver gene, Epi-driver gene, Montaña / Colina, COSMIC, Heterogeneidad intratumoral, Selección clonal, Inestabilidad microsatelital (MSI), Inestabilidad cromosómica, Cromothripsis, Translocación, Amplificación génica, Deleción homocigota, Vía de señalización, Plan A / Plan B, ctDNA, Medicina de precisión.
+    </div>
+    <ul class="q-list">
+      <li><strong>Pregunta reflexiva obligatoria 1:</strong> ¿Por qué los autores afirman que la distinción entre gen driver y mutación driver es fundamental? Proporciona un ejemplo con el gen <em>APC</em>. <span class="bloom-tag b-ana">Análisis</span></li>
+      <li><strong>Pregunta reflexiva obligatoria 2:</strong> Explica con tus propias palabras la paradoja de que los tumores, siendo genómicamente complejos, puedan responder dramáticamente a la inhibición de un solo gen (ej. <em>BRAF</em> V600E en melanoma). <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li><strong>Pregunta libre:</strong> El estudiante formula su propia pregunta más interesante surgida de la lectura, justificando por qué le parece relevante y formulando una hipótesis tentativa de respuesta. <span class="bloom-tag b-cre">Creación</span></li>
+    </ul>
+  </div>
+
+  <!-- ACTIVIDAD 2 -->
+  <div class="act-card">
+    <div class="act-number">2</div>
+    <div class="act-header">
+      <span class="act-tag tag-ind">Individual</span>
+      <span class="act-tag tag-disc">Discusión</span>
+      <h3 class="act-title">Cuestionario de Razonamiento Escalonado</h3>
+    </div>
+    <p>Cuestionario individual escrito que debe completarse <em>durante</em> la lectura (no después). Las preguntas siguen una progresión de dificultad cognitiva. Se entrega al inicio de la Fase 1.</p>
+    <ul class="q-list">
+      <li>Define la diferencia entre secuenciación del exoma y del genoma completo. ¿Qué ventajas y limitaciones tiene cada abordaje para el estudio del paisaje mutacional del cáncer? <span class="bloom-tag b-com">Comprensión</span></li>
+      <li>La Figura 1B del artículo muestra que el melanoma y el cáncer de pulmón tienen tasas mutacionales mucho más altas que el meduloblastoma. Propón dos hipótesis biológicas que expliquen esta diferencia. <span class="bloom-tag b-ana">Análisis</span></li>
+      <li>¿Cuál es el significado del criterio del 20/20 que proponen los autores para clasificar genes como oncogenes o supresores tumorales? ¿Por qué la frecuencia de mutación no es suficiente criterio? <span class="bloom-tag b-ana">Análisis</span></li>
+      <li>Vogelstein et al. proponen que las mutaciones en componentes de una misma vía de señalización tienden a ser mutuamente excluyentes. ¿Qué implicación tiene esto para entender la evolución clonal del tumor? ¿Apoya o contradice el modelo de selección darwiniana? <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li>El artículo menciona la "materia oscura" (dark matter) del cáncer. ¿Qué significa este concepto? Discute por qué el secuenciamiento actual podría subestimar el número real de genes driver. Fundamenta tu respuesta con datos del artículo. <span class="bloom-tag b-ana">Análisis</span></li>
+      <li>Los autores afirman que la metástasis puede explicarse en principio por procesos estocásticos, sin necesidad de postular genes de metástasis específicos. ¿Estás de acuerdo? Argumenta con base en el artículo y en lo que conoces de biología celular del cáncer. <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li>Si eres un médico en 2030 con acceso al perfil genómico completo del tumor de tu paciente, describe (no más de 10 líneas) cómo utilizarías la clasificación de vías driver de Vogelstein para tomar decisiones terapéuticas. <span class="bloom-tag b-cre">Creación</span></li>
+    </ul>
+  </div>
+
+  <!-- ACTIVIDAD 3 -->
+  <div class="act-card">
+    <div class="act-number">3</div>
+    <div class="act-header">
+      <span class="act-tag tag-grp">Equipo</span>
+      <span class="act-tag tag-inv">Investigación</span>
+      <h3 class="act-title">Análisis de Caso Genómico con cBioPortal y COSMIC</h3>
+    </div>
+    <p>Cada equipo trabaja con un tipo tumoral asignado. Accede a <strong>cBioPortal for Cancer Genomics</strong> (cbioportal.org) y al <strong>COSMIC</strong> (cancer.sanger.ac.uk) para responder las siguientes preguntas basadas en datos reales del TCGA. <em>Todos los hallazgos deben sustentarse con capturas de pantalla incorporadas al informe.</em></p>
+
+    <details>
+      <summary>🔬 Parte A — Caracterización del Paisaje Genómico</summary>
+      <div class="details-body">
+        <ul class="q-list">
+          <li>Accede al cBioPortal, selecciona tu tipo tumoral del TCGA (ej. TCGA-COAD para colorrectal). Identifica los 5 genes más frecuentemente mutados. ¿Son los mismos que menciona Vogelstein et al.? ¿Ha cambiado algo en los datos actualizados? <span class="bloom-tag b-com">Comprensión</span></li>
+          <li>Clasifica cada uno de esos 5 genes como oncogén o supresor tumoral según el criterio ratiométrico del artículo. Consulta COSMIC para verificar el patrón de mutación. <span class="bloom-tag b-apl">Aplicación</span></li>
+          <li>¿Cuántas mutaciones somáticas no sinónimas por tumor reporta cBioPortal en promedio para tu tipo tumoral? ¿Coincide con los datos de la Figura 1B del artículo? Interpreta las diferencias. <span class="bloom-tag b-ana">Análisis</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>🧩 Parte B — Mapeo de Vías de Señalización</summary>
+      <div class="details-body">
+        <ul class="q-list">
+          <li>Usando la Figura 7 del artículo y los datos de cBioPortal, identifica qué vías de señalización están más afectadas en tu tipo tumoral. Elabora un diagrama simplificado de la vía principal y señala dónde ocurren las alteraciones genéticas más frecuentes. <span class="bloom-tag b-apl">Aplicación</span></li>
+          <li>Selecciona dos genes driver de tu tumor que actúen en la misma vía de señalización. Confirma en cBioPortal si sus alteraciones son mutuamente excluyentes. Interpreta el resultado en términos evolutivos. <span class="bloom-tag b-ana">Análisis</span></li>
+          <li>Conecta las vías afectadas con al menos 3 hallmarks del cáncer según Hanahan &amp; Weinberg (2011). Explica el mecanismo molecular que une cada vía driver con el hallmark correspondiente. <span class="bloom-tag b-ana">Análisis</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <details>
+      <summary>🔎 Parte C — Pensamiento Crítico sobre Limitaciones</summary>
+      <div class="details-body">
+        <ul class="q-list">
+          <li>Identifica al menos dos genes que en el artículo de Vogelstein (2013) no se mencionan como driver, pero que en los datos actuales de TCGA/cBioPortal aparecen recurrentemente alterados en tu tumor. ¿Qué explica esta diferencia? <span class="bloom-tag b-eva">Evaluación</span></li>
+          <li>¿Qué limitaciones metodológicas del NGS exónico podrían estar subestimando genes driver en tu tipo tumoral específico? Argumenta con base en el artículo y en al menos una referencia adicional publicada posterior a 2018. <span class="bloom-tag b-eva">Evaluación</span></li>
+          <li>Discute si el perfil genómico que describes corresponde principalmente a la "cima del iceberg" (mutaciones clonales) o si refleja también la heterogeneidad subclonal. ¿Qué herramienta o diseño de estudio serviría para profundizar en esto? <span class="bloom-tag b-cre">Creación</span></li>
+        </ul>
+      </div>
+    </details>
+  </div>
+
+  <!-- ACTIVIDAD 4 -->
+  <div class="act-card">
+    <div class="act-number">4</div>
+    <div class="act-header">
+      <span class="act-tag tag-grp">Equipo</span>
+      <span class="act-tag tag-inv">Investigación</span>
+      <span class="act-tag tag-disc">Síntesis</span>
+      <h3 class="act-title">Propuesta Integradora: Del Genoma a la Clínica</h3>
+    </div>
+    <p>Cada equipo elabora un documento de síntesis (1,500–2,000 palabras) con el siguiente esquema obligatorio. La propuesta debe demostrar integración de las tres dimensiones: <em>genómica molecular, biología del cáncer y perspectiva clínica-traslacional.</em></p>
+    <div class="info-box">
+      <strong>Estructura obligatoria del documento:</strong>
+    </div>
+    <ul class="q-list">
+      <li><strong>Introducción (≤250 palabras):</strong> Presenta el tumor asignado, su epidemiología (incluyendo datos para México, búsqueda en INEGI/Globocan) y justifica la importancia del análisis genómico para este tumor. <span class="bloom-tag b-com">Comprensión</span></li>
+      <li><strong>Paisaje Genómico Actualizado (≤400 palabras):</strong> Describe las principales alteraciones driver de tu tumor con datos del TCGA actualizados. Compara con lo reportado en Vogelstein et al. (2013): ¿qué ha cambiado en 10 años de investigación? Incluye al menos 3 referencias post-2018. <span class="bloom-tag b-ana">Análisis</span></li>
+      <li><strong>Integración con Hallmarks (≤400 palabras):</strong> Conecta los genes driver identificados con los hallmarks del cáncer (Hanahan &amp; Weinberg 2011, Hanahan 2022). Elabora una tabla o diagrama que muestre esta integración. ¿Qué hallmarks están cubiertos y cuáles no explican los genes driver conocidos? <span class="bloom-tag b-ana">Análisis</span></li>
+      <li><strong>Propuesta Diagnóstica o Terapéutica (≤500 palabras):</strong> Propón una estrategia concreta de detección temprana (ej. biomarcadores en fluidos corporales) O una estrategia terapéutica dirigida a vías driver específicas. Fundamenta con evidencia de ensayos clínicos (ClinicalTrials.gov). ¿Es viable esta estrategia para el sistema de salud mexicano? <span class="bloom-tag b-cre">Creación</span></li>
+      <li><strong>Reflexión Crítica (≤200 palabras):</strong> Postura del equipo sobre el "Plan A vs Plan B" de Vogelstein: ¿debería México priorizar la detección temprana sobre el tratamiento de enfermedad avanzada? Argumenta con datos de salud pública. <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li><strong>Referencias bibliográficas:</strong> Mínimo 8 referencias. Formato Vancouver o APA 7.ª edición. Incluir siempre el DOI. Se descalifican referencias sin revisión por pares (Wikipedia, webs sin respaldo científico, etc.).</li>
+    </ul>
+  </div>
+
+  <!-- ACTIVIDAD 5 -->
+  <div class="act-card">
+    <div class="act-number">5</div>
+    <div class="act-header">
+      <span class="act-tag tag-disc">Debate</span>
+      <span class="act-tag tag-grp">Grupal</span>
+      <h3 class="act-title">Mesa Redonda: Pensamiento Crítico en Oncología Genómica</h3>
+    </div>
+    <p>Al finalizar las presentaciones de equipos, el profesor modera una mesa redonda de 30–40 minutos con los siguientes <strong>temas de debate</strong>. Cada estudiante debe intervenir al menos una vez con argumentos sustentados en el artículo o en las fuentes consultadas.</p>
+    <ul class="q-list">
+      <li><strong>DEBATE 1 — Reduccionismo vs. Complejidad:</strong> Vogelstein plantea que el cáncer se reduce a alteraciones en ~140 genes y 12 vías. Hanahan &amp; Weinberg insisten en la complejidad del microambiente tumoral. ¿Son estas perspectivas complementarias o contradictorias? ¿Cuál sirve mejor al clínico? <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li><strong>DEBATE 2 — La Metáfora del "Plan A":</strong> Vogelstein afirma que más del 75% de muertes por cáncer serían evitables con detección temprana. ¿Es esta afirmación sustentada por los datos o es una postura optimista no realista? ¿Qué barreras estructurales existen en el sistema de salud de México? <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li><strong>DEBATE 3 — Equidad en la Medicina de Precisión:</strong> Si el tratamiento óptimo del cáncer requiere secuenciación tumoral completa, ¿es esto éticamente sostenible en sistemas de salud con recursos limitados? ¿Cómo debe el médico equilibrar la mejor evidencia con la disponibilidad real? <span class="bloom-tag b-eva">Evaluación</span></li>
+      <li><strong>DEBATE 4 — Células troncales y genes driver:</strong> ¿Las células troncales cancerosas (CSC) son las responsables de acumular las mutaciones driver? ¿O cualquier célula puede ser la célula de origen? Conecta la información de Vogelstein con los conceptos de heterogeneidad tumoral y jerarquía celular estudiados en el módulo. <span class="bloom-tag b-cre">Síntesis</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 6: RÚBRICA
+════════════════════════════════════════════ -->
+<section id="rubrica">
+  <div class="section-header">
+    <span class="section-number">06 ——</span>
+    <h2>Rúbrica de <em>Evaluación</em></h2>
+  </div>
+
+  <p>La calificación total de la actividad equivale a <strong>100 puntos</strong>, distribuidos entre los productos individuales y los colectivos.</p>
+
+  <div class="card" style="margin-bottom:2rem;">
+    <h3>Distribución de la Calificación</h3>
+    <div class="obj-grid" style="margin-top:1rem;">
+      <div class="obj-item">
+        <span class="obj-icon">📝</span>
+        <div>
+          <div class="obj-label">Glosario Activo (Individual)</div>
+          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">15 pts</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <span class="obj-icon">🧠</span>
+        <div>
+          <div class="obj-label">Cuestionario Escalonado (Individual)</div>
+          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">25 pts</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <span class="obj-icon">🔬</span>
+        <div>
+          <div class="obj-label">Análisis de Caso Genómico (Equipo)</div>
+          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">25 pts</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <span class="obj-icon">📄</span>
+        <div>
+          <div class="obj-label">Propuesta Integradora (Equipo)</div>
+          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">25 pts</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <span class="obj-icon">🎤</span>
+        <div>
+          <div class="obj-label">Participación en Debate (Individual)</div>
+          <p class="obj-text" style="color:var(--accent3); font-weight:700; font-size:1rem;">10 pts</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Rúbrica Detallada — Propuesta Integradora</h3>
+  <table class="rubrica">
+    <thead>
+      <tr>
+        <th>Criterio</th>
+        <th>Excelente (100%)</th>
+        <th>Bueno (75%)</th>
+        <th>Suficiente (50%)</th>
+        <th>Insuficiente (25%)</th>
+        <th>Puntos</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="criterio">Dominio conceptual del artículo</td>
+        <td>Demuestra comprensión profunda de todos los conceptos centrales; usa terminología precisa; sin errores conceptuales.</td>
+        <td>Comprende la mayoría de los conceptos; 1–2 errores menores.</td>
+        <td>Comprende los conceptos básicos; varios errores o imprecisiones.</td>
+        <td>Comprensión superficial; errores conceptuales importantes.</td>
+        <td class="pts">5 pts</td>
+      </tr>
+      <tr>
+        <td class="criterio">Uso de bases de datos (cBioPortal, COSMIC)</td>
+        <td>Evidencia clara de acceso y análisis; capturas de pantalla pertinentes; interpreta datos correctamente.</td>
+        <td>Acceso confirmado; análisis parcialmente correcto.</td>
+        <td>Menciona las bases de datos pero sin análisis original.</td>
+        <td>No evidencia uso real de las bases de datos.</td>
+        <td class="pts">5 pts</td>
+      </tr>
+      <tr>
+        <td class="criterio">Calidad bibliográfica</td>
+        <td>≥8 referencias; todas con DOI; artículos originales en revistas indexadas; post-2018 los requeridos.</td>
+        <td>6–7 referencias de calidad; 1–2 sin DOI.</td>
+        <td>4–5 referencias; algunas sin revisión por pares.</td>
+        <td>&lt;4 referencias; predominan fuentes no científicas.</td>
+        <td class="pts">5 pts</td>
+      </tr>
+      <tr>
+        <td class="criterio">Integración Vogelstein–Hallmarks</td>
+        <td>Conexión explícita, mecánicamente justificada entre genes driver, vías y hallmarks específicos, con evidencia.</td>
+        <td>Conexión correcta pero superficialmente justificada.</td>
+        <td>Conexión mencionada sin justificación mecanística.</td>
+        <td>No conecta los dos marcos conceptuales.</td>
+        <td class="pts">5 pts</td>
+      </tr>
+      <tr>
+        <td class="criterio">Propuesta original y viabilidad</td>
+        <td>Propuesta creativa, sustentada en evidencia clínica real; considera contexto del sistema de salud mexicano.</td>
+        <td>Propuesta válida, sustentada parcialmente; no considera contexto local.</td>
+        <td>Propuesta genérica repetida de la literatura; sin análisis propio.</td>
+        <td>Propuesta inviable, sin sustento o no existe.</td>
+        <td class="pts">5 pts</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="warn-box" style="margin-top:1.5rem;">
+    <strong>Criterio transversal de integridad académica:</strong> El uso de inteligencia artificial generativa sin declaración explícita y sin verificación crítica del contenido (revisión con el artículo original y con bases de datos primarias) será considerado como trabajo no sustentado. El objetivo central de la actividad es desarrollar la capacidad de lectura crítica de literatura científica primaria, habilidad que no puede ser delegada.
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════
+     SECCIÓN 7: RECURSOS
+════════════════════════════════════════════ -->
+<section id="recursos">
+  <div class="section-header">
+    <span class="section-number">07 ——</span>
+    <h2>Recursos y <em>Fuentes</em></h2>
+  </div>
+
+  <p>Listado de bases de datos, herramientas y referencias complementarias para el desarrollo de la actividad. Todas las fuentes listadas son de acceso libre o disponibles a través de la biblioteca digital de la UNAM (VPN requerida para algunas).</p>
+
+  <h3 style="margin-bottom:1rem;">Bases de Datos Primarias <span class="tag">Obligatorias</span></h3>
+  <div class="res-grid">
+    <div class="res-item">
+      <div class="res-type">Base de datos · Genómica de cáncer</div>
+      <div class="res-name">cBioPortal for Cancer Genomics</div>
+      <p class="res-desc">Portal de análisis y visualización de datos genómicos del TCGA y otros estudios. Permite análisis de mutaciones, expresión, amplificaciones y correlaciones clínicas.</p>
+      <div class="res-url">cbioportal.org</div>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Base de datos · Mutaciones somáticas</div>
+      <div class="res-name">COSMIC — Catalogue of Somatic Mutations in Cancer</div>
+      <p class="res-desc">Catálogo global de mutaciones somáticas en cáncer. Fundamental para identificar el patrón de mutación de genes driver (montañas, recurrencia, missense vs truncantes).</p>
+      <div class="res-url">cancer.sanger.ac.uk/cosmic</div>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Programa · TCGA</div>
+      <div class="res-name">The Cancer Genome Atlas (TCGA)</div>
+      <p class="res-desc">Repositorio NCI/NIH con datos genómicos, transcriptómicos y clínicos de más de 11,000 tumores de 33 tipos de cáncer. Acceso a través de GDC Data Portal.</p>
+      <div class="res-url">portal.gdc.cancer.gov</div>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Base de datos · Ensayos clínicos</div>
+      <div class="res-name">ClinicalTrials.gov</div>
+      <p class="res-desc">Registro de ensayos clínicos en curso y concluidos. Útil para sustentar la Propuesta Integradora con evidencia de eficacia de terapias dirigidas.</p>
+      <div class="res-url">clinicaltrials.gov</div>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Buscador · Literatura biomédica</div>
+      <div class="res-name">PubMed / MEDLINE</div>
+      <p class="res-desc">Base de datos bibliográfica de la NLM/NIH. Uso obligatorio para la búsqueda de referencias complementarias. Filtros recomendados: Full text, Clinical Trial, Systematic Review, &gt;2018.</p>
+      <div class="res-url">pubmed.ncbi.nlm.nih.gov</div>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Estadísticas · Epidemiología</div>
+      <div class="res-name">GLOBOCAN — IARC</div>
+      <p class="res-desc">Estadísticas de incidencia y mortalidad por cáncer a nivel mundial y por país. Incluye datos para México. Indispensable para la sección epidemiológica de la Propuesta Integradora.</p>
+      <div class="res-url">gco.iarc.fr/today</div>
+    </div>
+  </div>
+
+  <h3 style="margin:2rem 0 1rem;">Lecturas Complementarias del Módulo</h3>
+  <div class="res-grid">
+    <div class="res-item">
+      <div class="res-type">Artículo seminal · Hallmarks</div>
+      <div class="res-name">Hanahan &amp; Weinberg (2011) — Hallmarks of Cancer: The Next Generation</div>
+      <p class="res-desc">Cell 144:646–674. Marco conceptual complementario de Vogelstein: mientras éste describe el <em>qué</em> genómico, Hanahan &amp; Weinberg describen el <em>para qué</em> fenotípico.</p>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Artículo · Nuevas dimensiones</div>
+      <div class="res-name">Hanahan (2022) — Hallmarks of Cancer: New Dimensions</div>
+      <p class="res-desc">Cancer Discovery 12:31–46. Actualización con 4 nuevos hallmarks propuestos: plasticidad fenotípica, reprogramación epigenética no mutacional, microbiomas y senescencia. Integración con Vogelstein.</p>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Revisión · Evolución tumoral</div>
+      <div class="res-name">Nowell (1976) — The Clonal Evolution of Tumor Cell Populations</div>
+      <p class="res-desc">Science 194:23–28. Referencia histórica fundamental. El modelo de selección clonal de Nowell es la base conceptual sobre la que Vogelstein construye el modelo de alteraciones secuenciales.</p>
+    </div>
+    <div class="res-item">
+      <div class="res-type">Revisión · Medicina de precisión</div>
+      <div class="res-name">Garraway &amp; Lander (2013) — Lessons from the Cancer Genome</div>
+      <p class="res-desc">Cell 153:17–37. Perspectiva complementaria contemporánea al artículo de Vogelstein sobre las implicaciones del paisaje genómico para la oncología de precisión.</p>
+    </div>
+  </div>
+
+  <div class="cite-box" style="margin-top:2rem;">
+    <strong>Recursos de apoyo para búsqueda bibliográfica:</strong> La biblioteca digital de la UNAM (dgb.unam.mx) permite acceso a Science, Cell, Nature, NEJM, Lancet y otras revistas de alto impacto a través de VPN institucional. Se recomienda el uso de Mendeley o Zotero para gestión de referencias.
+  </div>
+</section>
+
+</main>
+
+<!-- ═══════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════ -->
+<footer>
+  <p><strong>Universidad Nacional Autónoma de México</strong></p>
+  <p>Facultad de Estudios Superiores Iztacala · Carrera de Médico Cirujano</p>
+  <p>Módulo: Células Troncales y Cáncer · Sección de Enseñanza Básica</p>
+  <br>
+  <p style="color:var(--text-muted)">Actividad didáctica diseñada con base en: Vogelstein B et al. Cancer Genome Landscapes. <em>Science.</em> 2013;339(6127):1546–1558.</p>
+  <p style="color:var(--text-muted)">DOI: 10.1126/science.1235122 · Hanahan D, Weinberg RA. Cell 2011;144:646–674 · Hanahan D. Cancer Discovery 2022;12:31–46</p>
+</footer>
+
+<script>
+  function scrollTo(id) {
+    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+    document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+  }
+
+  // Update active nav on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navItems = document.querySelectorAll('.nav-item');
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const id = entry.target.id;
+        const sectionMap = {
+          'presentacion': 0, 'objetivos': 1, 'marco': 2,
+          'desarrollo': 3, 'actividades': 4, 'rubrica': 5, 'recursos': 6
+        };
+        navItems.forEach(n => n.classList.remove('active'));
+        if (sectionMap[id] !== undefined) {
+          navItems[sectionMap[id]].classList.add('active');
+        }
+      }
+    });
+  }, { threshold: 0.3 });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
