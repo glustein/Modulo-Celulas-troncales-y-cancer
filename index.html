@@ -807,7 +807,7 @@ select.filter-sel {
         <input type="text" class="form-input" id="prof-name" placeholder="Nombre completo">
       </div>
       <button class="btn btn-primary btn-full" onclick="loginProf()">Acceder al panel docente</button>
-      <p class="login-hint">Clave por defecto: <strong>iztacala2025</strong> (cámbiela en producción).</p>
+      <p class="login-hint">Clave por defecto: <strong>iztacala2026-2</strong> (cámbiela en producción).</p>
     </div>
   </div>
 </div>
@@ -1065,7 +1065,7 @@ async function loginStudent() {
 function loginProf() {
   const key = document.getElementById('prof-key').value.trim();
   const name = document.getElementById('prof-name').value.trim();
-  if (key !== 'iztacala2025') { notify('Clave incorrecta'); return; }
+  if (key !== 'iztacala2026-2') { notify('Clave incorrecta'); return; }
   if (!name) { notify('Ingrese su nombre'); return; }
   currentRole = 'prof';
   showScreen('prof-screen');
