@@ -153,10 +153,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
       <p class="login-hint">Sus respuestas se guardan automáticamente en este dispositivo. Si el profesor configuró Firebase, también se sincronizan al servidor.</p>
     </div>
     <div id="prof-form" style="display:none">
-      <div class="form-group"><label class="form-label">Clave de acceso docente</label><input type="password" class="form-input" id="prof-key" placeholder="Ingrese la clave"></div>
+      <div class="form-group"><label class="form-label">Clave de acceso docente</label><input type="password" class="form-input" id="prof-key" placeholder="Clave de acceso docente" autocomplete="current-password"></div>
       <div class="form-group"><label class="form-label">Nombre del profesor</label><input type="text" class="form-input" id="prof-name" placeholder="Nombre completo"></div>
       <button class="btn btn-primary btn-full" onclick="loginProf()">Acceder al panel docente</button>
-      <p class="login-hint">Clave: <strong>iztacala2025</strong></p>
+      <p class="login-hint">Ingrese la clave docente proporcionada por el coordinador del módulo.</p>
     </div>
   </div>
 </div>
@@ -236,28 +236,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(-
 <div id="notif" class="notif"></div>
 
 <script type="module">
+/* Firebase SDK 12.14.0 — Realtime Database */
 import{initializeApp}from'https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js';
-import{getDatabase,ref,set,get,onValue}from'https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js';
+import{getDatabase,ref,set,get}from'https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js';
 
-/*
-  ═══════════════════════════════════════════════════════
-  INSTRUCCIONES PARA ACTIVAR FIREBASE (PASO A PASO):
-  
-  1. Vaya a https://console.firebase.google.com
-  2. "Crear proyecto" → nombre: "ctycancer-iztacala" → continuar
-  3. En el menú lateral: Compilación → Realtime Database → Crear base de datos
-  4. Elija la ubicación más cercana → "Comenzar en modo de prueba" → Habilitar
-  5. En el menú lateral: Configuración del proyecto (ícono ⚙️) → pestaña "General"
-  6. Baje a "Tus apps" → "Añadir app" → ícono web (</>)
-  7. Nombre: "plataforma-ctc" → Registrar app
-  8. Copie el objeto firebaseConfig que aparece
-  9. Reemplace TODOS los valores "REEMPLAZAR..." abajo con sus datos
-  10. Guarde el archivo y vuelva a subirlo a GitHub Pages
-  
-  NOTA: El modo de prueba funciona 30 días. Para producción permanente,
-  configure reglas de seguridad en Realtime Database → Rules.
-  ═══════════════════════════════════════════════════════
-*/
 const FB_CFG={
   apiKey:"AIzaSyDd5_duPdsOIBHSRFPqyqsj8ZXhNXtlvy0",
   authDomain:"ctycancer-iztacala.firebaseapp.com",
@@ -265,30 +247,24 @@ const FB_CFG={
   projectId:"ctycancer-iztacala",
   storageBucket:"ctycancer-iztacala.firebasestorage.app",
   messagingSenderId:"1004030143582",
-  appId:"1:1004030143582:web:2f8134c6caa102de1558cf",
-  measurementId:"G-B283859FGG"
+  appId:"1:1004030143582:web:2f8134c6caa102de1558cf"
 };
 
-let db=null;
 try{
-  if(FB_CFG.apiKey!=="REEMPLAZAR_CON_SU_API_KEY"){
-    const app=initializeApp(FB_CFG);
-    db=getDatabase(app);
-    window._fbOK=true;
-    window._fbDB=db;
-    window._fbRef=ref;
-    window._fbSet=set;
-    window._fbGet=get;
-    window._fbOnValue=onValue;
-    console.log("[Firebase] Conectado correctamente");
-  }else{
-    window._fbOK=false;
-    console.log("[Firebase] No configurado — usando localStorage únicamente");
-  }
-}catch(e){window._fbOK=false;console.warn("[Firebase] Error:",e.message);}
-
+  const app=initializeApp(FB_CFG);
+  const db=getDatabase(app);
+  window._fbOK=true;
+  window._fbDB=db;
+  window._fbRef=ref;
+  window._fbSet=set;
+  window._fbGet=get;
+  console.log("[Firebase] Conectado ✓");
+}catch(e){
+  window._fbOK=false;
+  console.warn("[Firebase] Error al conectar:",e.message);
+}
 window._fbReady=true;
-document.dispatchEvent(new Event('firebase-ready'));
+document.dispatchEvent(new CustomEvent('firebase-ready'));
 </script>
 
 <script>
@@ -355,7 +331,12 @@ window.loginStudent=async()=>{
 window.loginProf=async()=>{
   const key=document.getElementById('prof-key').value.trim();
   const name=document.getElementById('prof-name').value.trim();
-  if(key!=='iztacala2025'){notify('Clave incorrecta');return;}
+  if(!key){notify('Ingrese la clave');return;}
+  // SHA-256 hash comparison — password never stored in plain text
+  const enc=new TextEncoder();
+  const buf=await crypto.subtle.digest('SHA-256',enc.encode(key));
+  const hash=Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
+  if(hash!=='63fbfb5276928bd1555a6e523814cb2f3d8818b1da2a35af6be1caa0aa865619'){notify('Clave incorrecta');return;}
   if(!name){notify('Ingrese su nombre');return;}
   CR='prof';
   showScreen('prof-screen');
@@ -859,8 +840,10 @@ window.notify=msg=>{const n=document.getElementById('notif');n.textContent=msg;n
 DB=lsGet();showScreen('login-screen');
 }//end startApp
 
-if(window._fbReady){startApp();}
-else{document.addEventListener('firebase-ready',startApp,{once:true});setTimeout(()=>{if(!window._fbReady){window._fbOK=false;window._fbReady=true;startApp();}},3000);}
+let _appStarted=false;
+function safeStart(){if(_appStarted)return;_appStarted=true;startApp();}
+if(window._fbReady){safeStart();}
+else{document.addEventListener('firebase-ready',safeStart,{once:true});setTimeout(safeStart,4000);}
 </script>
 </body>
 </html>
