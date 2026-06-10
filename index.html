@@ -2,2037 +2,865 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cancer Genome Landscapes — Plataforma de Evaluación</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Cancer Genome Landscapes — Plataforma de Evaluación v3</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #f7f5f0;
-  --bg2: #efefea;
-  --bg3: #e8e5de;
-  --surface: #ffffff;
-  --border: #d8d4cb;
-  --border2: #c8c3b8;
-  --text: #1a1916;
-  --text2: #4a4740;
-  --text3: #7a7670;
-  --accent: #c2410c;
-  --accent-light: #fff1ee;
-  --accent2: #0f766e;
-  --accent2-light: #f0fdf9;
-  --accent3: #6d28d9;
-  --accent3-light: #f5f3ff;
-  --gold: #b45309;
-  --gold-light: #fffbeb;
-  --success: #15803d;
-  --success-light: #f0fdf4;
-  --danger: #b91c1c;
-  --danger-light: #fef2f2;
-  --warn: #b45309;
-  --warn-light: #fffbeb;
-  --unam: #003366;
-  --unam-gold: #b8970a;
-  --radius: 8px;
-  --radius-lg: 12px;
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-
-body {
-  font-family: 'DM Sans', system-ui, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  line-height: 1.6;
-}
-
-/* ─── SCREENS ─── */
-.screen { display: none; min-height: 100vh; }
-.screen.active { display: block; }
-
-/* ─── LOGIN ─── */
-#login-screen {
-  display: none;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  background: var(--bg);
-}
-#login-screen.active { display: flex; }
-
-.login-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 3rem;
-  width: 100%;
-  max-width: 480px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
-}
-
-.login-logo {
-  text-align: center;
-  margin-bottom: 2rem;
-}
-
-.login-logo-top {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.65rem;
-  letter-spacing: 0.2em;
-  color: var(--unam);
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
-
-.login-title {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.8rem;
-  color: var(--text);
-  line-height: 1.2;
-  margin-bottom: 0.4rem;
-}
-
-.login-subtitle {
-  font-size: 0.82rem;
-  color: var(--text3);
-  font-family: 'DM Mono', monospace;
-}
-
-.role-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 4px;
-  background: var(--bg2);
-  border-radius: var(--radius);
-  padding: 4px;
-  margin-bottom: 1.5rem;
-}
-
-.role-tab {
-  padding: 0.6rem;
-  border: none;
-  background: transparent;
-  border-radius: 6px;
-  font-size: 0.82rem;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text3);
-  cursor: pointer;
-  font-weight: 500;
-  transition: all .15s;
-}
-.role-tab.active {
-  background: var(--surface);
-  color: var(--text);
-  box-shadow: 0 1px 2px rgba(0,0,0,0.08);
-}
-
-.form-group { margin-bottom: 1rem; }
-.form-label {
-  display: block;
-  font-size: 0.78rem;
-  font-weight: 500;
-  color: var(--text2);
-  margin-bottom: 0.4rem;
-  letter-spacing: 0.02em;
-}
-
-.form-input {
-  width: 100%;
-  padding: 0.65rem 0.9rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 0.9rem;
-  font-family: 'DM Sans', sans-serif;
-  background: var(--surface);
-  color: var(--text);
-  transition: border-color .15s;
-  outline: none;
-}
-.form-input:focus { border-color: var(--accent2); }
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  padding: 0.65rem 1.25rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 0.85rem;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all .15s;
-  background: var(--surface);
-  color: var(--text);
-  text-decoration: none;
-}
-.btn:hover { background: var(--bg2); }
-.btn:active { transform: scale(.98); }
-.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
-.btn-primary:hover { background: var(--text2); }
-.btn-accent { background: var(--accent); color: white; border-color: var(--accent); }
-.btn-accent:hover { background: #b13b0a; }
-.btn-teal { background: var(--accent2); color: white; border-color: var(--accent2); }
-.btn-teal:hover { background: #0d6b62; }
-.btn-full { width: 100%; }
-.btn-sm { padding: 0.4rem 0.9rem; font-size: 0.78rem; }
-
-.login-hint { font-size: 0.75rem; color: var(--text3); margin-top: 1rem; text-align: center; line-height: 1.5; }
-
-/* ─── TOPBAR ─── */
-.topbar {
-  background: var(--surface);
-  border-bottom: 1px solid var(--border);
-  padding: 0 1.5rem;
-  height: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
-.topbar-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-.topbar-dot {
-  width: 8px; height: 8px;
-  border-radius: 50%;
-  background: var(--accent);
-}
-.topbar-name {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1rem;
-  color: var(--text);
-}
-.topbar-sub {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.62rem;
-  color: var(--text3);
-  letter-spacing: 0.08em;
-}
-.topbar-user {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 0.82rem;
-  color: var(--text2);
-}
-.topbar-avatar {
-  width: 32px; height: 32px;
-  border-radius: 50%;
-  background: var(--accent2);
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.72rem;
-  font-weight: 600;
-}
-
-/* ─── STUDENT LAYOUT ─── */
-.student-layout {
-  max-width: 860px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-.student-header {
-  margin-bottom: 2rem;
-}
-.student-header h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: 1.6rem;
-  margin-bottom: 0.4rem;
-}
-.student-header p { font-size: 0.88rem; color: var(--text3); }
-
-/* progress overview */
-.progress-overview {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px,1fr));
-  gap: 10px;
-  margin-bottom: 2rem;
-}
-.prog-card {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1rem;
-}
-.prog-card-label { font-size: 0.7rem; color: var(--text3); font-weight: 500; margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
-.prog-card-val { font-size: 1.5rem; font-weight: 500; color: var(--text); font-family: 'DM Mono', monospace; }
-.prog-card-sub { font-size: 0.7rem; color: var(--text3); }
-
-/* activity list */
-.activity-list { display: flex; flex-direction: column; gap: 10px; }
-
-.act-row {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  cursor: pointer;
-  transition: border-color .15s, box-shadow .15s;
-}
-.act-row:hover { border-color: var(--border2); box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
-.act-row.done { border-left: 3px solid var(--success); }
-.act-row.locked { opacity: .55; cursor: not-allowed; }
-
-.act-icon {
-  width: 40px; height: 40px;
-  border-radius: var(--radius);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-.act-info { flex: 1; }
-.act-name { font-size: 0.92rem; font-weight: 500; color: var(--text); }
-.act-desc { font-size: 0.78rem; color: var(--text3); margin-top: 2px; }
-.act-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.68rem;
-  padding: 3px 8px;
-  border-radius: 4px;
-  white-space: nowrap;
-}
-.badge-pending { background: var(--bg2); color: var(--text3); }
-.badge-done { background: var(--success-light); color: var(--success); }
-.badge-pts { background: var(--accent2-light); color: var(--accent2); }
-
-/* ─── ACTIVITY MODAL ─── */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,0.35);
-  z-index: 200;
-  align-items: flex-start;
-  justify-content: center;
-  padding: 1.5rem;
-  overflow-y: auto;
-}
-.modal-overlay.open { display: flex; }
-
-.modal-box {
-  background: var(--surface);
-  border-radius: var(--radius-lg);
-  width: 100%;
-  max-width: 680px;
-  margin: auto;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
-  overflow: hidden;
-}
-
-.modal-head {
-  padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.modal-head-title { font-size: 0.95rem; font-weight: 500; }
-.modal-close {
-  width: 28px; height: 28px;
-  border-radius: var(--radius);
-  border: 1px solid var(--border);
-  background: transparent;
-  cursor: pointer;
-  font-size: 1rem;
-  display: flex; align-items: center; justify-content: center;
-  color: var(--text3);
-}
-.modal-close:hover { background: var(--bg2); }
-
-.modal-body { padding: 1.5rem; }
-.modal-footer {
-  padding: 1rem 1.5rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-/* ─── QUIZ ─── */
-.quiz-progress { margin-bottom: 1.25rem; }
-.quiz-progress-bar { height: 3px; background: var(--bg3); border-radius: 2px; }
-.quiz-progress-fill { height: 3px; background: var(--accent2); border-radius: 2px; transition: width .3s; }
-.quiz-progress-label { font-size: 0.72rem; color: var(--text3); margin-top: 4px; font-family: 'DM Mono', monospace; }
-
-.quiz-q { font-size: 0.92rem; font-weight: 500; color: var(--text); line-height: 1.6; margin-bottom: 1rem; }
-.quiz-opts { display: flex; flex-direction: column; gap: 6px; }
-.quiz-opt {
-  padding: 0.75rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--text);
-  cursor: pointer;
-  font-size: 0.85rem;
-  text-align: left;
-  font-family: 'DM Sans', sans-serif;
-  transition: all .15s;
-  line-height: 1.5;
-}
-.quiz-opt:hover:not(:disabled) { background: var(--bg2); }
-.quiz-opt:disabled { cursor: default; }
-.quiz-opt.correct { background: var(--success-light); border-color: var(--success); color: var(--success); }
-.quiz-opt.wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
-.quiz-opt.reveal { background: var(--success-light); border-color: var(--success); color: var(--success); }
-
-.quiz-feedback {
-  margin-top: 1rem;
-  padding: 0.85rem 1rem;
-  border-radius: var(--radius);
-  font-size: 0.82rem;
-  line-height: 1.6;
-  display: none;
-}
-.quiz-feedback.show { display: block; }
-.quiz-feedback.ok { background: var(--success-light); color: var(--success); border: 1px solid #bbf7d0; }
-.quiz-feedback.bad { background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; }
-
-/* ─── FLASHCARDS ─── */
-.flash-wrap { perspective: 700px; margin-bottom: 1.25rem; }
-.flash-card {
-  position: relative;
-  height: 180px;
-  cursor: pointer;
-  transform-style: preserve-3d;
-  transition: transform .55s;
-}
-.flash-card.flipped { transform: rotateY(180deg); }
-.flash-face {
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  backface-visibility: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-}
-.flash-front { background: var(--surface); }
-.flash-back { background: var(--bg2); transform: rotateY(180deg); }
-.flash-term { font-family: 'DM Serif Display', serif; font-size: 1.3rem; color: var(--text); }
-.flash-hint { font-size: 0.72rem; color: var(--text3); margin-top: 6px; }
-.flash-def { font-size: 0.82rem; color: var(--text2); line-height: 1.6; }
-.flash-nav { display: flex; align-items: center; justify-content: space-between; }
-.flash-counter { font-family: 'DM Mono', monospace; font-size: 0.78rem; color: var(--text3); }
-
-/* ─── DRAG DROP ─── */
-.dnd-source {
-  background: var(--bg2);
-  border-radius: var(--radius);
-  padding: 0.85rem;
-  margin-bottom: 1rem;
-  min-height: 56px;
-}
-.dnd-source-label { font-size: 0.72rem; color: var(--text3); font-weight: 500; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.06em; }
-.dnd-items-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
-.dnd-chip {
-  font-size: 0.78rem;
-  padding: 4px 10px;
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  background: var(--surface);
-  cursor: grab;
-  color: var(--text);
-  user-select: none;
-  transition: all .15s;
-}
-.dnd-chip:hover { border-color: var(--border2); }
-.dnd-chip.dragging { opacity: .4; }
-.dnd-chip.correct { background: var(--success-light); border-color: var(--success); color: var(--success); }
-.dnd-chip.wrong { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
-
-.dnd-zones { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 1rem; }
-.dnd-zone {
-  border: 1.5px dashed var(--border);
-  border-radius: var(--radius);
-  padding: 10px;
-  min-height: 100px;
-  transition: border-color .15s, background .15s;
-}
-.dnd-zone.over { border-color: var(--accent2); background: var(--accent2-light); }
-.dnd-zone-name {
-  font-size: 0.72rem;
-  font-weight: 500;
-  color: var(--text3);
-  margin-bottom: 8px;
-  display: flex; align-items: center; gap: 6px;
-}
-.dnd-zone-dot { width: 8px; height: 8px; border-radius: 50%; }
-.dnd-zone-items { display: flex; flex-wrap: wrap; gap: 5px; min-height: 36px; }
-
-/* ─── TIMELINE ─── */
-.tl-bank { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; padding: 10px; border: 1px dashed var(--border); border-radius: var(--radius); min-height: 48px; }
-.tl-chip {
-  font-size: 0.78rem;
-  padding: 5px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  cursor: pointer;
-  color: var(--text);
-  transition: all .15s;
-  line-height: 1.4;
-}
-.tl-chip:hover { background: var(--bg2); }
-.tl-chip.selected { border-color: var(--accent3); background: var(--accent3-light); color: var(--accent3); }
-.tl-chip.used { opacity: .35; pointer-events: none; }
-
-.tl-slots { display: flex; flex-direction: column; gap: 6px; }
-.tl-slot {
-  display: flex; align-items: flex-start; gap: 10px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  min-height: 44px;
-  background: var(--surface);
-  cursor: pointer;
-  transition: border-color .15s;
-}
-.tl-slot:hover { border-color: var(--border2); }
-.tl-slot.filled { border-color: var(--accent3); }
-.tl-slot.correct { border-color: var(--success); background: var(--success-light); }
-.tl-slot.wrong { border-color: var(--danger); background: var(--danger-light); }
-.tl-slot-n { font-family: 'DM Mono', monospace; font-size: 0.7rem; color: var(--text3); min-width: 18px; padding-top: 2px; }
-.tl-slot-content { font-size: 0.82rem; color: var(--text); line-height: 1.5; }
-
-/* ─── MATCHING ─── */
-.match-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
-.match-col-label { font-size: 0.72rem; font-weight: 500; color: var(--text3); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em; }
-.match-items { display: flex; flex-direction: column; gap: 5px; }
-.match-item {
-  padding: 7px 10px;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  font-size: 0.78rem;
-  cursor: pointer;
-  color: var(--text);
-  transition: all .15s;
-  line-height: 1.4;
-}
-.match-item:hover:not(.matched-ok) { background: var(--bg2); }
-.match-item.selected { border-color: var(--accent3); background: var(--accent3-light); color: var(--accent3); }
-.match-item.matched-ok { border-color: var(--success); background: var(--success-light); color: var(--success); pointer-events: none; }
-.match-item.matched-bad { border-color: var(--danger); background: var(--danger-light); color: var(--danger); }
-
-/* ─── SCENARIO ─── */
-.sc-case {
-  background: var(--bg2);
-  border-radius: var(--radius);
-  padding: 1rem 1.25rem;
-  font-size: 0.85rem;
-  line-height: 1.7;
-  margin-bottom: 1rem;
-  color: var(--text);
-  border-left: 3px solid var(--accent);
-}
-.sc-opts { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
-.sc-opt {
-  padding: 0.7rem 1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  background: var(--surface);
-  font-size: 0.83rem;
-  cursor: pointer;
-  text-align: left;
-  font-family: 'DM Sans', sans-serif;
-  color: var(--text);
-  transition: all .15s;
-  line-height: 1.5;
-}
-.sc-opt:hover:not(:disabled) { background: var(--bg2); }
-.sc-opt.good { background: var(--success-light); border-color: var(--success); color: var(--success); }
-.sc-opt.bad { background: var(--danger-light); border-color: var(--danger); color: var(--danger); }
-.sc-explain { font-size: 0.82rem; padding: 0.85rem 1rem; background: var(--bg2); border-radius: var(--radius); line-height: 1.6; display: none; }
-.sc-explain.show { display: block; }
-
-/* ─── RESULT CARD ─── */
-.result-card {
-  background: var(--bg2);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  text-align: center;
-}
-.result-score { font-family: 'DM Serif Display', serif; font-size: 3rem; color: var(--text); }
-.result-label { font-size: 0.82rem; color: var(--text3); margin-bottom: 1rem; }
-.result-bars { text-align: left; margin-top: 1rem; }
-.result-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-size: 0.78rem; }
-.result-bar-label { min-width: 140px; color: var(--text2); }
-.result-bar-track { flex: 1; height: 6px; background: var(--border); border-radius: 3px; }
-.result-bar-fill { height: 6px; border-radius: 3px; background: var(--accent2); transition: width .6s; }
-.result-bar-pts { min-width: 40px; text-align: right; color: var(--text3); font-family: 'DM Mono', monospace; }
-
-/* ─── REPORT PREVIEW ─── */
-.report-preview {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  margin-top: 1rem;
-  font-size: 0.82rem;
-}
-.report-section { margin-bottom: 1rem; }
-.report-section-title { font-weight: 500; font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 6px; }
-
-/* ─── PROFESSOR DASHBOARD ─── */
-.prof-layout {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-.prof-header { margin-bottom: 2rem; }
-.prof-header h1 { font-family: 'DM Serif Display', serif; font-size: 1.6rem; margin-bottom: 0.4rem; }
-.prof-header p { font-size: 0.85rem; color: var(--text3); }
-
-.stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap: 10px; margin-bottom: 2rem; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.25rem; }
-.stat-card-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); margin-bottom: 8px; }
-.stat-card-val { font-family: 'DM Mono', monospace; font-size: 1.8rem; font-weight: 500; color: var(--text); }
-.stat-card-sub { font-size: 0.72rem; color: var(--text3); margin-top: 2px; }
-
-.section-title {
-  font-size: 0.85rem;
-  font-weight: 500;
-  color: var(--text2);
-  margin-bottom: 1rem;
-  padding-bottom: 0.5rem;
-  border-bottom: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-/* student table */
-.student-table { width: 100%; border-collapse: collapse; font-size: 0.82rem; }
-.student-table th {
-  padding: 0.7rem 1rem;
-  text-align: left;
-  font-size: 0.7rem;
-  font-weight: 500;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text3);
-  border-bottom: 1px solid var(--border);
-  background: var(--bg2);
-}
-.student-table td { padding: 0.75rem 1rem; border-bottom: 1px solid var(--bg3); color: var(--text); }
-.student-table tr:hover td { background: var(--bg2); }
-.student-table tr:last-child td { border-bottom: none; }
-
-.grade-badge {
-  font-family: 'DM Mono', monospace;
-  font-size: 0.72rem;
-  padding: 3px 8px;
-  border-radius: 4px;
-}
-.grade-a { background: var(--success-light); color: var(--success); }
-.grade-b { background: var(--accent2-light); color: var(--accent2); }
-.grade-c { background: var(--warn-light); color: var(--warn); }
-.grade-d { background: var(--danger-light); color: var(--danger); }
-.grade-p { background: var(--bg3); color: var(--text3); }
-
-.mini-bar { height: 6px; background: var(--bg3); border-radius: 3px; width: 80px; display: inline-block; vertical-align: middle; margin-left: 6px; }
-.mini-bar-fill { height: 6px; border-radius: 3px; background: var(--accent2); }
-
-/* filter/search */
-.toolbar { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 1rem; align-items: center; }
-.search-input {
-  padding: 0.5rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 0.82rem;
-  background: var(--surface);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  min-width: 220px;
-}
-.search-input:focus { border-color: var(--accent2); }
-
-select.filter-sel {
-  padding: 0.5rem 0.85rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  font-size: 0.82rem;
-  background: var(--surface);
-  color: var(--text);
-  font-family: 'DM Sans', sans-serif;
-  outline: none;
-  cursor: pointer;
-}
-
-/* chart bars */
-.bar-chart { display: flex; align-items: flex-end; gap: 4px; height: 80px; margin-bottom: 4px; }
-.bar-col { flex: 1; background: var(--accent2); border-radius: 3px 3px 0 0; min-width: 8px; opacity: .8; transition: opacity .15s; }
-.bar-col:hover { opacity: 1; }
-.bar-labels { display: flex; gap: 4px; }
-.bar-label { flex: 1; font-family: 'DM Mono', monospace; font-size: 0.6rem; color: var(--text3); text-align: center; }
-
-/* detail modal */
-.detail-section { margin-bottom: 1.25rem; }
-.detail-section-title { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text3); font-weight: 500; margin-bottom: 8px; }
-.detail-row { display: flex; justify-content: space-between; align-items: center; padding: 5px 0; border-bottom: 1px solid var(--bg3); font-size: 0.82rem; }
-.detail-row:last-child { border-bottom: none; }
-.detail-key { color: var(--text2); }
-.detail-val { font-family: 'DM Mono', monospace; color: var(--text); }
-
-/* export area */
-.export-area {
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-lg);
-  padding: 1.25rem;
-  margin-top: 1.5rem;
-}
-.export-title { font-size: 0.85rem; font-weight: 500; margin-bottom: 1rem; }
-.export-btns { display: flex; gap: 8px; flex-wrap: wrap; }
-
-/* notification */
-.notif {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  background: var(--text);
-  color: var(--bg);
-  padding: 0.75rem 1.25rem;
-  border-radius: var(--radius);
-  font-size: 0.82rem;
-  z-index: 1000;
-  transform: translateY(100px);
-  opacity: 0;
-  transition: all .3s;
-  max-width: 300px;
-}
-.notif.show { transform: translateY(0); opacity: 1; }
-
-/* tabs within dashboard */
-.dash-tabs { display: flex; gap: 2px; margin-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
-.dash-tab {
-  padding: 0.6rem 1rem;
-  font-size: 0.83rem;
-  border: none;
-  background: none;
-  color: var(--text3);
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -1px;
-  font-family: 'DM Sans', sans-serif;
-  font-weight: 500;
-  transition: color .15s;
-}
-.dash-tab:hover { color: var(--text); }
-.dash-tab.active { color: var(--text); border-bottom-color: var(--accent); }
-
-.dash-panel { display: none; }
-.dash-panel.active { display: block; }
-
-.info-box {
-  background: var(--accent2-light);
-  border: 1px solid #99f6e4;
-  border-radius: var(--radius);
-  padding: 0.85rem 1rem;
-  font-size: 0.82rem;
-  color: var(--accent2);
-  margin-bottom: 1rem;
-  line-height: 1.6;
-}
-
-@media (max-width: 600px) {
-  .dnd-zones { grid-template-columns: 1fr; }
-  .match-grid { grid-template-columns: 1fr; }
-  .progress-overview { grid-template-columns: repeat(2,1fr); }
-  .login-card { padding: 2rem 1.5rem; }
-}
+:root{--bg:#f7f5f0;--bg2:#efefea;--bg3:#e8e5de;--surface:#fff;--border:#d8d4cb;--border2:#c8c3b8;--text:#1a1916;--text2:#4a4740;--text3:#7a7670;--accent:#c2410c;--accent-light:#fff1ee;--accent2:#0f766e;--accent2-light:#f0fdf9;--accent3:#6d28d9;--accent3-light:#f5f3ff;--gold:#b45309;--success:#15803d;--success-light:#f0fdf4;--danger:#b91c1c;--danger-light:#fef2f2;--warn:#b45309;--warn-light:#fffbeb;--unam:#003366;--r:8px;--rl:12px}
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--bg);color:var(--text);min-height:100vh;line-height:1.6;touch-action:manipulation}
+.screen{display:none;min-height:100vh}.screen.active{display:block}
+#login-screen{display:none;align-items:center;justify-content:center;min-height:100vh}
+#login-screen.active{display:flex}
+.login-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:2.5rem 2rem;width:100%;max-width:480px;box-shadow:0 1px 4px rgba(0,0,0,.07)}
+.login-inst{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.2em;color:var(--unam);text-transform:uppercase;margin-bottom:.75rem;text-align:center}
+.login-title{font-family:'DM Serif Display',serif;font-size:1.8rem;color:var(--text);line-height:1.2;margin-bottom:.3rem;text-align:center}
+.login-sub{font-size:.8rem;color:var(--text3);font-family:'DM Mono',monospace;text-align:center;margin-bottom:2rem}
+.role-tabs{display:grid;grid-template-columns:1fr 1fr;gap:4px;background:var(--bg2);border-radius:var(--r);padding:4px;margin-bottom:1.5rem}
+.role-tab{padding:.7rem;border:none;background:transparent;border-radius:6px;font-size:.85rem;font-family:'DM Sans',sans-serif;color:var(--text3);cursor:pointer;font-weight:500;transition:all .15s;min-height:44px}
+.role-tab.active{background:var(--surface);color:var(--text);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.form-group{margin-bottom:1rem}
+.form-label{display:block;font-size:.78rem;font-weight:500;color:var(--text2);margin-bottom:.35rem}
+.form-input{width:100%;padding:.72rem .9rem;border:1px solid var(--border);border-radius:var(--r);font-size:.95rem;font-family:'DM Sans',sans-serif;background:var(--surface);color:var(--text);outline:none;-webkit-appearance:none;min-height:46px}
+.form-input:focus{border-color:var(--accent2)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:.72rem 1.25rem;border:1px solid var(--border);border-radius:var(--r);font-size:.88rem;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;transition:all .15s;background:var(--surface);color:var(--text);text-decoration:none;-webkit-appearance:none;min-height:44px}
+.btn:active{transform:scale(.97)}.btn-primary{background:var(--text);color:var(--bg);border-color:var(--text)}.btn-teal{background:var(--accent2);color:#fff;border-color:var(--accent2)}.btn-full{width:100%}.btn-sm{padding:.4rem .9rem;font-size:.78rem;min-height:36px}
+.login-hint{font-size:.73rem;color:var(--text3);margin-top:.9rem;text-align:center;line-height:1.5}
+.topbar{background:var(--surface);border-bottom:1px solid var(--border);padding:0 1.25rem;height:56px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100}
+.tb-brand{display:flex;align-items:center;gap:10px}.tb-dot{width:8px;height:8px;border-radius:50%;background:var(--accent)}.tb-name{font-family:'DM Serif Display',serif;font-size:.9rem}.tb-sub{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.06em}
+.tb-user{display:flex;align-items:center;gap:7px}.tb-av{width:30px;height:30px;border-radius:50%;background:var(--accent2);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.65rem;font-weight:600}
+.sl{max-width:860px;margin:0 auto;padding:1.5rem 1rem}
+.sh{margin-bottom:1.5rem}.sh h1{font-family:'DM Serif Display',serif;font-size:1.45rem;margin-bottom:.25rem}.sh p{font-size:.84rem;color:var(--text3)}
+.po{display:grid;grid-template-columns:repeat(auto-fit,minmax(115px,1fr));gap:7px;margin-bottom:1.5rem}
+.pc{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:.85rem}
+.pcl{font-size:.62rem;color:var(--text3);font-weight:500;margin-bottom:3px;text-transform:uppercase;letter-spacing:.06em}.pcv{font-size:1.35rem;font-weight:500;color:var(--text);font-family:'DM Mono',monospace}.pcs{font-size:.62rem;color:var(--text3)}
+.al{display:flex;flex-direction:column;gap:7px}
+.ar{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.2rem;display:flex;align-items:center;gap:.85rem;cursor:pointer;transition:border-color .15s}
+.ar:active{background:var(--bg2)}.ar.done{border-left:3px solid var(--success)}
+.ai{width:36px;height:36px;border-radius:var(--r);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.an{flex:1}.an-n{font-size:.88rem;font-weight:500}.an-d{font-size:.73rem;color:var(--text3);margin-top:1px}
+.ab{font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 6px;border-radius:4px;white-space:nowrap}
+.ab-p{background:var(--bg2);color:var(--text3)}.ab-d{background:var(--success-light);color:var(--success)}.ab-s{background:var(--accent2-light);color:var(--accent2)}
+.mo{display:none;position:fixed;inset:0;background:rgba(0,0,0,.38);z-index:200;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.mo.open{display:flex}
+.mb{background:var(--surface);border-radius:var(--rl);width:100%;max-width:680px;margin:auto;box-shadow:0 20px 60px rgba(0,0,0,.15);overflow:hidden}
+.mh{padding:.95rem 1.25rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.mh-t{font-size:.9rem;font-weight:500}
+.mc{width:28px;height:28px;border-radius:var(--r);border:1px solid var(--border);background:transparent;cursor:pointer;font-size:.95rem;display:flex;align-items:center;justify-content:center;color:var(--text3)}
+.mbody{padding:1.2rem;overflow-y:auto;max-height:calc(100dvh - 180px);-webkit-overflow-scrolling:touch}
+.mfoot{padding:.9rem 1.25rem;border-top:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+/* QUIZ */
+.qpb{height:3px;background:var(--bg3);border-radius:2px;margin-bottom:.75rem}.qpf{height:3px;background:var(--accent2);border-radius:2px;transition:width .3s}
+.qml{font-family:'DM Mono',monospace;font-size:.67rem;color:var(--text3);margin-bottom:.75rem}
+.qq{font-size:.89rem;font-weight:500;line-height:1.65;margin-bottom:.9rem}
+.qo-wrap{display:flex;flex-direction:column;gap:6px;margin-bottom:.9rem}
+.qo{padding:.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);color:var(--text);cursor:pointer;font-size:.83rem;text-align:left;font-family:'DM Sans',sans-serif;line-height:1.5;min-height:44px;-webkit-appearance:none;width:100%}
+.qo:active:not(:disabled){background:var(--bg2)}.qo:disabled{cursor:default}
+.qo.correct{background:var(--success-light);border-color:var(--success);color:var(--success)}.qo.wrong{background:var(--danger-light);border-color:var(--danger);color:var(--danger)}
+.qfb{font-size:.8rem;padding:.8rem 1rem;border-radius:var(--r);line-height:1.65;margin-bottom:.9rem;display:none}.qfb.show{display:block}.qfb.ok{background:var(--success-light);color:#155540;border:1px solid #99e0c4}.qfb.bad{background:var(--danger-light);color:#7a1a0c;border:1px solid #fecaca}
+/* FLASH */
+.fw{perspective:700px;margin-bottom:.9rem}.fc{position:relative;height:180px;cursor:pointer;transform-style:preserve-3d;transition:transform .55s}.fc.flip{transform:rotateY(180deg)}
+.ff{position:absolute;inset:0;border:1px solid var(--border);border-radius:var(--rl);padding:1.25rem;backface-visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.ff-fr{background:var(--surface)}.ff-bk{background:var(--bg2);transform:rotateY(180deg)}
+.ft{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--text)}.fh{font-size:.7rem;color:var(--text3);margin-top:5px}.fd{font-size:.8rem;color:var(--text2);line-height:1.65}
+.fn{display:flex;align-items:center;justify-content:space-between;margin-bottom:.7rem}.fc-n{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--text3)}
+/* DND */
+.dnd-src{background:var(--bg2);border-radius:var(--r);padding:.8rem;margin-bottom:.75rem}
+.dnd-lbl{font-size:.68rem;color:var(--text3);font-weight:500;margin-bottom:7px;text-transform:uppercase;letter-spacing:.06em}
+.dnd-pool{display:flex;flex-wrap:wrap;gap:5px}
+.dnd-chip{font-size:.77rem;padding:7px 11px;border:1.5px solid var(--border);border-radius:18px;background:var(--surface);cursor:pointer;color:var(--text);user-select:none;-webkit-user-select:none;transition:all .15s;min-height:34px;display:inline-flex;align-items:center}
+.dnd-chip.sel-chip{border-color:var(--accent3);background:var(--accent3-light);color:var(--accent3);font-weight:500}
+.dnd-chip.dragging{opacity:.35}.dnd-chip.correct{background:var(--success-light);border-color:var(--success);color:var(--success)}.dnd-chip.wrong{background:var(--danger-light);border-color:var(--danger);color:var(--danger)}
+.dnd-zones{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:.75rem}
+.dnd-zone{border:2px dashed var(--border);border-radius:var(--r);padding:9px;min-height:88px;transition:border-color .15s,background .15s;cursor:pointer}
+.dnd-zone.over,.dnd-zone.tap-tgt{border-color:var(--accent2);background:var(--accent2-light)}
+.dz-nm{font-size:.7rem;font-weight:500;color:var(--text3);margin-bottom:6px;display:flex;align-items:center;gap:5px}.dz-dot{width:8px;height:8px;border-radius:50%}.dz-items{display:flex;flex-wrap:wrap;gap:4px;min-height:28px}
+.dz-hint{font-size:.65rem;color:var(--text3);margin-top:3px;font-style:italic}
+/* TL */
+.tl-bk{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:.8rem;padding:9px;border:1.5px dashed var(--border2);border-radius:var(--r);min-height:46px}
+.tl-chip{font-size:.77rem;padding:6px 9px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);cursor:pointer;color:var(--text);transition:all .15s;line-height:1.4;min-height:34px;display:inline-flex;align-items:center}
+.tl-chip:active{background:var(--bg2)}.tl-chip.sel{border-color:var(--accent3);background:var(--accent3-light);color:var(--accent3)}.tl-chip.used{opacity:.32;pointer-events:none}
+.tl-slots{display:flex;flex-direction:column;gap:5px}
+.tl-slot{display:flex;align-items:flex-start;gap:9px;padding:.7rem .9rem;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);cursor:pointer;min-height:42px;transition:border-color .15s}
+.tl-slot:active{background:var(--bg2)}.tl-slot.filled{border-color:var(--accent3)}.tl-slot.ok{border-color:var(--success);background:var(--success-light)}.tl-slot.no{border-color:var(--danger);background:var(--danger-light)}
+.tl-n{font-family:'DM Mono',monospace;font-size:.68rem;color:var(--text3);min-width:17px;padding-top:2px}.tl-c{font-size:.8rem;color:var(--text);line-height:1.5}
+/* MATCH */
+.mg{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:.9rem}
+.mct{font-size:.68rem;font-weight:500;color:var(--text3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em}
+.mi{padding:7px 9px;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);font-size:.77rem;cursor:pointer;color:var(--text);transition:all .15s;line-height:1.4;min-height:42px;display:flex;align-items:center}
+.mi:active:not(.ok):not(.used){background:var(--bg2)}.mi.sel{border-color:var(--accent3);background:var(--accent3-light);color:var(--accent3)}.mi.ok{border-color:var(--success);background:var(--success-light);color:var(--success);pointer-events:none}.mi.no{border-color:var(--danger);background:var(--danger-light);color:var(--danger)}
+/* SCENARIO */
+.sc-case{background:var(--bg2);border-left:3px solid var(--accent);border-radius:0 var(--r) var(--r) 0;padding:.9rem 1.1rem;font-size:.84rem;line-height:1.75;margin-bottom:.9rem}
+.sc-q{font-size:.86rem;font-weight:500;margin-bottom:.7rem}
+.sc-opts{display:flex;flex-direction:column;gap:5px;margin-bottom:.9rem}
+.sc-opt{padding:.75rem .9rem;border:1px solid var(--border);border-radius:var(--r);background:var(--surface);font-size:.82rem;cursor:pointer;text-align:left;font-family:'DM Sans',sans-serif;color:var(--text);line-height:1.5;min-height:44px;-webkit-appearance:none;width:100%}
+.sc-opt:active:not(:disabled){background:var(--bg2)}.sc-opt.good{background:var(--success-light);border-color:var(--success);color:var(--success)}.sc-opt.bad{background:var(--danger-light);border-color:var(--danger);color:var(--danger)}
+.sc-exp{font-size:.8rem;padding:.8rem .9rem;background:var(--bg2);border-radius:var(--r);line-height:1.65;display:none}.sc-exp.show{display:block}
+.sc-lbl{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--text3);letter-spacing:.1em;margin-bottom:.7rem}
+/* RESULT */
+.rc{background:var(--bg2);border-radius:var(--rl);padding:1.4rem;text-align:center}
+.rs{font-family:'DM Serif Display',serif;font-size:2.8rem;font-weight:900;color:var(--text);line-height:1}
+.rl{font-size:.78rem;color:var(--text3);margin:.35rem 0 .9rem}
+.rbs{text-align:left;margin-top:.9rem}
+.rbr{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-size:.75rem}
+.rbl{min-width:125px;color:var(--text2)}.rbt{flex:1;height:5px;background:var(--border);border-radius:3px}.rbf{height:5px;border-radius:3px;background:var(--accent2);transition:width .6s}.rbp{min-width:38px;text-align:right;color:var(--text3);font-family:'DM Mono',monospace;font-size:.7rem}
+/* PROF */
+.pl{max-width:1100px;margin:0 auto;padding:1.5rem 1rem}
+.ph{margin-bottom:1.5rem}.ph h1{font-family:'DM Serif Display',serif;font-size:1.45rem;margin-bottom:.25rem}.ph p{font-size:.83rem;color:var(--text3)}
+.sg{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:8px;margin-bottom:1.5rem}
+.sc{background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);padding:1.1rem}
+.scl{font-size:.65rem;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);margin-bottom:6px}
+.scv{font-family:'DM Mono',monospace;font-size:1.65rem;font-weight:500;color:var(--text)}.scs{font-size:.65rem;color:var(--text3);margin-top:2px}
+.st{font-size:.83rem;font-weight:500;color:var(--text2);margin-bottom:.9rem;padding-bottom:.45rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.stbl{width:100%;border-collapse:collapse;font-size:.8rem}
+.stbl th{padding:.65rem .9rem;text-align:left;font-size:.65rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;color:var(--text3);border-bottom:1px solid var(--border);background:var(--bg2)}
+.stbl td{padding:.7rem .9rem;border-bottom:1px solid var(--bg3);color:var(--text)}.stbl tr:hover td{background:var(--bg2)}
+.gb{font-family:'DM Mono',monospace;font-size:.7rem;padding:2px 7px;border-radius:4px}.ga{background:var(--success-light);color:var(--success)}.gb2{background:var(--accent2-light);color:var(--accent2)}.gc{background:var(--warn-light);color:var(--warn)}.gd{background:var(--danger-light);color:var(--danger)}.gp{background:var(--bg3);color:var(--text3)}
+.mb-bar{height:5px;background:var(--bg3);border-radius:3px;width:65px;display:inline-block;vertical-align:middle;margin-left:5px}.mb-fill{height:5px;border-radius:3px;background:var(--accent2)}
+.tb{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:1rem;align-items:center}
+.si,.fs{padding:.48rem .8rem;border:1px solid var(--border);border-radius:var(--r);font-size:.8rem;background:var(--surface);color:var(--text);font-family:'DM Sans',sans-serif;outline:none;min-height:38px;-webkit-appearance:none}.si{min-width:190px}
+.bc{display:flex;align-items:flex-end;gap:4px;height:65px;margin-bottom:3px}.bcol{flex:1;background:var(--accent2);border-radius:3px 3px 0 0;opacity:.8}
+.bls{display:flex;gap:4px}.blb{flex:1;font-family:'DM Mono',monospace;font-size:.56rem;color:var(--text3);text-align:center}
+.dtabs{display:flex;gap:2px;margin-bottom:1.4rem;border-bottom:1px solid var(--border)}
+.dtab{padding:.58rem .9rem;font-size:.81rem;border:none;background:none;color:var(--text3);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;font-family:'DM Sans',sans-serif;font-weight:500;min-height:40px}
+.dtab.active{color:var(--text);border-bottom-color:var(--accent)}
+.dp{display:none}.dp.active{display:block}
+.ib{background:var(--accent2-light);border:1px solid #99f6e4;border-radius:var(--r);padding:.8rem 1rem;font-size:.8rem;color:var(--accent2);margin-bottom:.9rem;line-height:1.6}
+.cb-banner{display:none;background:var(--warn-light);border:1px solid #fbbf24;border-radius:var(--r);padding:.55rem .9rem;font-size:.76rem;color:var(--warn);margin-bottom:.9rem;align-items:center;gap:7px}
+.cb-banner.show{display:flex}
+.notif{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--text);color:var(--bg);padding:.65rem 1.1rem;border-radius:var(--r);font-size:.8rem;z-index:999;opacity:0;transform:translateY(12px);transition:all .25s;pointer-events:none;max-width:290px}
+.notif.show{opacity:1;transform:translateY(0)}
+@media(max-width:600px){.dnd-zones{grid-template-columns:1fr}.mg{grid-template-columns:1fr}.po{grid-template-columns:repeat(2,1fr)}.login-card{padding:2rem 1.2rem}.mbody{max-height:calc(100dvh - 170px)}}
 </style>
 </head>
 <body>
 
-<!-- ══════════════════════════════════════════════
-     LOGIN
-══════════════════════════════════════════════ -->
+<!-- LOGIN -->
 <div id="login-screen" class="screen active">
   <div class="login-card">
-    <div class="login-logo">
-      <div class="login-logo-top">UNAM · FES Iztacala · Carrera Médico Cirujano</div>
-      <div class="login-title">Cancer Genome<br>Landscapes</div>
-      <div class="login-subtitle" style="margin-top:4px">Módulo Células Troncales y Cáncer</div>
-    </div>
-
+    <div class="login-inst">UNAM · FES Iztacala · Carrera Médico Cirujano</div>
+    <div class="login-title">Cancer Genome Landscapes</div>
+    <div class="login-sub">Módulo Células Troncales y Cáncer</div>
     <div class="role-tabs">
       <button class="role-tab active" id="tab-student" onclick="switchRole('student')">👩‍🎓 Estudiante</button>
       <button class="role-tab" id="tab-prof" onclick="switchRole('prof')">👨‍🏫 Profesor</button>
     </div>
-
     <div id="student-form">
-      <div class="form-group">
-        <label class="form-label">Número de matrícula</label>
-        <input type="text" class="form-input" id="student-id" placeholder="Ej. 421012345" maxlength="12">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Nombre completo</label>
-        <input type="text" class="form-input" id="student-name" placeholder="Nombre(s) Apellido(s)">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Grupo</label>
-        <input type="text" class="form-input" id="student-group" placeholder="Ej. 2451-A">
-      </div>
+      <div class="form-group"><label class="form-label">Número de matrícula</label><input type="text" class="form-input" id="student-id" placeholder="Ej. 421012345" maxlength="12" inputmode="numeric"></div>
+      <div class="form-group"><label class="form-label">Nombre completo</label><input type="text" class="form-input" id="student-name" placeholder="Nombre(s) Apellido(s)" autocomplete="name"></div>
+      <div class="form-group"><label class="form-label">Grupo</label><input type="text" class="form-input" id="student-group" placeholder="Ej. 2451-A"></div>
       <button class="btn btn-teal btn-full" onclick="loginStudent()">Ingresar y comenzar actividades</button>
-      <p class="login-hint">Sus respuestas y calificaciones se guardan automáticamente. No necesita contraseña; use su matrícula oficial.</p>
+      <p class="login-hint">Sus respuestas se guardan automáticamente en este dispositivo. Si el profesor configuró Firebase, también se sincronizan al servidor.</p>
     </div>
-
     <div id="prof-form" style="display:none">
-      <div class="form-group">
-        <label class="form-label">Clave de acceso docente</label>
-        <input type="password" class="form-input" id="prof-key" placeholder="Ingrese la clave">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Nombre del profesor</label>
-        <input type="text" class="form-input" id="prof-name" placeholder="Nombre completo">
-      </div>
+      <div class="form-group"><label class="form-label">Clave de acceso docente</label><input type="password" class="form-input" id="prof-key" placeholder="Ingrese la clave"></div>
+      <div class="form-group"><label class="form-label">Nombre del profesor</label><input type="text" class="form-input" id="prof-name" placeholder="Nombre completo"></div>
       <button class="btn btn-primary btn-full" onclick="loginProf()">Acceder al panel docente</button>
-      <p class="login-hint">Clave por defecto: <strong>iztacala2026-2</strong> (cámbiela en producción).</p>
+      <p class="login-hint">Clave: <strong>iztacala2025</strong></p>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     STUDENT SCREEN
-══════════════════════════════════════════════ -->
+<!-- STUDENT -->
 <div id="student-screen" class="screen">
   <div class="topbar">
-    <div class="topbar-brand">
-      <div class="topbar-dot"></div>
-      <div>
-        <div class="topbar-name">Cancer Genome Landscapes</div>
-        <div class="topbar-sub">Módulo Células Troncales · FES Iztacala UNAM</div>
-      </div>
-    </div>
-    <div class="topbar-user">
-      <div id="topbar-student-name" style="font-size:0.8rem; color:var(--text2)"></div>
-      <div class="topbar-avatar" id="topbar-avatar">--</div>
-      <button class="btn btn-sm" onclick="logout()">Salir</button>
-    </div>
+    <div class="tb-brand"><div class="tb-dot"></div><div><div class="tb-name">Cancer Genome Landscapes</div><div class="tb-sub">FES Iztacala UNAM</div></div></div>
+    <div class="tb-user"><div id="tb-sname" style="font-size:.76rem;color:var(--text2)"></div><div class="tb-av" id="tb-av">--</div><button class="btn btn-sm" onclick="logout()">Salir</button></div>
   </div>
-
-  <div class="student-layout">
-    <div class="student-header">
-      <h1>Mis actividades</h1>
-      <p>Completa todas las actividades para generar tu reporte de evaluación final.</p>
-    </div>
-
-    <div class="progress-overview" id="progress-overview"></div>
-
-    <div class="activity-list" id="activity-list"></div>
-
-    <div id="final-report-section" style="display:none; margin-top:2rem">
-      <div class="section-title" style="margin-bottom:1rem">Reporte final de evaluación</div>
-      <div id="final-report-content"></div>
-      <div style="display:flex; gap:8px; margin-top:1rem; flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="downloadStudentReport()">⬇ Descargar reporte (TXT)</button>
-        <button class="btn btn-teal" onclick="copyStudentReport()">📋 Copiar al portapapeles</button>
+  <div class="sl">
+    <div class="cb-banner" id="cb">⚠️ Sin conexión — datos guardados localmente</div>
+    <div class="sh"><h1>Mis actividades</h1><p>Completa las 6 actividades para generar tu reporte final.</p></div>
+    <div class="po" id="po"></div>
+    <div class="al" id="al"></div>
+    <div id="frs" style="display:none;margin-top:2rem">
+      <div class="st" style="margin-bottom:1rem">Reporte final de evaluación</div>
+      <div id="frc"></div>
+      <div style="display:flex;gap:7px;margin-top:1rem;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="downloadStudentReport()">⬇ Descargar reporte</button>
+        <button class="btn btn-teal" onclick="copyStudentReport()">📋 Copiar</button>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     PROFESSOR SCREEN
-══════════════════════════════════════════════ -->
+<!-- PROFESSOR -->
 <div id="prof-screen" class="screen">
   <div class="topbar">
-    <div class="topbar-brand">
-      <div class="topbar-dot" style="background:var(--unam)"></div>
-      <div>
-        <div class="topbar-name">Panel Docente — Cancer Genome Landscapes</div>
-        <div class="topbar-sub">Módulo Células Troncales · FES Iztacala UNAM</div>
-      </div>
-    </div>
-    <div class="topbar-user">
-      <div id="topbar-prof-name" style="font-size:0.8rem;color:var(--text2)"></div>
-      <div class="topbar-avatar" style="background:var(--unam)" id="prof-avatar">PR</div>
-      <button class="btn btn-sm" onclick="logout()">Salir</button>
-    </div>
+    <div class="tb-brand"><div class="tb-dot" style="background:var(--unam)"></div><div><div class="tb-name">Panel Docente — Cancer Genome Landscapes</div><div class="tb-sub">FES Iztacala UNAM</div></div></div>
+    <div class="tb-user"><div id="tb-pname" style="font-size:.76rem;color:var(--text2)"></div><div class="tb-av" style="background:var(--unam)" id="tb-pav">PR</div><button class="btn btn-sm btn-teal" onclick="refreshProfData()">↺ Actualizar</button><button class="btn btn-sm" onclick="logout()">Salir</button></div>
   </div>
-
-  <div class="prof-layout">
-    <div class="prof-header">
-      <h1>Panel de evaluación</h1>
-      <p>Consulta el progreso, calificaciones y reportes individuales de todos los estudiantes del módulo.</p>
+  <div class="pl">
+    <div class="ph"><h1>Panel de evaluación</h1><p>Calificaciones en tiempo real de todos los estudiantes del módulo.</p></div>
+    <div class="sg" id="sg"></div>
+    <div class="dtabs">
+      <button class="dtab active" onclick="showDT('alumnos')">Lista de alumnos</button>
+      <button class="dtab" onclick="showDT('analytics')">Análisis del grupo</button>
+      <button class="dtab" onclick="showDT('exportar')">Exportar</button>
     </div>
-
-    <div class="stats-grid" id="prof-stats"></div>
-
-    <div class="dash-tabs">
-      <button class="dash-tab active" onclick="showDashTab('alumnos')">Lista de alumnos</button>
-      <button class="dash-tab" onclick="showDashTab('analytics')">Análisis del grupo</button>
-      <button class="dash-tab" onclick="showDashTab('exportar')">Exportar</button>
-    </div>
-
-    <div id="dash-alumnos" class="dash-panel active">
-      <div class="toolbar">
-        <input type="text" class="search-input" placeholder="Buscar por nombre o matrícula…" id="search-students" oninput="renderStudentTable()">
-        <select class="filter-sel" id="filter-group" onchange="renderStudentTable()">
-          <option value="">Todos los grupos</option>
-        </select>
-        <select class="filter-sel" id="filter-status" onchange="renderStudentTable()">
-          <option value="">Todos los estados</option>
-          <option value="complete">Completado</option>
-          <option value="partial">En progreso</option>
-          <option value="none">Sin iniciar</option>
-        </select>
+    <div id="dt-alumnos" class="dp active">
+      <div class="tb">
+        <input type="text" class="si" placeholder="Buscar por nombre o matrícula…" id="srch" oninput="renderST()">
+        <select class="fs" id="fg" onchange="renderST()"><option value="">Todos los grupos</option></select>
+        <select class="fs" id="fs2" onchange="renderST()"><option value="">Todos</option><option value="complete">Completado</option><option value="partial">En progreso</option><option value="none">Sin iniciar</option></select>
       </div>
-      <div style="background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-lg); overflow:hidden">
-        <table class="student-table">
-          <thead>
-            <tr>
-              <th>Matrícula</th>
-              <th>Nombre</th>
-              <th>Grupo</th>
-              <th>Actividades</th>
-              <th>Calificación</th>
-              <th>Estado</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="student-table-body"></tbody>
-        </table>
+      <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--rl);overflow-x:auto">
+        <table class="stbl"><thead><tr><th>Matrícula</th><th>Nombre</th><th>Grupo</th><th>Actividades</th><th>Calificación</th><th>Estado</th><th></th></tr></thead>
+        <tbody id="stb"></tbody></table>
       </div>
     </div>
-
-    <div id="dash-analytics" class="dash-panel">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem">
-        <div>
-          <div class="section-title">Distribución de calificaciones</div>
-          <div class="bar-chart" id="grade-dist-chart"></div>
-          <div class="bar-labels" id="grade-dist-labels"></div>
-        </div>
-        <div>
-          <div class="section-title">Actividad más difícil</div>
-          <div id="activity-difficulty" style="display:flex;flex-direction:column;gap:6px"></div>
-        </div>
+    <div id="dt-analytics" class="dp">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div><div class="st">Distribución de calificaciones</div><div class="bc" id="gdc"></div><div class="bls" id="gdl"></div></div>
+        <div><div class="st">Promedio por actividad</div><div id="adiff" style="display:flex;flex-direction:column;gap:5px"></div></div>
       </div>
-      <div style="margin-top:2rem">
-        <div class="section-title">Preguntas con mayor tasa de error</div>
-        <div id="error-analysis" style="font-size:0.82rem; color:var(--text2); line-height:1.8"></div>
-      </div>
+      <div style="margin-top:1.5rem"><div class="st">Preguntas con mayor tasa de error</div><div id="ea" style="font-size:.8rem;color:var(--text2);line-height:1.8"></div></div>
     </div>
-
-    <div id="dash-exportar" class="dash-panel">
-      <div class="info-box">Los reportes generados son archivos de texto plano que pueden abrirse en Word, Excel (CSV) o cualquier editor. También puede copiar los datos directamente al portapapeles para pegarlos en una hoja de calificaciones.</div>
-      <div class="export-btns" style="flex-direction:column; gap:12px; max-width:480px">
-        <button class="btn btn-primary" onclick="exportCSV()">📊 Exportar lista completa como CSV (para Excel)</button>
-        <button class="btn" onclick="exportFullReport()">📄 Exportar reporte detallado de todos los alumnos (TXT)</button>
-        <button class="btn" onclick="exportGradeSheet()">📋 Exportar sólo calificaciones finales (tabla)</button>
+    <div id="dt-exportar" class="dp">
+      <div class="ib">Los reportes son archivos descargables para Excel o Word.</div>
+      <div style="display:flex;flex-direction:column;gap:9px;max-width:460px">
+        <button class="btn btn-primary" onclick="exportCSV()">📊 Exportar CSV (Excel)</button>
+        <button class="btn" onclick="exportFullReport()">📄 Reportes individuales (TXT)</button>
+        <button class="btn" onclick="exportGradeSheet()">📋 Lista de calificaciones</button>
         <button class="btn btn-teal" onclick="copyCSVClipboard()">📋 Copiar CSV al portapapeles</button>
       </div>
-      <div id="export-preview" style="margin-top:1.5rem; display:none">
-        <div class="section-title">Vista previa</div>
-        <textarea id="export-text" style="width:100%; height:220px; font-family:'DM Mono',monospace; font-size:0.72rem; padding:1rem; border:1px solid var(--border); border-radius:var(--radius); background:var(--bg2); color:var(--text); resize:vertical;" readonly></textarea>
+      <div id="ep" style="margin-top:1.25rem;display:none"><div class="st">Vista previa</div>
+        <textarea id="et" style="width:100%;height:190px;font-family:'DM Mono',monospace;font-size:.68rem;padding:.9rem;border:1px solid var(--border);border-radius:var(--r);background:var(--bg2);color:var(--text);resize:vertical;" readonly></textarea>
       </div>
     </div>
   </div>
 </div>
 
-<!-- ══════════════════════════════════════════════
-     ACTIVITY MODAL
-══════════════════════════════════════════════ -->
-<div id="modal-overlay" class="modal-overlay" onclick="closeModalOutside(event)">
-  <div class="modal-box" id="modal-box">
-    <div class="modal-head">
-      <div class="modal-head-title" id="modal-title">Actividad</div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer" id="modal-footer"></div>
-  </div>
-</div>
-
-<!-- DETAIL MODAL -->
-<div id="detail-overlay" class="modal-overlay" onclick="closeDetailOutside(event)">
-  <div class="modal-box" style="max-width:540px" id="detail-box">
-    <div class="modal-head">
-      <div class="modal-head-title" id="detail-title">Detalle del estudiante</div>
-      <button class="modal-close" onclick="closeDetail()">✕</button>
-    </div>
-    <div class="modal-body" id="detail-body"></div>
-    <div class="modal-footer">
-      <div></div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-sm" onclick="downloadOneReport()">⬇ Descargar reporte</button>
-        <button class="btn btn-sm btn-primary" onclick="closeDetail()">Cerrar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- NOTIFICATION -->
+<!-- MODALS -->
+<div id="mo" class="mo" onclick="closeModalOutside(event)"><div class="mb"><div class="mh"><div class="mh-t" id="mt">Actividad</div><button class="mc" onclick="closeModal()">✕</button></div><div class="mbody" id="mbody"></div><div class="mfoot" id="mfoot"></div></div></div>
+<div id="do2" class="mo" onclick="closeDetailOutside(event)"><div class="mb" style="max-width:510px"><div class="mh"><div class="mh-t" id="dt">Detalle del estudiante</div><button class="mc" onclick="closeDetail()">✕</button></div><div class="mbody" id="dbody"></div><div class="mfoot"><div></div><div style="display:flex;gap:7px"><button class="btn btn-sm" onclick="downloadOneReport()">⬇ Reporte</button><button class="btn btn-sm btn-primary" onclick="closeDetail()">Cerrar</button></div></div></div></div>
 <div id="notif" class="notif"></div>
 
+<script type="module">
+import{initializeApp}from'https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js';
+import{getDatabase,ref,set,get,onValue}from'https://www.gstatic.com/firebasejs/12.14.0/firebase-database.js';
+
+/*
+  ═══════════════════════════════════════════════════════
+  INSTRUCCIONES PARA ACTIVAR FIREBASE (PASO A PASO):
+  
+  1. Vaya a https://console.firebase.google.com
+  2. "Crear proyecto" → nombre: "ctycancer-iztacala" → continuar
+  3. En el menú lateral: Compilación → Realtime Database → Crear base de datos
+  4. Elija la ubicación más cercana → "Comenzar en modo de prueba" → Habilitar
+  5. En el menú lateral: Configuración del proyecto (ícono ⚙️) → pestaña "General"
+  6. Baje a "Tus apps" → "Añadir app" → ícono web (</>)
+  7. Nombre: "plataforma-ctc" → Registrar app
+  8. Copie el objeto firebaseConfig que aparece
+  9. Reemplace TODOS los valores "REEMPLAZAR..." abajo con sus datos
+  10. Guarde el archivo y vuelva a subirlo a GitHub Pages
+  
+  NOTA: El modo de prueba funciona 30 días. Para producción permanente,
+  configure reglas de seguridad en Realtime Database → Rules.
+  ═══════════════════════════════════════════════════════
+*/
+const FB_CFG={
+  apiKey:"AIzaSyDd5_duPdsOIBHSRFPqyqsj8ZXhNXtlvy0",
+  authDomain:"ctycancer-iztacala.firebaseapp.com",
+  databaseURL:"https://ctycancer-iztacala-default-rtdb.firebaseio.com",
+  projectId:"ctycancer-iztacala",
+  storageBucket:"ctycancer-iztacala.firebasestorage.app",
+  messagingSenderId:"1004030143582",
+  appId:"1:1004030143582:web:2f8134c6caa102de1558cf",
+  measurementId:"G-B283859FGG"
+};
+
+let db=null;
+try{
+  if(FB_CFG.apiKey!=="REEMPLAZAR_CON_SU_API_KEY"){
+    const app=initializeApp(FB_CFG);
+    db=getDatabase(app);
+    window._fbOK=true;
+    window._fbDB=db;
+    window._fbRef=ref;
+    window._fbSet=set;
+    window._fbGet=get;
+    window._fbOnValue=onValue;
+    console.log("[Firebase] Conectado correctamente");
+  }else{
+    window._fbOK=false;
+    console.log("[Firebase] No configurado — usando localStorage únicamente");
+  }
+}catch(e){window._fbOK=false;console.warn("[Firebase] Error:",e.message);}
+
+window._fbReady=true;
+document.dispatchEvent(new Event('firebase-ready'));
+</script>
+
 <script>
-/* ═══════════════════════════════════════════════
-   STORAGE LAYER — uses window.storage (Claude persistent)
-   with localStorage as fallback for local testing
-═══════════════════════════════════════════════ */
-const STORE_KEY = 'cglandscapes_v2';
+function startApp(){
+const fbOK=window._fbOK||false;
+const fbDB=window._fbDB||null;
+const fbRef=window._fbRef||null;
+const fbSet=window._fbSet||null;
+const fbGet=window._fbGet||null;
 
-async function saveData(data) {
-  try {
-    if (window.storage) {
-      await window.storage.set(STORE_KEY, JSON.stringify(data), true);
-    } else {
-      localStorage.setItem(STORE_KEY, JSON.stringify(data));
-    }
-  } catch(e) {
-    try { localStorage.setItem(STORE_KEY, JSON.stringify(data)); } catch(_) {}
-  }
+const LS='cglandscapes_v3';
+function lsGet(){try{const v=localStorage.getItem(LS);return v?JSON.parse(v):{students:{}}}catch(e){return{students:{}}}}
+function lsSet(d){try{localStorage.setItem(LS,JSON.stringify(d))}catch(e){}}
+
+async function cloudSave(s){
+  if(!fbOK||!fbDB)return;
+  try{await fbSet(fbRef(fbDB,'students/'+s.id),s);}catch(e){console.warn('FB write:',e.message);}
+}
+async function cloudLoadAll(){
+  if(!fbOK||!fbDB)return null;
+  try{const snap=await fbGet(fbRef(fbDB,'students'));if(snap.exists())return snap.val();return{};}catch(e){return null;}
 }
 
-async function loadData() {
-  try {
-    if (window.storage) {
-      const r = await window.storage.get(STORE_KEY, true);
-      if (r && r.value) return JSON.parse(r.value);
-    }
-    const lsv = localStorage.getItem(STORE_KEY);
-    if (lsv) return JSON.parse(lsv);
-  } catch(e) {}
-  return { students: {} };
-}
+let DB={students:{}};
+let CU=null,CR=null,CDI=null;
 
-let DB = { students: {} };
-let currentUser = null;
-let currentRole = null;
-let currentDetailId = null;
+window.addEventListener('online',()=>{document.getElementById('cb').classList.remove('show');if(CU)cloudSave(CU);notify('Conexión restaurada ✓');});
+window.addEventListener('offline',()=>{document.getElementById('cb').classList.add('show');});
 
-async function initDB() {
-  DB = await loadData();
-  if (!DB.students) DB.students = {};
-}
+const ACTS=[
+  {id:'quiz',name:'Quiz adaptativo',desc:'12 preguntas sobre Cancer Genome Landscapes',icon:'🧬',pts:25,color:'#fef3c7'},
+  {id:'flashcards',name:'Flashcards — Glosario activo',desc:'15 términos clave del artículo',icon:'📇',pts:10,color:'#ede9fe'},
+  {id:'dragdrop',name:'Clasificador de genes',desc:'Driver vs. passenger, oncogén vs. supresor',icon:'🔀',pts:15,color:'#dcfce7'},
+  {id:'timeline',name:'Puzzle evolutivo',desc:'Secuencia de tumorigénesis colorrectal',icon:'⏱',pts:15,color:'#e0f2fe'},
+  {id:'matching',name:'Emparejamiento gen–vía–tumor',desc:'3 rondas de asociación conceptual',icon:'🔗',pts:15,color:'#fce7f3'},
+  {id:'scenario',name:'Casos clínicos',desc:'2 casos con decisión terapéutica',icon:'🏥',pts:20,color:'#fff7ed'},
+];
+const TP=100;
+const G=p=>{if(p>=90)return'10';if(p>=80)return'9';if(p>=70)return'8';if(p>=60)return'7';if(p>=50)return'6';return'5';};
+const GL=p=>{if(p>=90)return'A';if(p>=80)return'B';if(p>=70)return'C';if(p>=60)return'D';return'F';};
 
-/* ═══════════════════════════════════════════════
-   AUTH
-═══════════════════════════════════════════════ */
-function switchRole(role) {
-  document.getElementById('student-form').style.display = role === 'student' ? 'block' : 'none';
-  document.getElementById('prof-form').style.display = role === 'prof' ? 'block' : 'none';
-  document.getElementById('tab-student').classList.toggle('active', role === 'student');
-  document.getElementById('tab-prof').classList.toggle('active', role === 'prof');
-}
+window.switchRole=role=>{
+  document.getElementById('student-form').style.display=role==='student'?'block':'none';
+  document.getElementById('prof-form').style.display=role==='prof'?'block':'none';
+  document.getElementById('tab-student').classList.toggle('active',role==='student');
+  document.getElementById('tab-prof').classList.toggle('active',role==='prof');
+};
 
-async function loginStudent() {
-  const id = document.getElementById('student-id').value.trim();
-  const name = document.getElementById('student-name').value.trim();
-  const group = document.getElementById('student-group').value.trim();
-  if (!id || !name || !group) { notify('Complete todos los campos'); return; }
-  if (!DB.students[id]) {
-    DB.students[id] = {
-      id, name, group,
-      registered: new Date().toISOString(),
-      scores: {},
-      attempts: {},
-      quizErrors: [],
-      lastAccess: null,
-    };
-  } else {
-    DB.students[id].name = name;
-    DB.students[id].group = group;
-  }
-  DB.students[id].lastAccess = new Date().toISOString();
-  await saveData(DB);
-  currentUser = DB.students[id];
-  currentRole = 'student';
-  showScreen('student-screen');
-  renderStudentUI();
-}
+window.loginStudent=async()=>{
+  const id=document.getElementById('student-id').value.trim();
+  const name=document.getElementById('student-name').value.trim();
+  const group=document.getElementById('student-group').value.trim();
+  if(!id||!name||!group){notify('Complete todos los campos');return;}
+  DB=lsGet();
+  if(!DB.students[id])DB.students[id]={id,name,group,registered:new Date().toISOString(),scores:{},attempts:{},quizErrors:[],lastAccess:null};
+  else{DB.students[id].name=name;DB.students[id].group=group;}
+  DB.students[id].lastAccess=new Date().toISOString();
+  lsSet(DB);
+  cloudSave(DB.students[id]);
+  CU=DB.students[id];CR='student';
+  showScreen('student-screen');renderSUI();
+};
 
-function loginProf() {
-  const key = document.getElementById('prof-key').value.trim();
-  const name = document.getElementById('prof-name').value.trim();
-  if (key !== 'iztacala2026-2') { notify('Clave incorrecta'); return; }
-  if (!name) { notify('Ingrese su nombre'); return; }
-  currentRole = 'prof';
+window.loginProf=async()=>{
+  const key=document.getElementById('prof-key').value.trim();
+  const name=document.getElementById('prof-name').value.trim();
+  if(key!=='iztacala2025'){notify('Clave incorrecta');return;}
+  if(!name){notify('Ingrese su nombre');return;}
+  CR='prof';
   showScreen('prof-screen');
-  document.getElementById('topbar-prof-name').textContent = name;
-  document.getElementById('prof-avatar').textContent = name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-  renderProfDashboard();
-}
+  document.getElementById('tb-pname').textContent=name;
+  document.getElementById('tb-pav').textContent=name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  notify('Cargando datos…');
+  await refreshProfData();
+};
 
-function logout() {
-  currentUser = null; currentRole = null;
-  showScreen('login-screen');
-}
+window.refreshProfData=async()=>{
+  const cd=await cloudLoadAll();
+  if(cd&&Object.keys(cd).length>0){
+    const local=lsGet();
+    DB.students={...local.students,...cd};
+    lsSet(DB);
+    notify('✓ '+Object.keys(DB.students).length+' estudiante(s) cargado(s)');
+  }else{
+    DB=lsGet();
+    notify(fbOK?'Sin datos en servidor — datos locales':'Sin Firebase — datos locales únicamente');
+  }
+  renderPD();
+};
 
-function showScreen(id) {
-  document.querySelectorAll('.screen').forEach(s => { s.classList.remove('active'); s.style.display=''; });
-  const s = document.getElementById(id);
-  s.style.display = id === 'login-screen' ? 'flex' : 'block';
+window.logout=()=>{CU=null;CR=null;showScreen('login-screen');};
+
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>{s.classList.remove('active');s.style.display='';});
+  const s=document.getElementById(id);
+  s.style.display=id==='login-screen'?'flex':'block';
   s.classList.add('active');
 }
 
-/* ═══════════════════════════════════════════════
-   ACTIVITY DEFINITIONS
-═══════════════════════════════════════════════ */
-const ACTIVITIES = [
-  { id:'quiz', name:'Quiz adaptativo', desc:'12 preguntas sobre Cancer Genome Landscapes', icon:'🧬', pts:25, color:'#fef3c7', iconBg:'#d97706' },
-  { id:'flashcards', name:'Flashcards — Glosario activo', desc:'15 términos clave del artículo de Vogelstein', icon:'📇', pts:10, color:'#ede9fe', iconBg:'#7c3aed' },
-  { id:'dragdrop', name:'Clasificador de genes', desc:'Driver vs. passenger, oncogén vs. supresor', icon:'🔀', pts:15, color:'#dcfce7', iconBg:'#16a34a' },
-  { id:'timeline', name:'Puzzle evolutivo', desc:'Secuencia de tumorigénesis colorrectal', icon:'⏱', pts:15, color:'#e0f2fe', iconBg:'#0284c7' },
-  { id:'matching', name:'Emparejamiento gen–vía–tumor', desc:'3 rondas de asociación conceptual', icon:'🔗', pts:15, color:'#fce7f3', iconBg:'#db2777' },
-  { id:'scenario', name:'Casos clínicos', desc:'2 casos con decisión terapéutica basada en genómica', icon:'🏥', pts:20, color:'#fff7ed', iconBg:'#c2410c' },
-];
+function gsc(id){return CU&&CU.scores?CU.scores[id]??null:null;}
+function tsc(){return ACTS.reduce((a,act)=>a+(CU?.scores?.[act.id]||0),0);}
+function cdc(){return ACTS.filter(a=>CU?.scores?.[a.id]!==undefined).length;}
 
-const TOTAL_PTS = ACTIVITIES.reduce((a,b) => a + b.pts, 0);
-
-function getScore(id) {
-  if (!currentUser || !currentUser.scores) return null;
-  return currentUser.scores[id] !== undefined ? currentUser.scores[id] : null;
-}
-
-function totalScore() {
-  if (!currentUser) return 0;
-  return ACTIVITIES.reduce((a,act) => a + (currentUser.scores[act.id] || 0), 0);
-}
-
-function completedCount() {
-  if (!currentUser) return 0;
-  return ACTIVITIES.filter(a => currentUser.scores[a.id] !== undefined).length;
-}
-
-/* ═══════════════════════════════════════════════
-   STUDENT UI
-═══════════════════════════════════════════════ */
-function renderStudentUI() {
-  const u = currentUser;
-  document.getElementById('topbar-student-name').textContent = u.name;
-  document.getElementById('topbar-avatar').textContent = u.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
-
-  const done = completedCount();
-  const total = totalScore();
-  const pct = Math.round((total/TOTAL_PTS)*100);
-
-  document.getElementById('progress-overview').innerHTML = `
-    <div class="prog-card"><div class="prog-card-label">Actividades</div><div class="prog-card-val">${done}/${ACTIVITIES.length}</div><div class="prog-card-sub">completadas</div></div>
-    <div class="prog-card"><div class="prog-card-label">Puntos</div><div class="prog-card-val">${total}</div><div class="prog-card-sub">de ${TOTAL_PTS} posibles</div></div>
-    <div class="prog-card"><div class="prog-card-label">Calificación</div><div class="prog-card-val">${pctToGrade(pct)}</div><div class="prog-card-sub">${pct}%</div></div>
-    <div class="prog-card"><div class="prog-card-label">Matrícula</div><div class="prog-card-val" style="font-size:1rem">${u.id}</div><div class="prog-card-sub">${u.group}</div></div>
-  `;
-
-  document.getElementById('activity-list').innerHTML = ACTIVITIES.map(act => {
-    const sc = getScore(act.id);
-    const done = sc !== null;
-    const pctAct = done ? Math.round((sc/act.pts)*100) : 0;
-    return `<div class="act-row ${done?'done':''}" onclick="openActivity('${act.id}')">
-      <div class="act-icon" style="background:${act.color}; font-size:1.2rem">${act.icon}</div>
-      <div class="act-info">
-        <div class="act-name">${act.name}</div>
-        <div class="act-desc">${act.desc}</div>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;flex-shrink:0">
-        ${done
-          ? `<span class="act-badge badge-pts">${sc}/${act.pts} pts</span><span class="act-badge badge-done">✓ Completa</span>`
-          : `<span class="act-badge badge-pending">${act.pts} pts</span>`}
-      </div>
-    </div>`;
+function renderSUI(){
+  const u=CU;
+  document.getElementById('tb-sname').textContent=u.name;
+  document.getElementById('tb-av').textContent=u.name.split(' ').map(w=>w[0]).join('').slice(0,2).toUpperCase();
+  const done=cdc(),total=tsc(),pct=Math.round((total/TP)*100);
+  document.getElementById('po').innerHTML=`
+    <div class="pc"><div class="pcl">Actividades</div><div class="pcv">${done}/${ACTS.length}</div><div class="pcs">completadas</div></div>
+    <div class="pc"><div class="pcl">Puntos</div><div class="pcv">${total}</div><div class="pcs">de ${TP}</div></div>
+    <div class="pc"><div class="pcl">Calificación</div><div class="pcv">${G(pct)}</div><div class="pcs">${pct}%</div></div>
+    <div class="pc"><div class="pcl">Matrícula</div><div class="pcv" style="font-size:.9rem">${u.id}</div><div class="pcs">${u.group}</div></div>`;
+  document.getElementById('al').innerHTML=ACTS.map(act=>{
+    const sc=gsc(act.id),dn=sc!==null;
+    return`<div class="ar ${dn?'done':''}" onclick="openActivity('${act.id}')">
+      <div class="ai" style="background:${act.color}">${act.icon}</div>
+      <div class="an"><div class="an-n">${act.name}</div><div class="an-d">${act.desc}</div></div>
+      <div style="display:flex;align-items:center;gap:5px;flex-shrink:0">
+        ${dn?`<span class="ab ab-s">${sc}/${act.pts}</span><span class="ab ab-d">✓</span>`:`<span class="ab ab-p">${act.pts} pts</span>`}
+      </div></div>`;
   }).join('');
-
-  if (done === ACTIVITIES.length) {
-    document.getElementById('final-report-section').style.display = 'block';
-    renderFinalReport();
-  }
+  if(done===ACTS.length){document.getElementById('frs').style.display='block';renderFR();}
 }
 
-function pctToGrade(pct) {
-  if (pct >= 90) return '10';
-  if (pct >= 80) return '9';
-  if (pct >= 70) return '8';
-  if (pct >= 60) return '7';
-  if (pct >= 50) return '6';
-  return '5';
+async function saveSc(id,pts,meta){
+  if(!CU)return;
+  CU.scores[id]=pts;
+  if(!CU.attempts)CU.attempts={};
+  CU.attempts[id]={pts,meta,ts:new Date().toISOString()};
+  if(meta.errors)CU.quizErrors=(CU.quizErrors||[]).concat(meta.errors);
+  DB.students[CU.id]=CU;
+  lsSet(DB);
+  try{await cloudSave(CU);}catch(e){}
 }
 
-function pctToLetterGrade(pct) {
-  if (pct >= 90) return 'A';
-  if (pct >= 80) return 'B';
-  if (pct >= 70) return 'C';
-  if (pct >= 60) return 'D';
-  return 'F';
-}
-
-/* ═══════════════════════════════════════════════
-   QUIZ DATA & LOGIC
-═══════════════════════════════════════════════ */
-const QUIZ_Qs = [
+/* QUIZ */
+const QQ=[
   {q:"¿Cuántas mutaciones no sinónimas presenta en promedio un tumor sólido común?",opts:["5 a 10","33 a 66","100 a 200",">500"],c:1,exp:"Vogelstein et al. reportan 33–66 mutaciones no sinónimas. ~95% son sustituciones de base única. La mayoría son passenger sin ventaja selectiva."},
-  {q:"En la metáfora topográfica del paisaje genómico, las 'montañas' representan:",opts:["Todos los genes del exoma","Genes driver muy frecuentemente mutados (ej. TP53, KRAS)","Regiones de alta densidad génica","Genes amplificados en tumores pediátricos"],c:1,exp:"Las 'montañas' son genes driver con alta frecuencia como TP53 y KRAS. Las 'colinas' son drivers de baja frecuencia pero mucho más numerosas."},
-  {q:"Regla 20/20 para clasificar un gen como oncogén Mut-driver:",opts:["Mutado en >20 estudios independientes",">20% de mutaciones COSMIC son missense en posiciones recurrentes",">20% de pacientes presentan la alteración","Amplificado 20 veces por encima del nivel basal"],c:1,exp:"Oncogén: >20% missense recurrentes. Supresor tumoral: >20% truncantes. Este criterio usa el patrón, no solo la frecuencia."},
-  {q:"¿Cuántas mutaciones driver tiene típicamente un tumor colorrectal adulto?",opts:["0 a 1","2 a 8","15 a 25","50 a 100"],c:1,exp:"2–8 mutaciones driver por tumor. Las restantes son passenger. La progresión colorrectal tarda 20–30 años."},
+  {q:"En la metáfora topográfica, las 'montañas' representan:",opts:["Todos los genes del exoma","Genes driver muy frecuentemente mutados (ej. TP53, KRAS)","Regiones de alta densidad génica","Genes amplificados en tumores pediátricos"],c:1,exp:"Las 'montañas' son genes driver de alta frecuencia como TP53 y KRAS. Las 'colinas' son drivers de baja frecuencia pero mucho más numerosas."},
+  {q:"Regla 20/20 para clasificar un gen como oncogén Mut-driver:",opts:["Mutado en >20 estudios",">20% de mutaciones COSMIC son missense en posiciones recurrentes",">20% de pacientes presentan la alteración","Amplificado 20 veces sobre el nivel basal"],c:1,exp:"Oncogén: >20% missense recurrentes. Supresor: >20% truncantes. Usa el patrón, no solo la frecuencia."},
+  {q:"¿Cuántas mutaciones driver tiene típicamente un tumor colorrectal adulto?",opts:["0 a 1","2 a 8","15 a 25","50 a 100"],c:1,exp:"2–8 mutaciones driver por tumor. La progresión colorrectal tarda ~20–30 años."},
   {q:"Los tres procesos celulares centrales regulados por las 12 vías driver son:",opts:["Apoptosis, angiogénesis y metástasis","Destino celular, supervivencia celular y mantenimiento del genoma","Proliferación, diferenciación y migración","Metabolismo, senescencia e inmortalización"],c:1,exp:"(1) Destino celular: vías WNT/APC, HH, NOTCH. (2) Supervivencia: RAS, PI3K, TP53. (3) Mantenimiento del genoma: BRCA, MMR."},
-  {q:"¿Por qué mutaciones en distintos genes de la misma vía tienden a ser mutuamente excluyentes?",opts:["Por restricción de espacio cromosómico","Una sola mutación en la vía ya otorga la ventaja selectiva máxima","Comparten el mismo promotor","Mecanismos de reparación impiden mutaciones dobles"],c:1,exp:"Si KRAS ya activa RAS-MAPK, una mutación adicional en BRAF no añade ventaja. Tiene implicaciones terapéuticas directas."},
-  {q:"¿Qué es la 'materia oscura' en el paisaje genómico del cáncer?",opts:["Células estromales contaminantes","Drivers no identificados: Epi-drivers, mutaciones no codificantes, regiones de baja cobertura","Mutaciones en cromosoma Y","Translocaciones en desiertos génicos"],c:1,exp:"Incluye Epi-driver genes, mutaciones en promotores (TERT), y regiones de difícil secuenciación. Explica la brecha entre epidemiología y datos moleculares."},
-  {q:"Tasa de falsos negativos estimada por NGS del exoma en cáncer pancreático (Biankin et al.):",opts:["<5%","~15%","~37%","~60%"],c:2,exp:"37% de mutaciones driver no detectadas. Solo 159/251 esperadas fueron identificadas. Causa: contaminación estromal y cobertura variable."},
-  {q:"¿Cómo explotan los inhibidores de PARP la deficiencia de BRCA1/2?",opts:["Activando directamente BRCA1 mutada","Letabilidad sintética: células BRCA-deficientes dependen más de PARP para reparación; inhibirlo es letal selectivo","Bloqueando la vía HER2","Inhibiendo VEGF"],c:1,exp:"Letabilidad sintética clásica: pérdida de reparación por recombinación homóloga (BRCA) + inhibición de PARP = muerte selectiva del tumor."},
-  {q:"¿Por qué vemurafenib funciona en melanoma BRAF V600E pero NO en cáncer colorrectal con la misma mutación?",opts:["El gen BRAF es diferente en colon","En colorrectal, EGFR reactiva la vía RAS-MAPK corriente arriba del bloqueo","Los pacientes metabolizan más rápido el fármaco","La mutación V600E ocurre en codón diferente"],c:1,exp:"En colorrectal, EGFR activa RAS-MAPK a nivel superior al punto de inhibición de vemurafenib, escapando el bloqueo. Contexto molecular importa."},
-  {q:"El 'Plan A' de Vogelstein para reducir la mortalidad por cáncer es:",opts:["Nuevos agentes de quimioterapia para metástasis","Detección temprana y prevención — >75% de muertes serían evitables","Inmunoterapia universal","Secuenciación germinal de todos los adultos"],c:1,exp:"La mayoría de muertes ocurren porque los cánceres se detectan en etapa metastásica. 20–30 años antes el tumor era operable."},
-  {q:"La heterogeneidad intratumoral implica que:",opts:["Es exclusiva de tumores pediátricos","Todo tumor tiene subclones genéticamente distintos; base de resistencia a terapia dirigida","Solo ocurre en la interfaz tumor-estroma","Solo es cuantificable por FISH"],c:1,exp:"Cada división introduce nuevas mutaciones. Subclones preexistentes resistentes seleccionados por la terapia explican las recaídas."},
+  {q:"¿Por qué mutaciones en genes de la misma vía tienden a ser mutuamente excluyentes?",opts:["Por restricción cromosómica","Una sola mutación en la vía ya otorga la ventaja selectiva máxima","Comparten el mismo promotor","Mecanismos de reparación impiden mutaciones dobles"],c:1,exp:"Si KRAS ya activa RAS-MAPK, una mutación adicional en BRAF no añade ventaja. Tiene implicaciones terapéuticas directas."},
+  {q:"¿Qué es la 'materia oscura' en el paisaje genómico?",opts:["Células estromales contaminantes","Drivers no identificados: Epi-drivers, mutaciones no codificantes, regiones de baja cobertura","Mutaciones en cromosoma Y","Translocaciones en desiertos génicos"],c:1,exp:"Incluye Epi-driver genes, mutaciones en promotores (TERT), y regiones de difícil secuenciación."},
+  {q:"Tasa de falsos negativos del NGS exónico en cáncer pancreático (Biankin et al.):",opts:["<5%","~15%","~37%","~60%"],c:2,exp:"37% de mutaciones driver no detectadas. Solo 159/251 esperadas fueron identificadas."},
+  {q:"¿Cómo explotan los inhibidores de PARP la deficiencia de BRCA1/2?",opts:["Activando BRCA1 mutada","Letabilidad sintética: BRCA-deficientes dependen más de PARP; inhibirlo es letal selectivo","Bloqueando HER2","Inhibiendo VEGF"],c:1,exp:"Letabilidad sintética: pérdida de reparación por recombinación homóloga + inhibición de PARP = muerte selectiva del tumor."},
+  {q:"¿Por qué vemurafenib funciona en melanoma BRAF V600E pero NO en cáncer colorrectal?",opts:["El gen BRAF es diferente en colon","En colorrectal, EGFR reactiva la vía RAS-MAPK corriente arriba del bloqueo","Los pacientes metabolizan más rápido el fármaco","La mutación ocurre en codón diferente"],c:1,exp:"En colorrectal, EGFR activa RAS-MAPK a nivel superior al punto de inhibición, escapando el bloqueo."},
+  {q:"El 'Plan A' de Vogelstein para reducir la mortalidad por cáncer:",opts:["Nuevos agentes de quimioterapia","Detección temprana y prevención — >75% de muertes serían evitables","Inmunoterapia universal","Secuenciación germinal de todos los adultos"],c:1,exp:"La mayoría de muertes ocurren porque los cánceres se detectan en etapa metastásica. 20–30 años antes el tumor era operable."},
+  {q:"La heterogeneidad intratumoral implica que:",opts:["Es exclusiva de tumores pediátricos","Todo tumor tiene subclones genéticamente distintos; base de resistencia a terapia dirigida","Solo ocurre en la interfaz tumor-estroma","Solo cuantificable por FISH"],c:1,exp:"Cada división introduce nuevas mutaciones. Subclones preexistentes resistentes seleccionados por la terapia explican las recaídas."},
 ];
-
-let quizState = {};
-
-function initQuiz() {
-  quizState = { idx: 0, score: 0, errors: [], answered: false };
+let QS={};
+function initQuiz(){QS={idx:0,score:0,errors:[],answered:false};}
+function renderQuiz(){
+  if(QS.idx>=QQ.length){const pts=Math.round((QS.score/QQ.length)*25);saveSc('quiz',pts,{errors:QS.errors,rawScore:QS.score,total:QQ.length});showAR('quiz',pts,25,QS.score+'/'+QQ.length+' respuestas correctas');return;}
+  const q=QQ[QS.idx],pct=Math.round((QS.idx/QQ.length)*100);
+  document.getElementById('mbody').innerHTML=`
+    <div><div class="qpb"><div class="qpf" style="width:${pct}%"></div></div><div class="qml">Pregunta ${QS.idx+1} de ${QQ.length} · Aciertos: ${QS.score}</div></div>
+    <div class="qq">${q.q}</div>
+    <div class="qo-wrap">${q.opts.map((o,i)=>`<button class="qo" id="qo-${i}" onclick="ansQ(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+    <div class="qfb" id="qfb"></div>`;
+  document.getElementById('mfoot').innerHTML=`<div style="font-size:.74rem;color:var(--text3)">Toca la respuesta</div><button class="btn btn-primary" id="qnext" onclick="nextQ()" style="display:none">Siguiente →</button>`;
+  QS.answered=false;
 }
+window.ansQ=i=>{
+  if(QS.answered)return;QS.answered=true;
+  const q=QQ[QS.idx];
+  document.querySelectorAll('.qo').forEach(b=>b.disabled=true);
+  document.getElementById('qo-'+q.c).classList.add('correct');
+  const fb=document.getElementById('qfb');
+  if(i===q.c){QS.score++;fb.className='qfb show ok';fb.textContent='✓ '+q.exp;}
+  else{document.getElementById('qo-'+i).classList.add('wrong');fb.className='qfb show bad';fb.textContent='✗ '+q.exp;QS.errors.push({qIdx:QS.idx,question:q.q,selected:q.opts[i],correct:q.opts[q.c]});}
+  document.getElementById('qnext').style.display='inline-flex';
+};
+window.nextQ=()=>{QS.idx++;renderQuiz();};
 
-function renderQuiz() {
-  const q = QUIZ_Qs[quizState.idx];
-  const pct = Math.round((quizState.idx/QUIZ_Qs.length)*100);
-  document.getElementById('modal-body').innerHTML = `
-    <div class="quiz-progress">
-      <div class="quiz-progress-bar"><div class="quiz-progress-fill" id="qbar" style="width:${pct}%"></div></div>
-      <div class="quiz-progress-label">Pregunta ${quizState.idx+1} de ${QUIZ_Qs.length} · Aciertos: ${quizState.score}</div>
-    </div>
-    <div class="quiz-q">${q.q}</div>
-    <div class="quiz-opts" id="qopts">
-      ${q.opts.map((o,i)=>`<button class="quiz-opt" id="qopt-${i}" onclick="answerQuiz(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
-    </div>
-    <div class="quiz-feedback" id="qfb"></div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <div style="font-size:0.78rem;color:var(--text3)">Selecciona la respuesta correcta</div>
-    <button class="btn btn-primary" id="qnext" onclick="nextQuizQ()" style="display:none">Siguiente →</button>
-  `;
-  quizState.answered = false;
-}
-
-function answerQuiz(i) {
-  if (quizState.answered) return;
-  quizState.answered = true;
-  const q = QUIZ_Qs[quizState.idx];
-  document.querySelectorAll('.quiz-opt').forEach(b => b.disabled = true);
-  document.getElementById(`qopt-${q.c}`).classList.add('correct');
-  const fb = document.getElementById('qfb');
-  if (i === q.c) {
-    quizState.score++;
-    fb.className = 'quiz-feedback show ok';
-    fb.textContent = '✓ ' + q.exp;
-  } else {
-    document.getElementById(`qopt-${i}`).classList.add('wrong');
-    fb.className = 'quiz-feedback show bad';
-    fb.textContent = '✗ ' + q.exp;
-    quizState.errors.push({ qIdx: quizState.idx, question: q.q, selected: q.opts[i], correct: q.opts[q.c] });
-  }
-  document.getElementById('qnext').style.display = 'inline-flex';
-}
-
-function nextQuizQ() {
-  quizState.idx++;
-  if (quizState.idx >= QUIZ_Qs.length) {
-    const pts = Math.round((quizState.score / QUIZ_Qs.length) * 25);
-    saveActivityScore('quiz', pts, { errors: quizState.errors, rawScore: quizState.score, total: QUIZ_Qs.length });
-    showActivityResult('quiz', pts, 25, `${quizState.score}/${QUIZ_Qs.length} respuestas correctas`);
-  } else {
-    renderQuiz();
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   FLASHCARDS LOGIC
-═══════════════════════════════════════════════ */
-const FLASHDATA = [
-  {t:'Exoma',d:'Conjunto de exones del genoma (~1.5% total). El NGS del exoma detecta >80% de mutaciones causantes de enfermedad pero omite alteraciones en intrones, regiones reguladoras y promotores.'},
-  {t:'Mutación driver',d:'Mutación somática que confiere ventaja de crecimiento selectivo. Cada alteración aumenta el ratio de nacimiento/muerte celular. No todas las mutaciones de un gen driver son driver (ej. APC).'},
-  {t:'Mutación passenger',d:'Mutación sin ventaja selectiva. Se acumula como marcador del tiempo entre expansiones clonales. >99.9% de las alteraciones tumorales son passenger.'},
-  {t:'Mut-driver gene',d:'Gen con mutaciones driver identificables por su patrón (no solo frecuencia). ~125 identificados por NGS. Se subclasifican como oncogenes o supresores tumorales según la regla 20/20.'},
-  {t:'Epi-driver gene',d:'Gen que favorece la proliferación por alteración epigenética (metilación, modificación de histonas) sin mutación intragénica frecuente. Ej: silenciamiento de MLH1 por hipermetilación.'},
-  {t:'Regla 20/20',d:'Criterio ratiométrico: oncogén = >20% de mutaciones en COSMIC son missense recurrentes; supresor tumoral = >20% son truncantes. Usa el patrón de mutación, no la frecuencia.'},
-  {t:'Montaña / Colina',d:'Montaña: gen driver con alta frecuencia (TP53, KRAS). Colina: gen driver de baja frecuencia. Las colinas dominan numéricamente pero son difíciles de identificar estadísticamente.'},
-  {t:'Materia oscura',d:'Drivers no identificados por NGS actual: Epi-driver genes, mutaciones no codificantes (promotor TERT), regiones de difícil cobertura. Explica la "brecha" entre epidemiología y molecular.'},
+/* FLASHCARDS */
+const FD=[
+  {t:'Exoma',d:'Conjunto de exones del genoma (~1.5%). El NGS del exoma detecta >80% de mutaciones causantes de enfermedad pero omite alteraciones en regiones reguladoras y promotores.'},
+  {t:'Mutación driver',d:'Mutación somática que confiere ventaja de crecimiento selectivo. Aumenta el ratio nacimiento/muerte celular. Una mutación driver en un gen driver no implica que TODAS las mutaciones de ese gen sean driver.'},
+  {t:'Mutación passenger',d:'Mutación sin ventaja selectiva. Se acumula como marcador del tiempo entre expansiones clonales. >99.9% de las alteraciones en un tumor son passenger.'},
+  {t:'Mut-driver gene',d:'Gen con mutaciones driver identificables por su patrón. ~125 identificados. Clasificados en oncogenes o supresores tumorales según la regla 20/20.'},
+  {t:'Epi-driver gen',d:'Gen que favorece proliferación por alteración epigenética (metilación, histonas) sin mutación intragénica frecuente. Ej: silenciamiento de MLH1 por hipermetilación.'},
+  {t:'Regla 20/20',d:'Oncogén = >20% de mutaciones COSMIC son missense en posiciones recurrentes. Supresor = >20% son truncantes. Usa el patrón de mutación, no la frecuencia.'},
+  {t:'Montaña / Colina',d:'Montaña: gen driver de alta frecuencia (TP53, KRAS). Colina: gen driver de baja frecuencia. Las colinas dominan numéricamente el paisaje genómico.'},
+  {t:'Materia oscura',d:'Drivers no identificados por NGS: Epi-driver genes, mutaciones en promotores (TERT), regiones de difícil cobertura. Explica la brecha entre epidemiología y datos moleculares.'},
   {t:'Heterogeneidad intratumoral',d:'Diversidad genética entre células de un mismo tumor. Inevitable: cada división introduce mutaciones. Base de la resistencia adquirida a terapia dirigida.'},
-  {t:'Exclusión mutua',d:'Mutaciones en genes de la misma vía rara vez coexisten en el mismo tumor (ej. KRAS y BRAF). Confirma el modelo de señalización por vías; base de la lógica terapéutica por pathway.'},
-  {t:'Letabilidad sintética',d:'Pérdida simultánea de dos genes que por separado son viables pero juntos son letales. Base de inhibidores PARP en tumores BRCA1/2-deficientes (letabilidad con la reparación por recombinación homóloga).'},
-  {t:'MSI-H',d:'Inestabilidad de microsatélites de alta carga. Resultado de deficiencia en genes de reparación de mismatch (MLH1, MSH2). Tasas mutacionales 10–100× más altas. Predictor de respuesta a anti-PD1.'},
-  {t:'Plan A vs Plan B',d:'Plan A = detección temprana y prevención; Plan B = terapia de enfermedad avanzada. Vogelstein estima >75% de muertes evitables si se detecta en el 90% inicial del desarrollo tumoral.'},
-  {t:'Cromothripsis',d:'Evento catastrófico raro: uno o pocos cromosomas sufren decenas de reordenamientos simultáneos en una sola división. Genera fusiones oncogénicas y deleciones de supresores. Complica inferencias causales.'},
-  {t:'Señalización por vías',d:'Los ~140 genes driver actúan en solo 12 vías y 3 procesos centrales. Esto explica la exclusión mutua y permite dirigir terapia a la vía completa, no solo al gen mutado específico.'},
+  {t:'Exclusión mutua',d:'Mutaciones en genes de la misma vía rara vez coexisten en el mismo tumor (ej. KRAS y BRAF). Confirma el modelo de señalización por vías.'},
+  {t:'Letabilidad sintética',d:'Base de inhibidores PARP: células BRCA1/2-deficientes dependen más de PARP para la reparación; inhibir PARP es letal selectivo para el tumor.'},
+  {t:'MSI-H',d:'Inestabilidad de microsatélites de alta carga. Resultado de deficiencia en genes MMR. Predictor de respuesta a inmunoterapia anti-PD1.'},
+  {t:'Plan A vs Plan B',d:'Plan A = detección temprana y prevención. Plan B = terapia de enfermedad avanzada. >75% de muertes serían evitables con Plan A implementado masivamente.'},
+  {t:'Cromothripsis',d:'Evento catastrófico raro: uno o pocos cromosomas sufren decenas de reordenamientos simultáneos en una sola división. Genera fusiones oncogénicas y deleciones de supresores.'},
+  {t:'Señalización por vías',d:'Los ~140 genes driver actúan en solo 12 vías y 3 procesos centrales. Explica la exclusión mutua y permite dirigir terapia a la vía completa, no al gen mutado específico.'},
 ];
-
-let flashState = {};
-
-function initFlash() {
-  flashState = { idx: 0, known: new Set(), review: new Set(), total: FLASHDATA.length };
+let FS2={};
+function initFlash(){FS2={idx:0,known:new Set(),review:new Set()};}
+function renderFlash(){
+  const fc=FD[FS2.idx];
+  document.getElementById('mbody').innerHTML=`
+    <div class="fn"><button class="btn btn-sm" onclick="fpr()">← Ant.</button><div class="fc-n">${FS2.idx+1} / ${FD.length}</div><button class="btn btn-sm" onclick="fne()">Sig. →</button></div>
+    <div class="fw"><div class="fc" id="fca" onclick="document.getElementById('fca').classList.toggle('flip')">
+      <div class="ff ff-fr"><div class="ft">${fc.t}</div><div class="fh">Toca para ver la definición</div></div>
+      <div class="ff ff-bk"><div class="fd">${fc.d}</div></div>
+    </div></div>
+    <div style="display:flex;gap:8px;justify-content:center">
+      <button class="btn btn-sm" style="color:var(--success);border-color:var(--success)" onclick="fkn()">✓ La sé</button>
+      <button class="btn btn-sm" style="color:var(--accent);border-color:var(--accent)" onclick="frv()">↺ Repasar</button>
+    </div>
+    <div style="font-size:.68rem;color:var(--text3);text-align:center;margin-top:6px">Aprendidas: ${FS2.known.size} · Repasar: ${FS2.review.size}</div>`;
+  document.getElementById('mfoot').innerHTML=`<div style="font-size:.74rem;color:var(--text3)">Marca cada tarjeta</div><button class="btn btn-teal" onclick="finF()">Finalizar</button>`;
 }
+window.fpr=()=>{FS2.idx=(FS2.idx-1+FD.length)%FD.length;renderFlash();};
+window.fne=()=>{FS2.idx=(FS2.idx+1)%FD.length;renderFlash();};
+window.fkn=()=>{FS2.known.add(FS2.idx);FS2.review.delete(FS2.idx);fne();};
+window.frv=()=>{FS2.review.add(FS2.idx);FS2.known.delete(FS2.idx);fne();};
+window.finF=()=>{const pts=Math.round((FS2.known.size/FD.length)*10);saveSc('flashcards',pts,{known:FS2.known.size,total:FD.length});showAR('flashcards',pts,10,FS2.known.size+'/'+FD.length+' tarjetas aprendidas');};
 
-function renderFlash() {
-  const fc = FLASHDATA[flashState.idx];
-  document.getElementById('modal-body').innerHTML = `
-    <div class="flash-nav" style="margin-bottom:1rem">
-      <button class="btn btn-sm" onclick="flashPrev()">← Ant.</button>
-      <div class="flash-counter">${flashState.idx+1} / ${FLASHDATA.length}</div>
-      <button class="btn btn-sm" onclick="flashNext()">Sig. →</button>
-    </div>
-    <div class="flash-wrap">
-      <div class="flash-card" id="fcard" onclick="document.getElementById('fcard').classList.toggle('flipped')">
-        <div class="flash-face flash-front"><div class="flash-term">${fc.t}</div><div class="flash-hint">Haz clic para la definición</div></div>
-        <div class="flash-face flash-back"><div class="flash-def">${fc.d}</div></div>
-      </div>
-    </div>
-    <div style="display:flex;gap:8px;justify-content:center;margin-top:0.5rem">
-      <button class="btn btn-sm" style="color:var(--success);border-color:var(--success)" onclick="flashKnow()">✓ La sé</button>
-      <button class="btn btn-sm" style="color:var(--accent);border-color:var(--accent)" onclick="flashRepeat()">↺ Repasar</button>
-    </div>
-    <div style="font-size:0.72rem;color:var(--text3);text-align:center;margin-top:8px">
-      Aprendidas: ${flashState.known.size} · Por repasar: ${flashState.review.size}
-    </div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <div style="font-size:0.78rem;color:var(--text3)">Marca cada tarjeta antes de finalizar</div>
-    <button class="btn btn-teal" onclick="finishFlash()">Finalizar flashcards</button>
-  `;
-}
-
-function flashPrev() { flashState.idx = (flashState.idx - 1 + FLASHDATA.length) % FLASHDATA.length; renderFlash(); }
-function flashNext() { flashState.idx = (flashState.idx + 1) % FLASHDATA.length; renderFlash(); }
-function flashKnow() { flashState.known.add(flashState.idx); flashState.review.delete(flashState.idx); flashNext(); }
-function flashRepeat() { flashState.review.add(flashState.idx); flashState.known.delete(flashState.idx); flashNext(); }
-
-function finishFlash() {
-  const pts = Math.round((flashState.known.size / FLASHDATA.length) * 10);
-  saveActivityScore('flashcards', pts, { known: flashState.known.size, total: FLASHDATA.length });
-  showActivityResult('flashcards', pts, 10, `${flashState.known.size}/${FLASHDATA.length} tarjetas aprendidas`);
-}
-
-/* ═══════════════════════════════════════════════
-   DRAG & DROP LOGIC
-═══════════════════════════════════════════════ */
-const DND_DATA = [
-  {id:'kras', label:'KRAS G12D (missense recurrente)', cat:'onco'},
-  {id:'tp53', label:'TP53 R248* (truncante)', cat:'tsg'},
-  {id:'apc', label:'APC Q1338* (truncante aa 1–1600)', cat:'tsg'},
-  {id:'braf', label:'BRAF V600E (missense recurrente)', cat:'onco'},
-  {id:'pik3ca', label:'PIK3CA E545K (missense recurrente)', cat:'onco'},
-  {id:'apc2', label:'APC missense en C-terminal (aa 2400)', cat:'passenger'},
-  {id:'ezh2', label:'EZH2 — hipermetilación de histonas', cat:'epidriver'},
-  {id:'mlh1m', label:'MLH1 — silenciamiento por metilación', cat:'epidriver'},
-  {id:'syn', label:'Mutación sinónima sin patrón recurrente', cat:'passenger'},
-  {id:'rb1', label:'RB1 — deleción homocigota', cat:'tsg'},
+/* DRAG & DROP — iOS COMPATIBLE */
+const DD=[
+  {id:'kras',label:'KRAS G12D (missense recurrente)',cat:'onco'},
+  {id:'tp53',label:'TP53 R248* (truncante)',cat:'tsg'},
+  {id:'apc',label:'APC Q1338* (truncante aa 1–1600)',cat:'tsg'},
+  {id:'braf',label:'BRAF V600E (missense recurrente)',cat:'onco'},
+  {id:'pik3ca',label:'PIK3CA E545K (missense recurrente)',cat:'onco'},
+  {id:'apc2',label:'APC missense en C-terminal (aa 2400)',cat:'passenger'},
+  {id:'ezh2',label:'EZH2 — hipermetilación de histonas',cat:'epidriver'},
+  {id:'mlh1m',label:'MLH1 — silenciamiento por metilación',cat:'epidriver'},
+  {id:'syn',label:'Mutación sinónima sin patrón recurrente',cat:'passenger'},
+  {id:'rb1',label:'RB1 — deleción homocigota',cat:'tsg'},
 ];
-
-const DND_ZONES = [
-  {id:'onco', label:'Oncogén (driver)', color:'#dc2626'},
-  {id:'tsg', label:'Supresor tumoral (driver)', color:'#2563eb'},
-  {id:'passenger', label:'Mutación passenger', color:'#6b7280'},
-  {id:'epidriver', label:'Epi-driver (epigenético)', color:'#b45309'},
+const DZ=[
+  {id:'onco',label:'Oncogén (driver)',color:'#dc2626'},
+  {id:'tsg',label:'Supresor tumoral (driver)',color:'#2563eb'},
+  {id:'passenger',label:'Mutación passenger',color:'#6b7280'},
+  {id:'epidriver',label:'Epi-driver (epigenético)',color:'#b45309'},
 ];
-
-let dndState = {};
-
-function initDnD() {
-  dndState = { placements: {}, dragging: null };
+let DS={};
+function initDnD(){DS={placements:{},selChip:null,dragging:null,ghost:null};}
+function renderDnD(){
+  document.getElementById('mbody').innerHTML=`
+    <p style="font-size:.77rem;color:var(--text3);margin-bottom:.7rem;background:var(--accent2-light);padding:8px 10px;border-radius:6px;line-height:1.6">
+      <strong>iOS/Android:</strong> Toca un gen (se resalta) → toca la zona de destino.<br>
+      <strong>Computadora:</strong> Arrastra el gen a la zona, o también puedes tocar.
+    </p>
+    <div class="dnd-src"><div class="dnd-lbl">Genes y alteraciones por clasificar</div>
+    <div class="dnd-pool" id="dnd-pool">${DD.map(d=>`<div class="dnd-chip" id="dchip-${d.id}" data-id="${d.id}">${d.label}</div>`).join('')}</div></div>
+    <div class="dnd-zones">${DZ.map(z=>`<div class="dnd-zone" id="dzone-${z.id}" data-zone="${z.id}">
+      <div class="dz-nm"><span class="dz-dot" style="background:${z.color}"></span>${z.label}</div>
+      <div class="dz-items" id="dzitems-${z.id}"></div>
+      <div class="dz-hint">↑ Toca para colocar aquí</div>
+    </div>`).join('')}</div>`;
+  document.getElementById('mfoot').innerHTML=`<button class="btn btn-sm" onclick="rstDnD()">↺ Reiniciar</button><button class="btn btn-teal" onclick="chkDnD()">Verificar</button>`;
+  attachDD();
 }
 
-function renderDnD() {
-  document.getElementById('modal-body').innerHTML = `
-    <div class="dnd-source">
-      <div class="dnd-source-label">Genes y alteraciones por clasificar — arrastra a su zona</div>
-      <div class="dnd-items-wrap" id="dnd-pool">
-        ${DND_DATA.map(d=>`<div class="dnd-chip" id="dchip-${d.id}" draggable="true" ondragstart="dndStart('${d.id}')" ondragend="dndEnd()">${d.label}</div>`).join('')}
-      </div>
-    </div>
-    <div class="dnd-zones">
-      ${DND_ZONES.map(z=>`
-        <div class="dnd-zone" id="dzone-${z.id}" ondragover="dndOver(event)" ondragleave="dndLeave(event)" ondrop="dndDrop(event,'${z.id}')">
-          <div class="dnd-zone-name"><span class="dnd-zone-dot" style="background:${z.color}"></span>${z.label}</div>
-          <div class="dnd-zone-items" id="dzitems-${z.id}"></div>
-        </div>
-      `).join('')}
-    </div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <button class="btn btn-sm" onclick="resetDnD()">↺ Reiniciar</button>
-    <button class="btn btn-teal" onclick="checkDnD()">Verificar clasificación</button>
-  `;
-}
-
-function dndStart(id) { dndState.dragging = id; document.getElementById('dchip-'+id).classList.add('dragging'); }
-function dndEnd() { if(dndState.dragging) document.getElementById('dchip-'+dndState.dragging).classList.remove('dragging'); }
-function dndOver(e) { e.preventDefault(); e.currentTarget.classList.add('over'); }
-function dndLeave(e) { e.currentTarget.classList.remove('over'); }
-function dndDrop(e, zone) {
-  e.preventDefault(); e.currentTarget.classList.remove('over');
-  if (!dndState.dragging) return;
-  const chip = document.getElementById('dchip-'+dndState.dragging);
-  document.getElementById('dzitems-'+zone).appendChild(chip);
-  chip.classList.remove('dragging');
-  dndState.placements[dndState.dragging] = zone;
-  dndState.dragging = null;
-}
-
-function checkDnD() {
-  let correct = 0;
-  DND_DATA.forEach(d => {
-    const chip = document.getElementById('dchip-'+d.id);
-    if (!chip) return;
-    if (dndState.placements[d.id] === d.cat) { chip.classList.add('correct'); correct++; }
-    else { chip.classList.add('wrong'); }
-  });
-  const pts = Math.round((correct / DND_DATA.length) * 15);
-  saveActivityScore('dragdrop', pts, { correct, total: DND_DATA.length });
-  setTimeout(() => showActivityResult('dragdrop', pts, 15, `${correct}/${DND_DATA.length} genes clasificados correctamente`), 800);
-}
-
-function resetDnD() { initDnD(); renderDnD(); }
-
-/* ═══════════════════════════════════════════════
-   TIMELINE LOGIC
-═══════════════════════════════════════════════ */
-const TL_DATA = [
-  {id:'t1', label:'Mutación en APC — inicia adenoma pequeño en célula madre colónica (30–50 años)', correct:0},
-  {id:'t2', label:'Activación de KRAS G12D — expansión del adenoma (40–60 años)', correct:1},
-  {id:'t3', label:'Inactivación de SMAD4/TGFBR2 (vía TGF-β) — adenoma avanzado', correct:2},
-  {id:'t4', label:'Pérdida de TP53 — transición a carcinoma in situ (50–70 años)', correct:3},
-  {id:'t5', label:'Invasión local — carcinoma invasivo con todas las mutaciones driver', correct:4},
-  {id:'t6', label:'Metástasis hepática — células derivadas del tumor primario', correct:5},
-];
-
-let tlState = {};
-
-function initTimeline() {
-  tlState = { selected: null, slots: new Array(TL_DATA.length).fill(null), chips: [...TL_DATA].sort(()=>Math.random()-0.5) };
-}
-
-function renderTimeline() {
-  document.getElementById('modal-body').innerHTML = `
-    <p style="font-size:0.82rem;color:var(--text3);margin-bottom:1rem">Haz clic en un evento del banco y luego en la posición correcta en la secuencia.</p>
-    <div class="tl-bank" id="tl-bank">
-      ${tlState.chips.map(c=>`<div class="tl-chip ${tlState.slots.includes(c.id)?'used':''}" id="tlchip-${c.id}" onclick="tlSelect('${c.id}')">${c.label}</div>`).join('')}
-    </div>
-    <div class="tl-slots" id="tl-slots">
-      ${TL_DATA.map((_,i)=>`
-        <div class="tl-slot ${tlState.slots[i]?'filled':''}" id="tlslot-${i}" onclick="tlPlace(${i})">
-          <span class="tl-slot-n">${i+1}.</span>
-          <span class="tl-slot-content">${tlState.slots[i] ? TL_DATA.find(t=>t.id===tlState.slots[i]).label : '<span style="color:var(--text3)">Haz clic aquí para colocar el evento seleccionado</span>'}</span>
-        </div>
-      `).join('')}
-    </div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <button class="btn btn-sm" onclick="resetTimeline()">↺ Reiniciar</button>
-    <button class="btn btn-teal" onclick="checkTimeline()">Verificar orden</button>
-  `;
-}
-
-function tlSelect(id) {
-  tlState.selected = id;
-  document.querySelectorAll('.tl-chip').forEach(c => c.classList.remove('selected'));
-  document.getElementById('tlchip-'+id).classList.add('selected');
-}
-
-function tlPlace(pos) {
-  if (!tlState.selected) return;
-  if (tlState.slots[pos]) {
-    const oldId = tlState.slots[pos];
-    const oldChip = document.getElementById('tlchip-'+oldId);
-    if (oldChip) { oldChip.classList.remove('used', 'selected'); }
-  }
-  tlState.slots[pos] = tlState.selected;
-  document.getElementById('tlchip-'+tlState.selected).classList.add('used');
-  tlState.selected = null;
-  renderTimeline();
-}
-
-function checkTimeline() {
-  let correct = 0;
-  TL_DATA.forEach((ev, i) => {
-    const slot = document.getElementById('tlslot-'+i);
-    if (!slot) return;
-    slot.classList.remove('correct','wrong','filled');
-    if (tlState.slots[i] === ev.id) { slot.classList.add('correct'); correct++; }
-    else if (tlState.slots[i]) { slot.classList.add('wrong'); }
-  });
-  const pts = Math.round((correct / TL_DATA.length) * 15);
-  saveActivityScore('timeline', pts, { correct, total: TL_DATA.length });
-  setTimeout(() => showActivityResult('timeline', pts, 15, `${correct}/${TL_DATA.length} eventos en posición correcta`), 600);
-}
-
-function resetTimeline() { initTimeline(); renderTimeline(); }
-
-/* ═══════════════════════════════════════════════
-   MATCHING LOGIC
-═══════════════════════════════════════════════ */
-const MATCH_ROUNDS = [
-  {
-    left:['KRAS G12D','TP53 truncante','APC Q1338*','PIK3CA H1047R','BRCA2 pérdida'],
-    right:['Oncogén · vía RAS-MAPK · >90% pancreático','Supresor · guardián del genoma · >50% de todos los tumores','Supresor · vía WNT · >80% colorrectal','Oncogén · vía PI3K · 30% mama/endometrio','Supresor · reparación HR · HBOC · letabilidad sintética PARP'],
-    pairs:[0,1,2,3,4]
-  },
-  {
-    left:['MLH1 metilación','BRAF V600E','IDH1 R132H','EGFR L858R','Destino celular'],
-    right:['Epi-driver · MSI-H · responde a anti-PD1','Oncogén · melanoma · falla en colorrectal (EGFR)','Oncogén · 2-HG · hipometilación · glioma bajo grado','Oncogén · RTK · NSCLC · responde a erlotinib','Proceso central: vías WNT/APC, HH, NOTCH'],
-    pairs:[0,1,2,3,4]
-  },
-  {
-    left:['Supervivencia celular','Mantenimiento del genoma','Heterogeneidad intratumoral','Materia oscura','Exclusión mutua'],
-    right:['Vías RAS, PI3K, TP53 — ratio nacimiento/muerte celular','Vías BRCA, MMR — integridad del ADN y caretakers del genoma','Subclones distintos · base de resistencia a terapia dirigida','Drivers no identificados por NGS: Epi-drivers y mutaciones no codificantes','Mutaciones en la misma vía rara vez coexisten en el mismo tumor'],
-    pairs:[0,1,2,3,4]
-  }
-];
-
-let matchState = {};
-
-function initMatching() {
-  matchState = { round: 0, leftSel: null, rightSel: null, matched: new Set(), score: 0, total: 0, shuffled: [] };
-  MATCH_ROUNDS.forEach(r => {
-    matchState.shuffled.push([...r.right.map((t,i)=>({t,i}))].sort(()=>Math.random()-0.5));
-  });
-}
-
-function renderMatching() {
-  const r = MATCH_ROUNDS[matchState.round];
-  const sh = matchState.shuffled[matchState.round];
-  document.getElementById('modal-body').innerHTML = `
-    <p style="font-size:0.78rem;color:var(--text3);margin-bottom:0.75rem">Ronda ${matchState.round+1} de ${MATCH_ROUNDS.length} — Selecciona un elemento de cada columna para emparejarlos.</p>
-    <div class="match-grid">
-      <div>
-        <div class="match-col-label">Gen / Concepto</div>
-        <div class="match-items">
-          ${r.left.map((t,i)=>`<div class="match-item ${matchState.matched.has('L'+matchState.round+'_'+i)?'matched-ok':''}" id="ml-${i}" onclick="matchSelect('left',${i})">${t}</div>`).join('')}
-        </div>
-      </div>
-      <div>
-        <div class="match-col-label">Vía / Función / Tumor</div>
-        <div class="match-items">
-          ${sh.map((item,j)=>`<div class="match-item ${matchState.matched.has('R'+matchState.round+'_'+item.i)?'matched-ok':''}" id="mr-${j}" data-orig="${item.i}" onclick="matchSelect('right',${j})">${item.t}</div>`).join('')}
-        </div>
-      </div>
-    </div>
-    <div style="font-size:0.78rem;color:var(--text3);margin-top:8px">Emparejados: ${matchState.matched.size/2} de ${r.left.length}</div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <div style="font-size:0.78rem;color:var(--text3)">Ronda ${matchState.round+1}/${MATCH_ROUNDS.length}</div>
-    <button class="btn btn-teal" onclick="nextMatchRound()">Siguiente ronda →</button>
-  `;
-}
-
-function matchSelect(side, idx) {
-  const r = MATCH_ROUNDS[matchState.round];
-  const sh = matchState.shuffled[matchState.round];
-  if (side === 'left') {
-    document.querySelectorAll('[id^="ml-"]').forEach(e => e.classList.remove('selected'));
-    if (!matchState.matched.has('L'+matchState.round+'_'+idx)) {
-      document.getElementById('ml-'+idx).classList.add('selected');
-      matchState.leftSel = idx;
-    }
-  } else {
-    document.querySelectorAll('[id^="mr-"]').forEach(e => { if (!e.classList.contains('matched-ok')) e.classList.remove('selected'); });
-    const origIdx = parseInt(document.getElementById('mr-'+idx).dataset.orig);
-    if (!matchState.matched.has('R'+matchState.round+'_'+origIdx)) {
-      document.getElementById('mr-'+idx).classList.add('selected');
-      matchState.rightSel = { j: idx, orig: origIdx };
-    }
-  }
-  if (matchState.leftSel !== null && matchState.rightSel !== null) {
-    const lIdx = matchState.leftSel;
-    const { j, orig } = matchState.rightSel;
-    if (r.pairs[lIdx] === orig) {
-      document.getElementById('ml-'+lIdx).classList.remove('selected');
-      document.getElementById('ml-'+lIdx).classList.add('matched-ok');
-      document.getElementById('mr-'+j).classList.remove('selected');
-      document.getElementById('mr-'+j).classList.add('matched-ok');
-      matchState.matched.add('L'+matchState.round+'_'+lIdx);
-      matchState.matched.add('R'+matchState.round+'_'+orig);
-      matchState.score++;
-      document.querySelector('[id^="mr-"]').parentElement.parentElement.querySelector('[style*="font-size:0.78rem"]').textContent = `Emparejados: ${matchState.matched.size/2} de ${r.left.length}`;
-    } else {
-      document.getElementById('ml-'+lIdx).classList.add('matched-bad');
-      document.getElementById('mr-'+j).classList.add('matched-bad');
-      setTimeout(() => {
-        document.getElementById('ml-'+lIdx) && document.getElementById('ml-'+lIdx).classList.remove('matched-bad','selected');
-        document.getElementById('mr-'+j) && document.getElementById('mr-'+j).classList.remove('matched-bad','selected');
-      }, 600);
-    }
-    matchState.leftSel = null; matchState.rightSel = null;
-  }
-}
-
-function nextMatchRound() {
-  matchState.total += MATCH_ROUNDS[matchState.round].left.length;
-  matchState.round++;
-  matchState.matched = new Set();
-  matchState.leftSel = null; matchState.rightSel = null;
-  if (matchState.round >= MATCH_ROUNDS.length) {
-    const pts = Math.round((matchState.score / (MATCH_ROUNDS.reduce((a,r)=>a+r.left.length,0))) * 15);
-    saveActivityScore('matching', pts, { correct: matchState.score, total: MATCH_ROUNDS.reduce((a,r)=>a+r.left.length,0) });
-    showActivityResult('matching', pts, 15, `${matchState.score}/${MATCH_ROUNDS.reduce((a,r)=>a+r.left.length,0)} pares correctos en 3 rondas`);
-  } else {
-    renderMatching();
-  }
-}
-
-/* ═══════════════════════════════════════════════
-   SCENARIO LOGIC
-═══════════════════════════════════════════════ */
-const SCENARIOS = [
-  {
-    title:'Caso 1: Adenocarcinoma pulmonar',
-    steps:[
-      { case:'Paciente masculino, 62 años, fumador crónico. Adenocarcinoma pulmonar estadio IIIB. NGS tumoral: EGFR L858R (exón 21), KRAS wild-type, ALK wild-type, PD-L1 15%.', opts:['Quimioterapia platino + pemetrexed','Erlotinib (inhibidor EGFR) primera línea','Pembrolizumab por PD-L1 15%','Cirugía sin terapia sistémica'], c:1, exp:'EGFR L858R es mutación driver missense recurrente. Los inhibidores EGFR (erlotinib, osimertinib) son primera línea. PD-L1 15% no alcanza el umbral de ≥50% para pembrolizumab en primera línea sin quimioterapia.' },
-      { case:'Seis meses después: progresión. Biopsia líquida (ctDNA) detecta EGFR T790M — mutación de resistencia adquirida a erlotinib de primera generación.', opts:['Reiniciar erlotinib a dosis mayor','Osimertinib (inhibidor EGFR 3ª gen., activo contra T790M)','Quimioterapia exclusiva','Suspender tratamiento por resistencia'], c:1, exp:'EGFR T790M es la mutación de resistencia más frecuente (~60%). Osimertinib es específicamente activo contra T790M e incluso es hoy primera línea. Ilustra heterogeneidad temporal y evolución clonal bajo presión terapéutica.' },
-    ]
-  },
-  {
-    title:'Caso 2: Melanoma metastásico BRAF V600E',
-    steps:[
-      { case:'Paciente femenina, 48 años. Melanoma cutáneo metastásico estadio IV. NGS: BRAF V600E, NRAS wild-type, MMR proficiente, PD-L1 negativo.', opts:['Quimioterapia con dacarbazina','Vemurafenib monoterapia (anti-BRAF)','Dabrafenib + trametinib (anti-BRAF + anti-MEK)','Pembrolizumab por PD-L1 negativo'], c:2, exp:'BRAF V600E predice respuesta a inhibidores BRAF. La combinación BRAF+MEK (dabrafenib+trametinib) es superior a monoterapia: inhibe la vía en dos puntos, reduciendo la resistencia emergente por reactivación de MEK.' },
-      { case:'14 meses después: progresión. Nueva biopsia muestra mutación adquirida MAP2K1 Q56P (MEK1). ¿Cómo interpreta este hallazgo en el marco de Vogelstein et al.?', opts:['Nueva vía distinta explica la resistencia','Mutación passenger, la resistencia es no genética','Selección clonal de subclón MAP2K1-mutado preexistente que reactivó RAS-MAPK corriente abajo del bloqueo','El diagnóstico inicial fue incorrecto'], c:2, exp:'MAP2K1/MEK1 actúa corriente abajo de BRAF en la misma vía RAS-MAPK. Su mutación reestablece la señalización evadiendo el bloqueo de BRAF — selección de subclón preexistente con heterogeneidad intratumoral (Fig. 6 del artículo). Ejemplo de heterogeneidad temporal con consecuencia clínica directa.' },
-    ]
-  },
-];
-
-let scenState = {};
-
-function initScenario() {
-  scenState = { case: 0, step: 0, score: 0, answered: false };
-}
-
-function renderScenario() {
-  const sc = SCENARIOS[scenState.case];
-  if (scenState.step >= sc.steps.length) {
-    scenState.case++;
-    scenState.step = 0;
-    if (scenState.case >= SCENARIOS.length) {
-      const pts = Math.round((scenState.score / (SCENARIOS.reduce((a,s)=>a+s.steps.length,0))) * 20);
-      saveActivityScore('scenario', pts, { correct: scenState.score, total: SCENARIOS.reduce((a,s)=>a+s.steps.length,0) });
-      showActivityResult('scenario', pts, 20, `${scenState.score}/${SCENARIOS.reduce((a,s)=>a+s.steps.length,0)} decisiones correctas`);
-      return;
-    }
-  }
-  const step = SCENARIOS[scenState.case].steps[scenState.step];
-  document.getElementById('modal-body').innerHTML = `
-    <div style="font-size:0.72rem;color:var(--text3);margin-bottom:0.5rem;font-family:'DM Mono',monospace">${SCENARIOS[scenState.case].title} · Decisión ${scenState.step+1}</div>
-    <div class="sc-case">${step.case}</div>
-    <div class="sc-opts" id="sc-opts">
-      ${step.opts.map((o,i)=>`<button class="sc-opt" id="scopt-${i}" onclick="answerScen(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}
-    </div>
-    <div class="sc-explain" id="sc-exp"></div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <div style="font-size:0.78rem;color:var(--text3)">Caso ${scenState.case+1}/${SCENARIOS.length} · Paso ${scenState.step+1}/${SCENARIOS[scenState.case].steps.length}</div>
-    <button class="btn btn-primary" id="sc-next" onclick="nextScenStep()" style="display:none">Siguiente →</button>
-  `;
-  scenState.answered = false;
-}
-
-function answerScen(i) {
-  if (scenState.answered) return;
-  scenState.answered = true;
-  const step = SCENARIOS[scenState.case].steps[scenState.step];
-  document.querySelectorAll('.sc-opt').forEach(b => b.disabled = true);
-  if (i === step.c) { document.getElementById('scopt-'+i).classList.add('good'); scenState.score++; }
-  else { document.getElementById('scopt-'+i).classList.add('bad'); document.getElementById('scopt-'+step.c).classList.add('good'); }
-  const exp = document.getElementById('sc-exp');
-  exp.textContent = step.exp; exp.className = 'sc-explain show';
-  document.getElementById('sc-next').style.display = 'inline-flex';
-}
-
-function nextScenStep() { scenState.step++; renderScenario(); }
-
-/* ═══════════════════════════════════════════════
-   OPEN ACTIVITY
-═══════════════════════════════════════════════ */
-function openActivity(id) {
-  const act = ACTIVITIES.find(a => a.id === id);
-  document.getElementById('modal-title').textContent = `${act.icon} ${act.name}`;
-  document.getElementById('modal-overlay').classList.add('open');
-
-  switch(id) {
-    case 'quiz':     initQuiz();     renderQuiz(); break;
-    case 'flashcards': initFlash();  renderFlash(); break;
-    case 'dragdrop': initDnD();     renderDnD(); break;
-    case 'timeline': initTimeline(); renderTimeline(); break;
-    case 'matching': initMatching(); renderMatching(); break;
-    case 'scenario': initScenario(); renderScenario(); break;
-  }
-}
-
-function closeModal() { document.getElementById('modal-overlay').classList.remove('open'); renderStudentUI(); }
-function closeModalOutside(e) { if (e.target.id === 'modal-overlay') closeModal(); }
-
-/* ═══════════════════════════════════════════════
-   SCORE SAVING
-═══════════════════════════════════════════════ */
-async function saveActivityScore(id, pts, meta) {
-  if (!currentUser) return;
-  currentUser.scores[id] = pts;
-  if (!currentUser.attempts) currentUser.attempts = {};
-  currentUser.attempts[id] = { pts, meta, ts: new Date().toISOString() };
-  if (meta.errors) currentUser.quizErrors = (currentUser.quizErrors||[]).concat(meta.errors);
-  DB.students[currentUser.id] = currentUser;
-  await saveData(DB);
-}
-
-function showActivityResult(id, pts, maxPts, detail) {
-  const pct = Math.round((pts/maxPts)*100);
-  document.getElementById('modal-body').innerHTML = `
-    <div class="result-card">
-      <div class="result-score">${pts}<span style="font-size:1.5rem;color:var(--text3)">/${maxPts}</span></div>
-      <div class="result-label">puntos obtenidos · ${detail}</div>
-      <div style="font-size:0.82rem;color:var(--text2);margin-top:0.5rem">${pct >= 80 ? '✓ Excelente comprensión del artículo.' : pct >= 60 ? 'Buen desempeño. Revisa los conceptos fallidos.' : 'Refuerza la lectura de Vogelstein et al. (2013).'}</div>
-    </div>
-  `;
-  document.getElementById('modal-footer').innerHTML = `
-    <div style="font-size:0.78rem;color:var(--text3)">${pct >= 80 ? '🟢' : pct >= 60 ? '🟡' : '🔴'} ${pct}% — ${pctToLetterGrade(pct)}</div>
-    <div style="display:flex;gap:8px">
-      <button class="btn btn-sm" onclick="openActivity('${id}')">↺ Reintentar</button>
-      <button class="btn btn-primary btn-sm" onclick="closeModal()">Continuar →</button>
-    </div>
-  `;
-}
-
-/* ═══════════════════════════════════════════════
-   STUDENT FINAL REPORT
-═══════════════════════════════════════════════ */
-function renderFinalReport() {
-  const u = currentUser;
-  const total = totalScore();
-  const pct = Math.round((total/TOTAL_PTS)*100);
-  const date = new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'});
-
-  const barsHTML = ACTIVITIES.map(act => {
-    const sc = u.scores[act.id] || 0;
-    const p = Math.round((sc/act.pts)*100);
-    return `<div class="result-bar-row">
-      <div class="result-bar-label">${act.name}</div>
-      <div class="result-bar-track"><div class="result-bar-fill" style="width:${p}%"></div></div>
-      <div class="result-bar-pts">${sc}/${act.pts}</div>
-    </div>`;
-  }).join('');
-
-  document.getElementById('final-report-content').innerHTML = `
-    <div class="result-card" style="text-align:left">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:1rem;margin-bottom:1.5rem">
-        <div>
-          <div style="font-size:0.72rem;color:var(--text3);text-transform:uppercase;letter-spacing:0.06em;margin-bottom:4px">Reporte de evaluación</div>
-          <div style="font-family:'DM Serif Display',serif;font-size:1.2rem">${u.name}</div>
-          <div style="font-size:0.78rem;color:var(--text3)">Matrícula: ${u.id} · Grupo: ${u.group} · ${date}</div>
-        </div>
-        <div style="text-align:right">
-          <div style="font-family:'DM Mono',monospace;font-size:2.5rem;font-weight:500">${pctToGrade(pct)}</div>
-          <div style="font-size:0.72rem;color:var(--text3)">${total}/${TOTAL_PTS} pts · ${pct}%</div>
-        </div>
-      </div>
-      <div class="result-bars">${barsHTML}</div>
-    </div>
-  `;
-}
-
-function generateReportText(u) {
-  const total = ACTIVITIES.reduce((a,act) => a + (u.scores && u.scores[act.id] || 0), 0);
-  const pct = Math.round((total/TOTAL_PTS)*100);
-  const date = new Date().toLocaleDateString('es-MX', {day:'2-digit',month:'long',year:'numeric'});
-  let txt = `REPORTE DE EVALUACIÓN — MÓDULO CÉLULAS TRONCALES Y CÁNCER
-FES Iztacala UNAM — Cancer Genome Landscapes (Vogelstein et al., 2013)
-${'='.repeat(60)}
-
-DATOS DEL ESTUDIANTE
-Nombre:     ${u.name}
-Matrícula:  ${u.id}
-Grupo:      ${u.group}
-Fecha:      ${date}
-Registro:   ${u.registered ? u.registered.slice(0,10) : 'N/A'}
-
-CALIFICACIÓN FINAL
-Puntos obtenidos: ${total} / ${TOTAL_PTS}
-Porcentaje:       ${pct}%
-Calificación:     ${pctToGrade(pct)} (${pctToLetterGrade(pct)})
-
-DESGLOSE POR ACTIVIDAD
-${'─'.repeat(60)}
-${ACTIVITIES.map(act => {
-  const sc = (u.scores && u.scores[act.id] !== undefined) ? u.scores[act.id] : 'N/A';
-  const pctAct = sc !== 'N/A' ? Math.round((sc/act.pts)*100)+'%' : '—';
-  return `${act.name.padEnd(35)} ${String(sc).padStart(3)} / ${act.pts} pts   ${pctAct}`;
-}).join('\n')}
-${'─'.repeat(60)}
-TOTAL:                              ${String(total).padStart(3)} / ${TOTAL_PTS} pts   ${pct}%
-
-`;
-  if (u.quizErrors && u.quizErrors.length > 0) {
-    txt += `ERRORES EN QUIZ (preguntas para reforzar)\n${'─'.repeat(60)}\n`;
-    u.quizErrors.forEach((err, i) => {
-      txt += `${i+1}. ${err.question}\n   Seleccionó: ${err.selected}\n   Correcto:   ${err.correct}\n\n`;
+function attachDD(){
+  document.querySelectorAll('.dnd-chip').forEach(chip=>{
+    const cid=chip.dataset.id;
+    chip.setAttribute('draggable','true');
+    // Desktop drag
+    chip.addEventListener('dragstart',e=>{DS.dragging=cid;chip.classList.add('dragging');e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',cid);});
+    chip.addEventListener('dragend',()=>chip.classList.remove('dragging'));
+    // Tap-to-select (works on iOS + desktop)
+    chip.addEventListener('click',e=>{
+      e.stopPropagation();
+      if(chip.classList.contains('correct')||chip.classList.contains('wrong'))return;
+      if(DS.selChip===cid){chip.classList.remove('sel-chip');DS.selChip=null;document.querySelectorAll('.dnd-zone').forEach(z=>z.classList.remove('tap-tgt'));return;}
+      document.querySelectorAll('.dnd-chip').forEach(c=>c.classList.remove('sel-chip'));
+      chip.classList.add('sel-chip');DS.selChip=cid;
+      document.querySelectorAll('.dnd-zone').forEach(z=>z.classList.add('tap-tgt'));
     });
+    // Touch drag
+    chip.addEventListener('touchstart',e=>{
+      const t=e.touches[0];DS.dragging=cid;
+      const cl=chip.cloneNode(true);
+      cl.id='ghost-chip';
+      cl.style.cssText='position:fixed;pointer-events:none;z-index:9999;opacity:.85;transform:scale(1.05);min-height:auto;padding:7px 11px;font-size:.77px;border:1.5px solid var(--accent3);background:var(--accent3-light);color:var(--accent3);border-radius:18px;';
+      cl.style.fontSize='.77rem';
+      cl.style.left=(t.clientX-chip.offsetWidth/2)+'px';
+      cl.style.top=(t.clientY-18)+'px';
+      document.body.appendChild(cl);DS.ghost=cl;chip.style.opacity='.3';
+    },{passive:true});
+    chip.addEventListener('touchmove',e=>{
+      e.preventDefault();const t=e.touches[0];
+      if(DS.ghost){DS.ghost.style.left=(t.clientX-40)+'px';DS.ghost.style.top=(t.clientY-18)+'px';}
+      document.querySelectorAll('.dnd-zone').forEach(z=>z.classList.remove('over'));
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const z=el?.closest('.dnd-zone');if(z)z.classList.add('over');
+    },{passive:false});
+    chip.addEventListener('touchend',e=>{
+      const t=e.changedTouches[0];
+      if(DS.ghost){DS.ghost.remove();DS.ghost=null;}
+      chip.style.opacity='';
+      document.querySelectorAll('.dnd-zone').forEach(z=>z.classList.remove('over'));
+      const el=document.elementFromPoint(t.clientX,t.clientY);
+      const z=el?.closest('.dnd-zone');
+      if(z&&DS.dragging)placeChip(DS.dragging,z.dataset.zone);
+      DS.dragging=null;
+    },{passive:true});
+  });
+  document.querySelectorAll('.dnd-zone').forEach(zone=>{
+    zone.addEventListener('dragover',e=>{e.preventDefault();zone.classList.add('over');});
+    zone.addEventListener('dragleave',()=>zone.classList.remove('over'));
+    zone.addEventListener('drop',e=>{e.preventDefault();zone.classList.remove('over');const id=e.dataTransfer.getData('text/plain')||DS.dragging;if(id)placeChip(id,zone.dataset.zone);});
+    zone.addEventListener('click',()=>{
+      document.querySelectorAll('.dnd-zone').forEach(z=>z.classList.remove('tap-tgt'));
+      if(DS.selChip){placeChip(DS.selChip,zone.dataset.zone);DS.selChip=null;}
+    });
+  });
+}
+
+function placeChip(chipId,zoneId){
+  const chip=document.getElementById('dchip-'+chipId);if(!chip)return;
+  chip.classList.remove('sel-chip','dragging');
+  document.getElementById('dzitems-'+zoneId)?.appendChild(chip);
+  DS.placements[chipId]=zoneId;
+  document.querySelectorAll('.dnd-chip').forEach(c=>c.classList.remove('sel-chip'));
+  document.querySelectorAll('.dnd-zone').forEach(z=>z.classList.remove('tap-tgt','over'));
+  DS.selChip=null;
+}
+
+window.chkDnD=()=>{
+  let c=0;
+  DD.forEach(d=>{const chip=document.getElementById('dchip-'+d.id);if(!chip)return;if(DS.placements[d.id]===d.cat){chip.classList.add('correct');c++;}else{chip.classList.add('wrong');}});
+  const pts=Math.round((c/DD.length)*15);saveSc('dragdrop',pts,{correct:c,total:DD.length});
+  setTimeout(()=>showAR('dragdrop',pts,15,c+'/'+DD.length+' genes clasificados correctamente'),500);
+};
+window.rstDnD=()=>{initDnD();renderDnD();};
+
+/* TIMELINE */
+const TLD=[
+  {id:'t1',label:'Mutación en APC — inicia adenoma pequeño en célula madre colónica (30–50 años)',correct:0},
+  {id:'t2',label:'Activación de KRAS G12D — expansión del adenoma (40–60 años)',correct:1},
+  {id:'t3',label:'Inactivación de SMAD4/TGFBR2 (vía TGF-β) — adenoma avanzado',correct:2},
+  {id:'t4',label:'Pérdida de TP53 — transición a carcinoma in situ (50–70 años)',correct:3},
+  {id:'t5',label:'Invasión local — carcinoma invasivo con todas las mutaciones driver',correct:4},
+  {id:'t6',label:'Metástasis hepática — células derivadas del tumor primario',correct:5},
+];
+let TLS={};
+function initTL(){TLS={sel:null,slots:new Array(TLD.length).fill(null),chips:[...TLD].sort(()=>Math.random()-.5)};}
+function renderTL(){
+  document.getElementById('mbody').innerHTML=`
+    <p style="font-size:.78rem;color:var(--text3);margin-bottom:.7rem">Toca un evento del banco → toca la posición donde corresponde.</p>
+    <div class="tl-bk" id="tlbk">${TLS.chips.map(c=>`<div class="tl-chip ${TLS.slots.includes(c.id)?'used':''}" id="tlc-${c.id}" onclick="tlSel('${c.id}')">${c.label}</div>`).join('')}</div>
+    <div class="tl-slots">${TLD.map((_,i)=>`<div class="tl-slot ${TLS.slots[i]?'filled':''}" id="tls-${i}" onclick="tlPl(${i})"><span class="tl-n">${i+1}.</span><span class="tl-c">${TLS.slots[i]?TLD.find(t=>t.id===TLS.slots[i]).label:'<span style="color:var(--text3)">Toca aquí para colocar el evento</span>'}</span></div>`).join('')}</div>`;
+  document.getElementById('mfoot').innerHTML=`<button class="btn btn-sm" onclick="rstTL()">↺</button><button class="btn btn-teal" onclick="chkTL()">Verificar</button>`;
+}
+window.tlSel=id=>{TLS.sel=id;document.querySelectorAll('.tl-chip').forEach(c=>c.classList.remove('sel'));document.getElementById('tlc-'+id)?.classList.add('sel');};
+window.tlPl=pos=>{
+  if(!TLS.sel)return;
+  if(TLS.slots[pos]){const oid=TLS.slots[pos];document.getElementById('tlc-'+oid)?.classList.remove('used','sel');}
+  TLS.slots[pos]=TLS.sel;document.getElementById('tlc-'+TLS.sel)?.classList.add('used');TLS.sel=null;renderTL();
+};
+window.chkTL=()=>{
+  let c=0;
+  TLD.forEach((ev,i)=>{const s=document.getElementById('tls-'+i);if(!s)return;s.classList.remove('ok','no','filled');if(TLS.slots[i]===ev.id){s.classList.add('ok');c++;}else if(TLS.slots[i]){s.classList.add('no');}});
+  const pts=Math.round((c/TLD.length)*15);saveSc('timeline',pts,{correct:c,total:TLD.length});
+  setTimeout(()=>showAR('timeline',pts,15,c+'/'+TLD.length+' eventos en posición correcta'),400);
+};
+window.rstTL=()=>{initTL();renderTL();};
+
+/* MATCHING */
+const MR=[
+  {left:['KRAS G12D','TP53 truncante','APC Q1338*','PIK3CA H1047R','BRCA2 pérdida'],right:['Oncogén · vía RAS-MAPK · >90% pancreático','Supresor · guardián del genoma · >50% tumores','Supresor · vía WNT · >80% colorrectal','Oncogén · vía PI3K · 30% mama/endometrio','Supresor · reparación HR · HBOC · letabilidad PARP'],pairs:[0,1,2,3,4]},
+  {left:['MLH1 metilación','BRAF V600E','IDH1 R132H','EGFR L858R','NOTCH1 activante'],right:['Epi-driver · MSI-H · responde a anti-PD1','Oncogén · melanoma · falla en colorrectal (EGFR)','Oncogén · 2-HG · hipometilación · glioma bajo grado','Oncogén · RTK · NSCLC · responde a erlotinib','Oncogén · destino celular · leucemia T'],pairs:[0,1,2,3,4]},
+  {left:['Destino celular','Supervivencia celular','Mantenimiento del genoma','Heterogeneidad intratumoral','Plan A de Vogelstein'],right:['Vías WNT/APC, HH, NOTCH — balance división/diferenciación','Vías RAS, PI3K, TP53 — ratio nacimiento/muerte celular','BRCA, MMR, TP53 — integridad del ADN','Subclones distintos · base de resistencia a terapia dirigida','Detección temprana y prevención como prioridad'],pairs:[0,1,2,3,4]},
+];
+let MS={};
+function initMatch(){MS={round:0,lSel:null,rSel:null,matched:new Set(),score:0,sh:MR.map(r=>[...r.right.map((t,i)=>({t,i}))].sort(()=>Math.random()-.5))};}
+function renderMatch(){
+  const r=MR[MS.round];const sh=MS.sh[MS.round];
+  document.getElementById('mbody').innerHTML=`
+    <p style="font-size:.74rem;color:var(--text3);margin-bottom:.7rem">Ronda ${MS.round+1} de 3 — Toca un elemento de cada columna para emparejarlos.</p>
+    <div class="mg">
+      <div><div class="mct">Concepto A</div>${r.left.map((t,i)=>`<div class="mi ${MS.matched.has('L'+MS.round+'_'+i)?'ok':''}" id="ml-${i}" onclick="mSel('L',${i})">${t}</div>`).join('')}</div>
+      <div><div class="mct">Concepto B</div>${sh.map((it,j)=>`<div class="mi ${MS.matched.has('R'+MS.round+'_'+it.i)?'ok':''}" id="mr-${j}" data-orig="${it.i}" onclick="mSel('R',${j})">${it.t}</div>`).join('')}</div>
+    </div>
+    <div style="font-size:.74rem;color:var(--text3)">Emparejados: ${MS.matched.size/2} de ${r.left.length}</div>`;
+  document.getElementById('mfoot').innerHTML=`<div style="font-size:.74rem;color:var(--text3)">Ronda ${MS.round+1}/3</div><button class="btn btn-teal" onclick="nxtMR()">Siguiente ronda →</button>`;
+}
+window.mSel=(side,idx)=>{
+  const r=MR[MS.round];const sh=MS.sh[MS.round];
+  if(side==='L'){document.querySelectorAll('[id^=ml-]').forEach(e=>e.classList.remove('sel'));if(!document.getElementById('ml-'+idx)?.classList.contains('ok')){document.getElementById('ml-'+idx)?.classList.add('sel');MS.lSel=idx;}}
+  else{document.querySelectorAll('[id^=mr-]').forEach(e=>{if(!e.classList.contains('ok'))e.classList.remove('sel');});const oi=parseInt(document.getElementById('mr-'+idx)?.dataset.orig||'0');if(!MS.matched.has('R'+MS.round+'_'+oi)){document.getElementById('mr-'+idx)?.classList.add('sel');MS.rSel={j:idx,orig:oi};}}
+  if(MS.lSel!==null&&MS.rSel!==null){
+    const li=MS.lSel,{j,orig}=MS.rSel;
+    const lel=document.getElementById('ml-'+li),rel=document.getElementById('mr-'+j);
+    if(r.pairs[li]===orig){lel?.classList.remove('sel');lel?.classList.add('ok');rel?.classList.remove('sel');rel?.classList.add('ok');MS.matched.add('L'+MS.round+'_'+li);MS.matched.add('R'+MS.round+'_'+orig);MS.score++;if(MS.matched.size/2===r.left.length)notify('¡Ronda completa! 🎯');}
+    else{lel?.classList.add('no');rel?.classList.add('no');setTimeout(()=>{lel?.classList.remove('no','sel');rel?.classList.remove('no','sel');},600);}
+    MS.lSel=null;MS.rSel=null;
   }
-  txt += `\nFin del reporte. Generado automáticamente por la plataforma.\n`;
-  return txt;
+};
+window.nxtMR=()=>{
+  MS.round++;MS.lSel=null;MS.rSel=null;MS.matched=new Set();
+  if(MS.round>=MR.length){const tot=MR.reduce((a,r)=>a+r.left.length,0);const pts=Math.round((MS.score/tot)*15);saveSc('matching',pts,{correct:MS.score,total:tot});showAR('matching',pts,15,MS.score+'/'+tot+' pares correctos');}
+  else renderMatch();
+};
+
+/* SCENARIOS */
+const SC=[
+  {title:'Caso 1: Adenocarcinoma pulmonar',steps:[
+    {case:'Paciente masculino, 62 años, fumador crónico. Adenocarcinoma pulmonar estadio IIIB. NGS: EGFR L858R (exón 21), KRAS wild-type, PD-L1 15%.',q:'¿Primera línea de tratamiento?',opts:['Quimioterapia platino + pemetrexed','Erlotinib (inhibidor EGFR)','Pembrolizumab por PD-L1 15%','Cirugía sin terapia sistémica'],c:1,exp:'EGFR L858R es mutación driver missense recurrente. Los inhibidores EGFR (erlotinib, osimertinib) son primera línea. PD-L1 15% no alcanza el umbral para pembrolizumab en monoterapia.'},
+    {case:'6 meses después: progresión. Biopsia líquida detecta EGFR T790M — mutación de resistencia adquirida a erlotinib.',q:'¿Siguiente línea terapéutica?',opts:['Reiniciar erlotinib a dosis mayor','Osimertinib (inhibidor EGFR 3ª gen., activo contra T790M)','Solo quimioterapia','Suspender tratamiento'],c:1,exp:'EGFR T790M es la mutación de resistencia más frecuente (~60%). Osimertinib es activo contra T790M. Ilustra la heterogeneidad temporal y evolución clonal bajo presión terapéutica.'},
+  ]},
+  {title:'Caso 2: Melanoma metastásico',steps:[
+    {case:'Paciente femenina, 48 años. Melanoma cutáneo metastásico estadio IV. NGS: BRAF V600E, NRAS wild-type, MMR proficiente, PD-L1 negativo.',q:'¿Tratamiento de elección?',opts:['Quimioterapia con dacarbazina','Vemurafenib monoterapia','Dabrafenib + trametinib (BRAF+MEK inhibición)','Pembrolizumab por PD-L1 negativo'],c:2,exp:'BRAF V600E predice respuesta a inhibidores BRAF. La combinación BRAF+MEK es superior a monoterapia: inhibe la vía en dos puntos, reduciendo la resistencia emergente.'},
+    {case:'14 meses después: progresión. Nueva biopsia: mutación adquirida MAP2K1 Q56P (MEK1).',q:'¿Cómo explicas la recaída según Vogelstein et al.?',opts:['Nueva vía distinta explica la resistencia','Mutación MAP2K1 es passenger','Selección clonal de subclón MAP2K1-mutado preexistente que reactivó RAS-MAPK corriente abajo del bloqueo','El diagnóstico inicial fue incorrecto'],c:2,exp:'MAP2K1/MEK1 actúa corriente abajo de BRAF en la misma vía RAS-MAPK. Su mutación reestablece la señalización — selección de subclón preexistente (heterogeneidad intratumoral, Fig. 6 del artículo).'},
+  ]},
+];
+let SS={};
+function initSC(){SS={case:0,step:0,score:0,ans:false};}
+function renderSC(){
+  const sc=SC[SS.case];
+  if(SS.step>=sc.steps.length){SS.case++;SS.step=0;if(SS.case>=SC.length){const tot=SC.reduce((a,s)=>a+s.steps.length,0);const pts=Math.round((SS.score/tot)*20);saveSc('scenario',pts,{correct:SS.score,total:tot});showAR('scenario',pts,20,SS.score+'/'+tot+' decisiones correctas');return;}}
+  const step=SC[SS.case].steps[SS.step];
+  document.getElementById('mbody').innerHTML=`
+    <div class="sc-lbl">${SC[SS.case].title} · Decisión ${SS.step+1}/${SC[SS.case].steps.length}</div>
+    <div class="sc-case">${step.case}</div>
+    <div class="sc-q">${step.q}</div>
+    <div class="sc-opts">${step.opts.map((o,i)=>`<button class="sc-opt" id="so-${i}" onclick="ansSC(${i})">${String.fromCharCode(65+i)}. ${o}</button>`).join('')}</div>
+    <div class="sc-exp" id="sc-exp"></div>`;
+  document.getElementById('mfoot').innerHTML=`<div style="font-size:.74rem;color:var(--text3)">Caso ${SS.case+1}/${SC.length}</div><button class="btn btn-primary" id="sc-next" onclick="nxtSC()" style="display:none">Siguiente →</button>`;
+  SS.ans=false;
+}
+window.ansSC=i=>{
+  if(SS.ans)return;SS.ans=true;
+  const step=SC[SS.case].steps[SS.step];
+  document.querySelectorAll('.sc-opt').forEach(b=>b.disabled=true);
+  if(i===step.c){document.getElementById('so-'+i).classList.add('good');SS.score++;}
+  else{document.getElementById('so-'+i).classList.add('bad');document.getElementById('so-'+step.c).classList.add('good');}
+  const ex=document.getElementById('sc-exp');ex.textContent=step.exp;ex.className='sc-exp show';
+  document.getElementById('sc-next').style.display='inline-flex';
+};
+window.nxtSC=()=>{SS.step++;SS.ans=false;renderSC();};
+
+/* OPEN ACTIVITY */
+window.openActivity=id=>{
+  const act=ACTS.find(a=>a.id===id);
+  document.getElementById('mt').textContent=act.icon+' '+act.name;
+  document.getElementById('mo').classList.add('open');
+  switch(id){
+    case 'quiz':initQuiz();renderQuiz();break;
+    case 'flashcards':initFlash();renderFlash();break;
+    case 'dragdrop':initDnD();renderDnD();break;
+    case 'timeline':initTL();renderTL();break;
+    case 'matching':initMatch();renderMatch();break;
+    case 'scenario':initSC();renderSC();break;
+  }
+};
+window.closeModal=()=>{document.getElementById('mo').classList.remove('open');renderSUI();};
+window.closeModalOutside=e=>{if(e.target.id==='mo')window.closeModal();};
+
+function showAR(id,pts,mp,detail){
+  const pct=Math.round((pts/mp)*100);
+  document.getElementById('mbody').innerHTML=`<div class="rc"><div class="rs">${pts}<span style="font-size:1.35rem;color:var(--text3)">/${mp}</span></div><div class="rl">${detail}</div><div style="font-size:.8rem;color:var(--text2)">${pct>=80?'✓ Excelente comprensión del artículo.':pct>=60?'Buen desempeño. Revisa los conceptos fallidos.':'Refuerza la lectura de Vogelstein et al. (2013).'}</div></div>`;
+  document.getElementById('mfoot').innerHTML=`<div style="font-size:.74rem;color:var(--text3)">${pct>=80?'🟢':pct>=60?'🟡':'🔴'} ${pct}%</div><div style="display:flex;gap:7px"><button class="btn btn-sm" onclick="openActivity('${id}')">↺ Reintentar</button><button class="btn btn-primary btn-sm" onclick="closeModal()">Continuar →</button></div>`;
 }
 
-function downloadStudentReport() {
-  const txt = generateReportText(currentUser);
-  downloadTxt(`reporte_${currentUser.id}.txt`, txt);
-  notify('Reporte descargado');
+/* REPORT */
+function renderFR(){
+  const u=CU,total=tsc(),pct=Math.round((total/TP)*100);
+  const date=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  const bars=ACTS.map(act=>{const sc=u.scores[act.id]||0,p=Math.round((sc/act.pts)*100);return`<div class="rbr"><div class="rbl">${act.name}</div><div class="rbt"><div class="rbf" style="width:${p}%"></div></div><div class="rbp">${sc}/${act.pts}</div></div>`;}).join('');
+  document.getElementById('frc').innerHTML=`<div class="rc" style="text-align:left"><div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:.9rem;margin-bottom:1.25rem"><div><div style="font-size:.68rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:3px">Reporte de evaluación</div><div style="font-family:'DM Serif Display',serif;font-size:1.1rem">${u.name}</div><div style="font-size:.74rem;color:var(--text3)">Matrícula: ${u.id} · ${u.group} · ${date}</div></div><div style="text-align:right"><div style="font-family:'DM Mono',monospace;font-size:2.4rem;font-weight:500">${G(pct)}</div><div style="font-size:.68rem;color:var(--text3)">${total}/${TP} pts · ${pct}%</div></div></div><div class="rbs">${bars}</div></div>`;
+}
+function genTxt(u){
+  const total=ACTS.reduce((a,act)=>a+(u.scores&&u.scores[act.id]||0),0);
+  const pct=Math.round((total/TP)*100),date=new Date().toLocaleDateString('es-MX',{day:'2-digit',month:'long',year:'numeric'});
+  let txt='REPORTE DE EVALUACIÓN — MÓDULO CÉLULAS TRONCALES Y CÁNCER\nFES Iztacala UNAM — Cancer Genome Landscapes (Vogelstein et al., 2013)\n'+'='.repeat(60)+'\n\nDATOS DEL ESTUDIANTE\nNombre:    '+u.name+'\nMatrícula: '+u.id+'\nGrupo:     '+u.group+'\nFecha:     '+date+'\n\nCALIFICACIÓN FINAL\nPuntos: '+total+' / '+TP+' ('+pct+'%) — Calificación: '+G(pct)+'\n\nDESGLOSE POR ACTIVIDAD\n'+'─'.repeat(60)+'\n';
+  ACTS.forEach(act=>{const sc=u.scores&&u.scores[act.id]!==undefined?u.scores[act.id]:'N/A';const p=sc!=='N/A'?Math.round((sc/act.pts)*100)+'%':'—';txt+=act.name.padEnd(35)+String(sc).padStart(3)+' / '+act.pts+' pts   '+p+'\n';});
+  txt+='─'.repeat(60)+'\nTOTAL: '+String(total).padStart(3)+' / '+TP+' pts   '+pct+'%\n';
+  if(u.quizErrors&&u.quizErrors.length){txt+='\nERRORES EN QUIZ\n'+'─'.repeat(60)+'\n';u.quizErrors.forEach((e,i)=>{txt+=(i+1)+'. '+e.question+'\n   Seleccionó: '+e.selected+'\n   Correcto:   '+e.correct+'\n\n';});}
+  return txt+'\nGenerado — Cancer Genome Landscapes Platform v3\n';
+}
+window.downloadStudentReport=()=>{dlTxt('reporte_'+CU.id+'.txt',genTxt(CU));notify('Reporte descargado');};
+window.copyStudentReport=()=>{navigator.clipboard.writeText(genTxt(CU)).then(()=>notify('Copiado al portapapeles'));};
+
+/* PROF DASHBOARD */
+function renderPD(){
+  const sts=Object.values(DB.students);
+  const compl=sts.filter(s=>s.scores&&Object.keys(s.scores).length===ACTS.length);
+  const inpr=sts.filter(s=>s.scores&&Object.keys(s.scores).length>0&&Object.keys(s.scores).length<ACTS.length);
+  const scs=compl.map(s=>ACTS.reduce((a,act)=>a+(s.scores[act.id]||0),0));
+  const avg=scs.length?Math.round(scs.reduce((a,b)=>a+b,0)/scs.length):0,ap=Math.round((avg/TP)*100);
+  document.getElementById('sg').innerHTML=`
+    <div class="sc"><div class="scl">Total alumnos</div><div class="scv">${sts.length}</div><div class="scs">registrados</div></div>
+    <div class="sc"><div class="scl">Completaron</div><div class="scv">${compl.length}</div><div class="scs">todas las actividades</div></div>
+    <div class="sc"><div class="scl">En progreso</div><div class="scv">${inpr.length}</div><div class="scs">iniciaron</div></div>
+    <div class="sc"><div class="scl">Promedio grupo</div><div class="scv">${ap}%</div><div class="scs">${avg}/${TP} — ${G(ap)}</div></div>`;
+  const grps=[...new Set(sts.map(s=>s.group))].sort();
+  const fg=document.getElementById('fg');fg.innerHTML='<option value="">Todos los grupos</option>';
+  grps.forEach(g=>fg.innerHTML+=`<option value="${g}">${g}</option>`);
+  renderST();renderAN();
 }
 
-function copyStudentReport() {
-  navigator.clipboard.writeText(generateReportText(currentUser)).then(() => notify('Copiado al portapapeles'));
-}
-
-/* ═══════════════════════════════════════════════
-   PROFESSOR DASHBOARD
-═══════════════════════════════════════════════ */
-function renderProfDashboard() {
-  const students = Object.values(DB.students);
-  const completed = students.filter(s => s.scores && Object.keys(s.scores).length === ACTIVITIES.length);
-  const inProgress = students.filter(s => s.scores && Object.keys(s.scores).length > 0 && Object.keys(s.scores).length < ACTIVITIES.length);
-  const scores = completed.map(s => ACTIVITIES.reduce((a,act) => a+(s.scores[act.id]||0),0));
-  const avg = scores.length ? Math.round(scores.reduce((a,b)=>a+b,0)/scores.length) : 0;
-  const avgPct = Math.round((avg/TOTAL_PTS)*100);
-
-  document.getElementById('prof-stats').innerHTML = `
-    <div class="stat-card"><div class="stat-card-label">Total alumnos</div><div class="stat-card-val">${students.length}</div><div class="stat-card-sub">registrados</div></div>
-    <div class="stat-card"><div class="stat-card-label">Completaron</div><div class="stat-card-val">${completed.length}</div><div class="stat-card-sub">todas las actividades</div></div>
-    <div class="stat-card"><div class="stat-card-label">En progreso</div><div class="stat-card-val">${inProgress.length}</div><div class="stat-card-sub">iniciaron pero no terminaron</div></div>
-    <div class="stat-card"><div class="stat-card-label">Promedio grupo</div><div class="stat-card-val">${avgPct}%</div><div class="stat-card-sub">${avg}/${TOTAL_PTS} pts — ${pctToGrade(avgPct)}</div></div>
-  `;
-
-  const groups = [...new Set(students.map(s=>s.group))].sort();
-  const sel = document.getElementById('filter-group');
-  sel.innerHTML = '<option value="">Todos los grupos</option>';
-  groups.forEach(g => sel.innerHTML += `<option value="${g}">${g}</option>`);
-
-  renderStudentTable();
-  renderAnalytics();
-}
-
-function renderStudentTable() {
-  const search = document.getElementById('search-students').value.toLowerCase();
-  const group = document.getElementById('filter-group').value;
-  const status = document.getElementById('filter-status').value;
-
-  let students = Object.values(DB.students).filter(s => {
-    if (search && !s.name.toLowerCase().includes(search) && !s.id.includes(search)) return false;
-    if (group && s.group !== group) return false;
-    if (status) {
-      const n = s.scores ? Object.keys(s.scores).length : 0;
-      if (status === 'complete' && n !== ACTIVITIES.length) return false;
-      if (status === 'partial' && (n === 0 || n === ACTIVITIES.length)) return false;
-      if (status === 'none' && n !== 0) return false;
-    }
+window.renderST=()=>{
+  const srch=document.getElementById('srch').value.toLowerCase();
+  const grp=document.getElementById('fg').value,st=document.getElementById('fs2').value;
+  let sts=Object.values(DB.students).filter(s=>{
+    if(srch&&!s.name.toLowerCase().includes(srch)&&!s.id.includes(srch))return false;
+    if(grp&&s.group!==grp)return false;
+    if(st){const n=s.scores?Object.keys(s.scores).length:0;if(st==='complete'&&n!==ACTS.length)return false;if(st==='partial'&&(n===0||n===ACTS.length))return false;if(st==='none'&&n!==0)return false;}
     return true;
-  });
-
-  students.sort((a,b) => {
-    const ta = ACTIVITIES.reduce((x,act)=>x+(a.scores&&a.scores[act.id]||0),0);
-    const tb = ACTIVITIES.reduce((x,act)=>x+(b.scores&&b.scores[act.id]||0),0);
-    return tb - ta;
-  });
-
-  const tbody = document.getElementById('student-table-body');
-  if (students.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">No se encontraron estudiantes con esos filtros.</td></tr>`;
-    return;
-  }
-
-  tbody.innerHTML = students.map(s => {
-    const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
-    const pct = Math.round((total/TOTAL_PTS)*100);
-    const done = s.scores ? Object.keys(s.scores).length : 0;
-    const grLetter = pctToLetterGrade(pct);
-    const grClass = grLetter==='A'?'grade-a':grLetter==='B'?'grade-b':grLetter==='C'?'grade-c':grLetter==='D'?'grade-d':'grade-p';
-    const statusLabel = done === ACTIVITIES.length ? '✓ Completo' : done > 0 ? `${done}/${ACTIVITIES.length} acts` : 'Sin iniciar';
-    const statusColor = done === ACTIVITIES.length ? 'var(--success)' : done > 0 ? 'var(--warn)' : 'var(--text3)';
-
-    return `<tr>
-      <td style="font-family:'DM Mono',monospace;font-size:0.78rem">${s.id}</td>
-      <td style="font-weight:500">${s.name}</td>
-      <td style="font-family:'DM Mono',monospace;font-size:0.78rem">${s.group}</td>
-      <td>${done > 0 ? `<span>${done}/${ACTIVITIES.length}</span><span class="mini-bar"><span class="mini-bar-fill" style="width:${Math.round((done/ACTIVITIES.length)*100)}%"></span></span>` : '—'}</td>
-      <td>${done > 0 ? `<span class="grade-badge ${grClass}">${pctToGrade(pct)} (${pct}%)</span>` : '<span style="color:var(--text3)">—</span>'}</td>
-      <td style="font-size:0.78rem;color:${statusColor}">${statusLabel}</td>
-      <td><button class="btn btn-sm" onclick="openStudentDetail('${s.id}')">Ver detalle</button></td>
-    </tr>`;
+  }).sort((a,b)=>{const ta=ACTS.reduce((x,act)=>x+(a.scores&&a.scores[act.id]||0),0),tb=ACTS.reduce((x,act)=>x+(b.scores&&b.scores[act.id]||0),0);return tb-ta;});
+  const tb=document.getElementById('stb');
+  if(!sts.length){tb.innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--text3);padding:2rem">Sin resultados.</td></tr>';return;}
+  tb.innerHTML=sts.map(s=>{
+    const tot=ACTS.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0),pct=Math.round((tot/TP)*100),dn=s.scores?Object.keys(s.scores).length:0;
+    const gl=GL(pct),gc=gl==='A'?'ga':gl==='B'?'gb2':gl==='C'?'gc':gl==='D'?'gd':'gp';
+    const sl=dn===ACTS.length?'✓ Completo':dn>0?dn+'/'+ACTS.length:'Sin iniciar';
+    const sc2=dn===ACTS.length?'var(--success)':dn>0?'var(--warn)':'var(--text3)';
+    return`<tr><td style="font-family:'DM Mono',monospace;font-size:.74rem">${s.id}</td><td style="font-weight:500">${s.name}</td><td style="font-family:'DM Mono',monospace;font-size:.74rem">${s.group}</td><td>${dn>0?'<span>'+dn+'/'+ACTS.length+'</span><span class="mb-bar"><span class="mb-fill" style="width:'+Math.round((dn/ACTS.length)*100)+'%"></span></span>':'—'}</td><td>${dn>0?'<span class="gb '+gc+'">'+G(pct)+' ('+pct+'%)</span>':'<span style="color:var(--text3)">—</span>'}</td><td style="font-size:.76rem;color:${sc2}">${sl}</td><td><button class="btn btn-sm" onclick="openSD('${s.id}')">Ver</button></td></tr>`;
   }).join('');
+};
+
+function renderAN(){
+  const sts=Object.values(DB.students).filter(s=>s.scores&&Object.keys(s.scores).length>0);
+  const scs=sts.map(s=>ACTS.reduce((a,act)=>a+(s.scores[act.id]||0),0));
+  const bins=[0,0,0,0,0];scs.forEach(sc=>{const p=Math.round((sc/TP)*100);if(p<50)bins[0]++;else if(p<60)bins[1]++;else if(p<70)bins[2]++;else if(p<80)bins[3]++;else bins[4]++;});
+  const mx=Math.max(...bins,1);
+  const ch=document.getElementById('gdc');if(!ch)return;
+  ch.innerHTML=bins.map((b,i)=>`<div class="bcol" style="height:${Math.round((b/mx)*60)}px;opacity:${.5+i*.1}" title="${b} estudiantes"></div>`).join('');
+  document.getElementById('gdl').innerHTML=['<50%','50-59%','60-69%','70-79%','≥80%'].map((l,i)=>`<div class="blb">${l}<br><strong>${bins[i]}</strong></div>`).join('');
+  const ad=document.getElementById('adiff');
+  if(ad)ad.innerHTML=ACTS.map(act=>{const as2=sts.filter(s=>s.scores&&s.scores[act.id]!==undefined).map(s=>s.scores[act.id]);const av2=as2.length?Math.round(as2.reduce((a,b)=>a+b,0)/as2.length):0;const pct=as2.length?Math.round((av2/act.pts)*100):0;return`<div class="rbr"><div class="rbl" style="font-size:.71rem">${act.icon} ${act.name}</div><div class="rbt"><div class="rbf" style="width:${pct}%;background:${pct<60?'var(--accent)':'var(--accent2)'}"></div></div><div class="rbp" style="font-size:.68rem">${pct}%</div></div>`;}).join('');
+  const ea=document.getElementById('ea');
+  if(ea){const ae=sts.flatMap(s=>s.quizErrors||[]);if(!ae.length){ea.innerHTML='<span style="color:var(--text3)">Sin datos de errores aún.</span>';return;}const ec={};ae.forEach(e=>{ec[e.question]=(ec[e.question]||0)+1;});const sr=Object.entries(ec).sort((a,b)=>b[1]-a[1]).slice(0,5);ea.innerHTML=sr.map(([q,n])=>`<div style="margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid var(--border)"><span style="font-weight:500">${n} errores:</span> ${q}</div>`).join('');}
 }
 
-function renderAnalytics() {
-  const students = Object.values(DB.students).filter(s => s.scores && Object.keys(s.scores).length > 0);
-  const scores = students.map(s => ACTIVITIES.reduce((a,act)=>a+(s.scores[act.id]||0),0));
-  
-  const bins = [0,0,0,0,0]; // <50, 50-59, 60-69, 70-79, >=80
-  scores.forEach(sc => {
-    const p = Math.round((sc/TOTAL_PTS)*100);
-    if(p<50) bins[0]++; else if(p<60) bins[1]++; else if(p<70) bins[2]++; else if(p<80) bins[3]++; else bins[4]++;
-  });
-  const maxBin = Math.max(...bins,1);
-  const chart = document.getElementById('grade-dist-chart');
-  if(!chart) return;
-  chart.innerHTML = bins.map((b,i)=>`<div class="bar-col" style="height:${Math.round((b/maxBin)*80)}px;opacity:${0.5+i*0.1}" title="${b} estudiantes"></div>`).join('');
-  document.getElementById('grade-dist-labels').innerHTML = ['<50%','50-59%','60-69%','70-79%','≥80%'].map((l,i)=>`<div class="bar-label">${l}<br><strong>${bins[i]}</strong></div>`).join('');
+window.showDT=id=>{
+  document.querySelectorAll('.dtab').forEach(t=>t.classList.remove('active'));document.querySelectorAll('.dp').forEach(p=>p.classList.remove('active'));
+  event.currentTarget.classList.add('active');document.getElementById('dt-'+id).classList.add('active');if(id==='analytics')renderAN();
+};
 
-  const actDifficulty = document.getElementById('activity-difficulty');
-  if(actDifficulty) {
-    actDifficulty.innerHTML = ACTIVITIES.map(act => {
-      const actScores = students.filter(s=>s.scores&&s.scores[act.id]!==undefined).map(s=>s.scores[act.id]);
-      const avg = actScores.length ? Math.round(actScores.reduce((a,b)=>a+b,0)/actScores.length) : 0;
-      const pct = actScores.length ? Math.round((avg/act.pts)*100) : 0;
-      return `<div class="result-bar-row"><div class="result-bar-label" style="font-size:0.75rem">${act.icon} ${act.name}</div>
-        <div class="result-bar-track" style="height:6px"><div class="result-bar-fill" style="width:${pct}%;background:${pct<60?'var(--accent)':'var(--accent2)'}"></div></div>
-        <div class="result-bar-pts" style="font-size:0.72rem">${pct}%</div></div>`;
-    }).join('');
-  }
+window.openSD=id=>{
+  CDI=id;const s=DB.students[id];
+  const tot=ACTS.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0),pct=Math.round((tot/TP)*100);
+  document.getElementById('dt').textContent=s.name;
+  document.getElementById('dbody').innerHTML=`
+    <div style="margin-bottom:.9rem"><div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Datos del estudiante</div>
+    ${[['Matrícula',s.id],['Grupo',s.group],['Registro',s.registered?.slice(0,10)||'N/A'],['Último acceso',s.lastAccess?.slice(0,10)||'N/A']].map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--bg3);font-size:.8rem"><span style="color:var(--text2)">${k}</span><span style="font-family:'DM Mono',monospace">${v}</span></div>`).join('')}</div>
+    <div style="margin-bottom:.9rem"><div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Calificación global</div>
+    ${[['Puntos',tot+' / '+TP],['Porcentaje',pct+'%'],['Calificación',G(pct)+' ('+GL(pct)+')']].map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--bg3);font-size:.8rem"><span style="color:var(--text2)">${k}</span><span style="font-family:'DM Mono',monospace">${v}</span></div>`).join('')}</div>
+    <div><div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Desglose por actividad</div>
+    ${ACTS.map(act=>{const sc=s.scores&&s.scores[act.id]!==undefined?s.scores[act.id]+'/'+act.pts+' pts':'—';return`<div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid var(--bg3);font-size:.8rem"><span style="color:var(--text2)">${act.icon} ${act.name}</span><span style="font-family:'DM Mono',monospace">${sc}</span></div>`;}).join('')}</div>
+    ${s.quizErrors&&s.quizErrors.length?`<div style="margin-top:.9rem"><div style="font-size:.65rem;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Errores en quiz (${s.quizErrors.length})</div>${s.quizErrors.slice(0,3).map(e=>`<div style="font-size:.74rem;padding:3px 0;border-bottom:1px solid var(--bg3);color:var(--text2);line-height:1.4"><strong>P:</strong> ${e.question.slice(0,55)}...<br><strong>R:</strong> ${e.selected.slice(0,40)}</div>`).join('')}</div>`:''}`;
+  document.getElementById('do2').classList.add('open');
+};
+window.closeDetail=()=>{document.getElementById('do2').classList.remove('open');};
+window.closeDetailOutside=e=>{if(e.target.id==='do2')window.closeDetail();};
+window.downloadOneReport=()=>{if(!CDI)return;dlTxt('reporte_'+CDI+'.txt',genTxt(DB.students[CDI]));notify('Reporte descargado');};
 
-  const errDiv = document.getElementById('error-analysis');
-  if(errDiv) {
-    const allErrors = students.flatMap(s=>s.quizErrors||[]);
-    if(allErrors.length === 0) { errDiv.innerHTML = '<span style="color:var(--text3)">No hay datos de errores aún.</span>'; return; }
-    const errCount = {};
-    allErrors.forEach(e => { errCount[e.question] = (errCount[e.question]||0)+1; });
-    const sorted = Object.entries(errCount).sort((a,b)=>b[1]-a[1]).slice(0,5);
-    errDiv.innerHTML = sorted.map(([q,n])=>`<div style="margin-bottom:6px;padding-bottom:6px;border-bottom:1px solid var(--border)"><span style="font-weight:500">${n} errores:</span> ${q}</div>`).join('');
-  }
+/* EXPORTS */
+function genCSV(){
+  const rows=[['Matrícula','Nombre','Grupo',...ACTS.map(a=>a.name),'Total','Porcentaje','Calificación']];
+  Object.values(DB.students).forEach(s=>{const tot=ACTS.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0),pct=Math.round((tot/TP)*100);rows.push([s.id,s.name,s.group,...ACTS.map(a=>s.scores&&s.scores[a.id]!==undefined?s.scores[a.id]:'N/A'),tot,pct+'%',G(pct)]);});
+  return rows.map(r=>r.map(c=>'"'+c+'"').join(',')).join('\n');
 }
+window.exportCSV=()=>{const csv=genCSV();document.getElementById('et').value=csv;document.getElementById('ep').style.display='block';dlTxt('calificaciones_cancer_genome.csv',csv);notify('CSV descargado');};
+window.exportGradeSheet=()=>{let t='LISTA DE CALIFICACIONES — CANCER GENOME LANDSCAPES\nFES Iztacala UNAM · '+new Date().toLocaleDateString('es-MX')+'\n'+'='.repeat(60)+'\n\n'+'Matrícula'.padEnd(14)+'Nombre'.padEnd(32)+'Grupo'.padEnd(12)+'Pts'.padEnd(8)+'%'.padEnd(8)+'Cal\n'+'─'.repeat(60)+'\n';Object.values(DB.students).sort((a,b)=>a.group.localeCompare(b.group)||a.name.localeCompare(b.name)).forEach(s=>{const tot=ACTS.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0),pct=Math.round((tot/TP)*100);t+=s.id.padEnd(14)+s.name.slice(0,30).padEnd(32)+s.group.padEnd(12)+String(tot).padEnd(8)+(pct+'%').padEnd(8)+G(pct)+'\n';});document.getElementById('et').value=t;document.getElementById('ep').style.display='block';dlTxt('lista_calificaciones.txt',t);notify('Lista descargada');};
+window.exportFullReport=()=>{const t=Object.values(DB.students).map(s=>genTxt(s)).join('\n\n'+'═'.repeat(60)+'\n\n');document.getElementById('et').value=t.slice(0,1800)+(t.length>1800?'\n[truncado en vista previa...]':'');document.getElementById('ep').style.display='block';dlTxt('reportes_completos.txt',t);notify('Reportes descargados');};
+window.copyCSVClipboard=()=>{navigator.clipboard.writeText(genCSV()).then(()=>notify('CSV copiado'));};
 
-function showDashTab(id) {
-  document.querySelectorAll('.dash-tab').forEach(t=>t.classList.remove('active'));
-  document.querySelectorAll('.dash-panel').forEach(p=>p.classList.remove('active'));
-  event.currentTarget.classList.add('active');
-  document.getElementById('dash-'+id).classList.add('active');
-  if(id==='analytics') renderAnalytics();
-}
+function dlTxt(fn,t){const a=document.createElement('a');a.href='data:text/plain;charset=utf-8,'+encodeURIComponent(t);a.download=fn;a.click();}
+let notT;
+window.notify=msg=>{const n=document.getElementById('notif');n.textContent=msg;n.classList.add('show');clearTimeout(notT);notT=setTimeout(()=>n.classList.remove('show'),2600);};
 
-/* ─── STUDENT DETAIL ─── */
-function openStudentDetail(id) {
-  currentDetailId = id;
-  const s = DB.students[id];
-  const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
-  const pct = Math.round((total/TOTAL_PTS)*100);
-  const date = s.registered ? s.registered.slice(0,10) : 'N/A';
-  const lastAccess = s.lastAccess ? s.lastAccess.slice(0,10) : 'N/A';
+DB=lsGet();showScreen('login-screen');
+}//end startApp
 
-  document.getElementById('detail-title').textContent = s.name;
-  document.getElementById('detail-body').innerHTML = `
-    <div class="detail-section">
-      <div class="detail-section-title">Datos del estudiante</div>
-      <div class="detail-row"><span class="detail-key">Matrícula</span><span class="detail-val">${s.id}</span></div>
-      <div class="detail-row"><span class="detail-key">Grupo</span><span class="detail-val">${s.group}</span></div>
-      <div class="detail-row"><span class="detail-key">Registro</span><span class="detail-val">${date}</span></div>
-      <div class="detail-row"><span class="detail-key">Último acceso</span><span class="detail-val">${lastAccess}</span></div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-title">Calificación global</div>
-      <div class="detail-row"><span class="detail-key">Puntos</span><span class="detail-val">${total} / ${TOTAL_PTS}</span></div>
-      <div class="detail-row"><span class="detail-key">Porcentaje</span><span class="detail-val">${pct}%</span></div>
-      <div class="detail-row"><span class="detail-key">Calificación</span><span class="detail-val">${pctToGrade(pct)} (${pctToLetterGrade(pct)})</span></div>
-    </div>
-    <div class="detail-section">
-      <div class="detail-section-title">Desglose por actividad</div>
-      ${ACTIVITIES.map(act => {
-        const sc = s.scores && s.scores[act.id] !== undefined ? s.scores[act.id] : null;
-        return `<div class="detail-row">
-          <span class="detail-key">${act.icon} ${act.name}</span>
-          <span class="detail-val">${sc !== null ? sc+'/'+act.pts+' pts' : '—'}</span>
-        </div>`;
-      }).join('')}
-    </div>
-    ${s.quizErrors && s.quizErrors.length > 0 ? `<div class="detail-section">
-      <div class="detail-section-title">Errores en quiz (${s.quizErrors.length})</div>
-      ${s.quizErrors.slice(0,3).map(e=>`<div style="font-size:0.78rem;padding:5px 0;border-bottom:1px solid var(--bg3);color:var(--text2)"><strong>Q:</strong> ${e.question.slice(0,60)}...<br><strong>Resp:</strong> ${e.selected.slice(0,40)}</div>`).join('')}
-    </div>` : ''}
-  `;
-  document.getElementById('detail-overlay').classList.add('open');
-}
-
-function closeDetail() { document.getElementById('detail-overlay').classList.remove('open'); }
-function closeDetailOutside(e) { if(e.target.id==='detail-overlay') closeDetail(); }
-
-function downloadOneReport() {
-  if(!currentDetailId) return;
-  const s = DB.students[currentDetailId];
-  downloadTxt(`reporte_${s.id}.txt`, generateReportText(s));
-  notify('Reporte descargado');
-}
-
-/* ─── EXPORTS ─── */
-function generateCSV() {
-  const rows = [['Matrícula','Nombre','Grupo',...ACTIVITIES.map(a=>a.name),'Total','Porcentaje','Calificación']];
-  Object.values(DB.students).forEach(s => {
-    const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
-    const pct = Math.round((total/TOTAL_PTS)*100);
-    rows.push([s.id, s.name, s.group, ...ACTIVITIES.map(a=>s.scores&&s.scores[a.id]!==undefined?s.scores[a.id]:'N/A'), total, pct+'%', pctToGrade(pct)]);
-  });
-  return rows.map(r=>r.map(c=>`"${c}"`).join(',')).join('\n');
-}
-
-function exportCSV() {
-  const csv = generateCSV();
-  document.getElementById('export-text').value = csv;
-  document.getElementById('export-preview').style.display = 'block';
-  downloadTxt('calificaciones_cancer_genome.csv', csv);
-  notify('CSV descargado');
-}
-
-function exportGradeSheet() {
-  let txt = `LISTA DE CALIFICACIONES — CANCER GENOME LANDSCAPES\nFES Iztacala UNAM · ${new Date().toLocaleDateString('es-MX')}\n${'='.repeat(60)}\n\n`;
-  txt += `${'Matrícula'.padEnd(14)}${'Nombre'.padEnd(32)}${'Grupo'.padEnd(12)}${'Pts'.padEnd(8)}${'%'.padEnd(8)}Cal\n${'─'.repeat(60)}\n`;
-  Object.values(DB.students).sort((a,b)=>a.group.localeCompare(b.group)||a.name.localeCompare(b.name)).forEach(s => {
-    const total = ACTIVITIES.reduce((a,act)=>a+(s.scores&&s.scores[act.id]||0),0);
-    const pct = Math.round((total/TOTAL_PTS)*100);
-    txt += `${s.id.padEnd(14)}${s.name.slice(0,30).padEnd(32)}${s.group.padEnd(12)}${String(total).padEnd(8)}${(pct+'%').padEnd(8)}${pctToGrade(pct)}\n`;
-  });
-  document.getElementById('export-text').value = txt;
-  document.getElementById('export-preview').style.display = 'block';
-  downloadTxt('lista_calificaciones.txt', txt);
-  notify('Lista descargada');
-}
-
-function exportFullReport() {
-  let txt = Object.values(DB.students).map(s => generateReportText(s)).join('\n\n' + '═'.repeat(60) + '\n\n');
-  document.getElementById('export-text').value = txt.slice(0,2000) + (txt.length > 2000 ? '\n[...truncado en vista previa...]' : '');
-  document.getElementById('export-preview').style.display = 'block';
-  downloadTxt('reportes_completos.txt', txt);
-  notify('Reporte completo descargado');
-}
-
-function copyCSVClipboard() {
-  navigator.clipboard.writeText(generateCSV()).then(() => notify('CSV copiado al portapapeles'));
-}
-
-/* ─── UTILS ─── */
-function downloadTxt(filename, text) {
-  const a = document.createElement('a');
-  a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(text);
-  a.download = filename;
-  a.click();
-}
-
-let notifTimeout;
-function notify(msg) {
-  const n = document.getElementById('notif');
-  n.textContent = msg;
-  n.classList.add('show');
-  clearTimeout(notifTimeout);
-  notifTimeout = setTimeout(() => n.classList.remove('show'), 2500);
-}
-
-/* ─── INIT ─── */
-initDB().then(() => {
-  showScreen('login-screen');
-});
+if(window._fbReady){startApp();}
+else{document.addEventListener('firebase-ready',startApp,{once:true});setTimeout(()=>{if(!window._fbReady){window._fbOK=false;window._fbReady=true;startApp();}},3000);}
 </script>
 </body>
 </html>
