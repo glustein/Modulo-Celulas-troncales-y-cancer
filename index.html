@@ -286,24 +286,41 @@ function lsWrite(data) {
 
 async function fbSave(student) {
   const fb = window.__fb;
-  if (!fb || !fb.ok) return false;
+  if (!fb || !fb.ok) {
+    console.warn('[fbSave] Firebase no disponible');
+    return false;
+  }
   try {
     await fb.set(fb.ref(fb.db, 'students/' + student.id), student);
     return true;
   } catch(e) {
-    console.warn('[FB save]', e.message);
+    console.error('[fbSave] ERROR:', e.code, e.message);
+    // Show visible error so professor can diagnose
+    if (e.message && e.message.includes('PERMISSION_DENIED')) {
+      notify('⚠ Firebase: permiso denegado. Verifique las reglas de la base de datos.');
+    } else {
+      notify('⚠ Firebase: ' + (e.code || e.message || 'error desconocido'));
+    }
     return false;
   }
 }
 
 async function fbLoadAll() {
   const fb = window.__fb;
-  if (!fb || !fb.ok) return null;
+  if (!fb || !fb.ok) {
+    console.warn('[fbLoadAll] Firebase no disponible');
+    return null;
+  }
   try {
     const snap = await fb.get(fb.ref(fb.db, 'students'));
     return snap.exists() ? snap.val() : {};
   } catch(e) {
-    console.warn('[FB load]', e.message);
+    console.error('[fbLoadAll] ERROR:', e.code, e.message);
+    if (e.message && e.message.includes('PERMISSION_DENIED')) {
+      notify('⚠ Firebase: permiso denegado al leer. Verifique las reglas.');
+    } else {
+      notify('⚠ Error al cargar desde Firebase: ' + (e.code || e.message));
+    }
     return null;
   }
 }
@@ -370,6 +387,21 @@ window.loginStudent = async () => {
   CR = 'student';
   showScreen('student-screen');
   renderStudentUI();
+  // Show Firebase status immediately on login
+  setTimeout(() => {
+    const fb = window.__fb;
+    if (!fb) {
+      notify('⚠ Firebase no cargó — datos solo locales');
+    } else if (!fb.ok) {
+      notify('⚠ Firebase con error — datos solo locales');
+    } else {
+      // Test write immediately on login to catch permission errors early
+      fbSave(CU).then(ok => {
+        if (ok) notify('✓ Conectado — datos guardados en el servidor');
+        // If not ok, fbSave already showed the error
+      });
+    }
+  }, 500);
 };
 
 /* ── LOGIN: PROFESSOR ───────────────────────────────────── */
@@ -403,10 +435,11 @@ window.refreshProfData = async () => {
     notify('✓ ' + Object.keys(DB.students).length + ' estudiante(s) cargado(s) desde Firebase');
   } else {
     DB = lsRead();
-    const msg = (window.__fb && window.__fb.ok)
-      ? 'Firebase vacío — mostrando datos locales'
-      : 'Sin Firebase — datos locales únicamente';
-    notify(msg);
+    if (window.__fb && window.__fb.ok) {
+      notify('Firebase vacío — ningún alumno ha guardado datos aún, o verifique las reglas de seguridad');
+    } else {
+      notify('Sin Firebase — verifique la conexión o las credenciales');
+    }
   }
   renderProfDashboard();
 };
